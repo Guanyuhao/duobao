@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+</head>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="css/com.css"/>
+	<link rel="stylesheet" type="text/css" href="css/detail.css"/>
+<body>
+	<header class="mui-bar mui-bar-nav">
+	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>    
+	    <h1 class="mui-title">详情</h1>
+	    <span class="mui-icon icon-car"><a href="bill.html"></a></span>
+	</header>
+	<footer class="detail">
+		<nav class="mui-bar mui-bar-tab">
+			<button class="mui-btn" id="addbill"> <span class="icon-car"></span>加入夺宝清单</button>
+			<button class="mui-btn ">立即购买</button>		
+		</nav>
+	</footer>
+	<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--banner-->	
+	        <div id="slider" class="mui-slider" >
+	          <div class="mui-slider-group mui-slider-loop" id="DetaBan">
+	            
+	          </div>
+	          <div class="mui-slider-indicator">
+	            
+	          </div>
+	        </div>
+	        <!--title-->
+	        <div class="detail-title">
+	        	
+	        </div>
+	        <!--infor-->
+	        <div class="detail-infor">
+	        	<p>说明：<span>一元夺宝</span>所有商品都是从正规渠道采购，100%正品。参与夺宝后人数满足该商品所需总人数时5分钟之后开奖。</p>
+	        </div>
+	        <!--获奖者-->
+	        <div class="detail-win">
+	        	
+	        </div>
+	        <!--往期揭晓-->
+	        <div class="past-ann mui-table-view">
+	        	<li class="mui-table-view-cell">
+			        <a class="mui-navigate-right">往期揭晓</a>
+			    </li>			     
+	        </div>
+	        <div class="part-recode mui-table-view">
+	        	<li class="mui-table-view-cell">参与记录</li>
+	        </div>
+	       	
+	        <!--数据列表-->
+	        
+	        <ul class="mui-table-view mui-table-view-chevron" id="BuyList">
+	        
+	        </ul>
+	        <!--滑块-->
+	        <div class="detail-range clearfloat">
+	        	<div class="mui-input-row mui-input-range" id="paging">
+					<input type="range" min="0" max="5" value="0">
+				</div>        	
+	        </div>
+	      </div>
+	    </div>  
+	</div>
+</body>
+<script type="text/javascript">
+	var h5pullDown = true;
+</script>
+<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/car.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	//
+	//初始化上拉刷新 下拉加载
+	mui.init({
+		pullRefresh :{
+	    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+	    down : {
+	      height:50,//可选,默认50.触发下拉刷新拖动距离,
+	      auto: true,//可选,默认false.自动下拉刷新一次
+	      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+	      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+	      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+	      callback:function down(){
+	      	
+	      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+	      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+	    },
+	    up : {
+	      height:50,//可选.默认50.触发上拉加载拖动距离
+	      auto:true,//可选,默认false.自动上拉加载一次
+	      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+	      contentnomore:'本页已经加载完毕',//可选，请求完毕若没有更多数据时显示的提醒内容；
+	      callback :function up(){
+	      	
+	      	 this.endPullupToRefresh(true|false);
+	      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+	    }
+	  }
+	})
+	
+
+;(function(){
+	
+function plusReady(){
+	var detailCon=plus.webview.currentWebview();
+	//console.log(detailCon.itemId)
+	var addbill = document.querySelector('#addbill')
+	addbill.addEventListener('tap',function(){
+		addcar({
+			goodsSaleId:detailCon.itemId,
+			callback:function(res){
+				//成功 返回 result 1
+				console.log(res)
+				var Obj = JSON.parse(res);
+				if(Obj.result){
+					 mui.toast('已经添加到您的清单',{ duration:1000, type:'div' }) 
+				}else{
+					mui.alert('不好意思，该商品太火爆了')
+				}
+			}
+		})
+	})
+getDetaData({
+	goodsSaleId:detailCon.itemId,
+	callback:function(res){
+		detaBanDom (res)
+		detaTitleDom(res)
+		detaInforDom(res)
+	}
+})
+getBuyListData({
+	goodsSaleId:detailCon.itemId,
+	page:0,
+	callback:function(res){
+		buyList(res)
+		pagingEvent(detailCon.itemId)
+	}
+})
+ 
+}
+if(window.plus){
+	plusReady();
+}else{
+	document.addEventListener("plusready",plusReady,false);
+}
+
+	
+})()
+//详情接口
+	function getDetaData(opt){
+		
+		var config = {
+			goodsSaleId:3,
+			callback:function(res){
+				//console.log(res)
+			}
+		}
+		for(var i in opt){
+			config[i] = opt[i]
+		}
+		jsajax({
+			method:'post',
+			url:"http://139.129.203.90/caibao/goods/item?goodsSaleId="+config.goodsSaleId,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+//bug list 参与记录列表
+	function getBuyListData(opt){
+		var config = {
+			goodsSaleId:3,
+			page:0,
+			callback:function(res){
+				//console.log(res)
+			}
+		}
+		for(var i in opt){
+			config[i] = opt[i]
+		}
+		var Url ='?goodsSaleId='+config.goodsSaleId+'&page='+config.page;
+		jsajax({
+			method:'post',
+			url:"http://139.129.203.90/caibao/goods/itemBuyList"+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+	//detail banner
+	function detaBanDom (res){
+		var arr = JSON.parse(res).images;
+			//console.log(arr)
+		var DetaBan = document.getElementById('DetaBan');
+		var DetaBanSub = document.querySelector('.mui-slider-indicator');
+		var Fragment = document.createDocumentFragment();
+		var FragmentSub= document.createDocumentFragment();
+		var Oindicator = document.createElement('div');
+		Oindicator.className = 'mui-slider-indicator';
+		for (var i = 0; i<arr.length; i++) {
+			var Odiv = document.createElement('div');
+			Odiv.className = 'mui-slider-item';
+			var Oa = document.createElement('a');
+			Oa.href = 'javascript:;';
+			var Oimg = new Image();
+			Oimg.src = arr[i];
+			Oa.appendChild(Oimg);
+			Odiv.appendChild(Oa);
+			Fragment.appendChild(Odiv);			
+			var OdivSub = document.createElement('div');			
+			if(i == 0){
+				OdivSub.className = 'mui-indicator mui-active';
+			}else{
+				OdivSub.className = 'mui-indicator';
+			}
+			FragmentSub.appendChild(OdivSub);
+		}		
+		DetaBan.appendChild(Fragment);
+		DetaBanSub.appendChild(FragmentSub);
+		var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
+		var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
+		var clone01 = Odiv01.cloneNode(true);
+		//循环播放所需
+		var clone02 = Odiv02.cloneNode(true);
+		clone01.className = 'mui-slider-item mui-slider-item-duplicate';
+		clone02.className = 'mui-slider-item mui-slider-item-duplicate';
+		Odiv01.parentNode.insertBefore(clone02,Odiv01)
+		DetaBan.appendChild(clone01);
+		var gallery = mui('.mui-slider');
+		gallery.slider({
+		  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+		});
+	}
+	//detail title
+	function detaTitleDom(res){
+		var Obj = JSON.parse(res);
+		//console.log(Obj)
+		var itemStatus = Obj.itemStatus;
+		var DetaTitle = document.querySelector('.detail-title');
+		var Obutton = document.createElement('button');
+		if(itemStatus == 1){
+			Obutton.innerText = '正在进行';
+			Obutton.className = 'mui-btn btn-ing';
+		}else if(itemStatus == 2){
+			Obutton.innerText = '已揭晓';
+			Obutton.className = 'mui-btn btn-ed';
+			//获奖者
+		}else if(itemStatus == 3){
+			Obutton.innerText = '倒计时';
+			Obutton.className = 'mui-btn btn-shall';
+			//一会还有猫腻
+		}
+		var Ospan = document.createElement('span');
+		Ospan.innerText = Obj.title;
+		DetaTitle.appendChild(Obutton);
+		DetaTitle.appendChild(Ospan);
+	}
+	//detail infor 
+	function detaInforDom(res){
+		var Obj = JSON.parse(res).goodsSale;
+		//console.log(Obj)
+		var DetaInfor = document.querySelector('.detail-infor');
+		var Op01 = document.createElement('p');
+		var Op02 = document.createElement('p');
+		var Op03 = document.createElement('p');
+		Op01.innerText = '商品期号：'+Obj.num;
+		var Ospan = document.createElement('span');
+		var per = (Obj.finishPerson/Obj.totalPerson)*100;
+		if( per > 0&&per < 1){
+			per = 1
+		}
+		var num = Math.floor(per);
+		Ospan.style.width = num+'%';
+		Op02.appendChild(Ospan);
+		Op03.innerHTML = '总需人数：'+Obj.totalPerson+'人次('+Obj.price+'元 / 次)';
+		var Op03Span = document.createElement('span');
+		Op03.appendChild(Op03Span);
+		var surplus = Obj.totalPerson-Obj.finishPerson;
+		Op03Span.innerHTML = '剩余：<i>'+surplus+'</i>人次';
+		DetaInfor.appendChild(Op01);
+		DetaInfor.appendChild(Op02);
+		DetaInfor.appendChild(Op03);
+	}
+	//detail win 
+	function detailWinDom(res){
+		var Obj = JSON.parse(res).prevSale;
+		
+	}
+	//buy list
+	function buyList(res){
+		var Obj = JSON.parse(res)
+	//	console.log(Obj)
+		var arr = Obj.buyList;
+		var BuyList = document.querySelector('#BuyList');
+		BuyList.innerHTML = '';
+		var Fragment = document.createDocumentFragment();
+		for (var i = 0 ; l=arr.length, i<l; i++) {
+			var Oli = document.createElement('li');
+			Oli.className = '"mui-table-view-cell mui-media';
+			Oli.setAttribute('userId',arr[i].userId);
+			var Oimg = new Image();
+			Oimg.className = 'mui-media-object mui-pull-left';
+			Oimg.src = arr[i].photo;
+			var Odiv = document.createElement('div');
+			Odiv.className = 'mui-media-body';
+			var Op01 = document.createElement('p');
+			Op01.innerHTML = '<span>'+arr[i].userName+'</span> '+arr[i].address+' IP：'+arr[i].ip;
+			var Op02 = document.createElement('p');
+			Op02.innerHTML = '参与<span>'+arr[i].payPerson+'</span>人次 '+arr[i].number;			
+			Odiv.appendChild(Op01);
+			Odiv.appendChild(Op02);
+			Oli.appendChild(Oimg);
+			Oli.appendChild(Odiv);
+			Fragment.appendChild(Oli)
+		}
+		BuyList.appendChild(Fragment);
+	}
+	
+//getDetaData({
+//	goodsSaleId:3670,
+//	callback:function(res){
+//		detaBanDom (res)
+//		detaTitleDom(res)
+//		detaInforDom(res)
+//	}
+//})
+//getBuyListData({
+//	goodsSaleId:3670,
+//	page:0,
+//	callback:function(res){
+//		buyList(res)
+//	}
+//})
+
+//分页事件
+function pagingEvent(goodsSaleId){
+	
+	var Paging = document.querySelector('#paging')
+	Paging.ontouchend = function(){
+		var val = document.querySelector('#paging input').value;
+		var sky = document.querySelector('#BuyList');
+		getBuyListData({
+			goodsSaleId:goodsSaleId,
+			page:val,
+			callback:function(res){
+				buyList(res)
+				if(!sky.innerHTML){
+					sky.innerHTML ='<li style="font-size: .14rem; color: #C0C0C0;">没有更多记录了</li>';
+				}
+			}
+		})	
+		mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
+	}
+}
+
+</script>
+</html>

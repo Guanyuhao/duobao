@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../css/mui.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			#empty{
+				width: 100%;
+				height: 100%;
+				position: relative;
+			}
+			.emp-img{
+				width: 1rem;
+				height: 1rem;
+				background: url(../image/ic_emptypage_shopping_cart.png) no-repeat center center;
+				background-size: 100% 100%;
+				position: absolute;
+				left: 50%;
+				margin-left: -0.5rem;
+				top: 20%;
+			}
+			.emp-com{
+				position: absolute;
+				top: 40%;
+				width: 2.5rem;
+				left: 50%;
+				margin-left: -1.25rem;
+				text-align: center;
+			}
+			.emp-com .mui-btn{
+				width: 1.5rem;
+				height:0.3rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="empty">
+			<div class="emp-img"></div>
+			<div class="emp-com" id="aaaa">
+				<p>当前没用参与活动哦~试试手气吧</p>
+				<button class="mui-btn mui-btn-danger">查看商品</button>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var h5pullDown = true;
+	</script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		mui('.emp-com').on('tap','button',function(){
+			mui.openWindow({
+				url:"../index.html",
+				id:'index.html',
+				createNew:false
+			})
+		})
+		
+	</script>
+</html>

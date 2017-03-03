@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<style>
+			
+			.area {
+				margin: 20px auto 0px auto;
+			}
+			
+			.mui-input-group {
+				margin-top: 10px;
+			}
+			
+			.mui-input-group:first-child {
+				margin-top: 20px;
+			}
+			
+			.mui-input-group label {
+				width: 26%;
+			}
+			
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {
+				width: 74%;
+			}
+			
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {
+				top: 6px;
+			}
+			
+			.mui-content-padded {
+				margin-top: 25px;
+			}
+			
+			.mui-btn {
+				padding: 10px;
+			}
+			
+			.link-area {
+				display: block;
+				margin-top: 25px;
+				text-align: center;
+			}
+			
+			.spliter {
+				color: #bbb;
+				padding: 0px 8px;
+			}
+			
+			.oauth-area {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				text-align: center;
+				width: 100%;
+				padding: 0px;
+				margin: 0px;
+			}
+			
+			.oauth-area .oauth-btn {
+				display: inline-block;
+				width: 50px;
+				height: 50px;
+				background-size: 30px 30px;
+				background-position: center center;
+				background-repeat: no-repeat;
+				margin: 0px 20px;
+				/*-webkit-filter: grayscale(100%); */
+				border: solid 1px #ddd;
+				border-radius: 25px;
+			}
+			
+			.oauth-area .oauth-btn:active {
+				border: solid 1px #aaa;
+			}
+			
+			.oauth-area .oauth-btn.disabled {
+				background-color: #ddd;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+			<h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group">
+				<div class="mui-input-row">
+					<label>账号</label>
+					<input id='account' type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+				</div>
+				<div class="mui-input-row">
+					<label>验证码</label>
+					<input id='password' type="text" class="mui-input-clear mui-input" placeholder="请输入验证码">
+				</div>
+			</form>
+			<!--<form class="mui-input-group">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell">
+						自动登录
+						<div id="autoLogin" class="mui-switch">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</li>
+				</ul>
+			</form>-->
+			<div class="mui-content-padded">
+				<!--<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				</div>-->
+				<button id='code' class="mui-btn mui-btn-block mui-btn-default">获取验证码</button>
+				<button id='login' class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+				
+			</div>
+		</div>
+		<script type="text/javascript">
+			var h5pullDown = true;
+		</script>
+		<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>  
+		<script src="js/mui.js"></script>
+		<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			
+			;(function(){
+				function plusReady(){
+//				var wvs=plus.webview.all();
+//				for(var i=1;i<wvs.length;i++){				
+//					wvs[i].close();
+//				}
+			}
+			if(window.plus){
+				plusReady();
+			}else{
+				document.addEventListener("plusready",plusReady,false);
+			}
+				var Login = document.querySelector('#login');
+				var Code = document.querySelector('#code');
+				var Account = document.querySelector('#account');
+				var Password = document.querySelector('#password');
+				var RegPhone = /^1(3|4|5|7|8)\d{9}$/;
+				var phoneCode;//手机验证码
+				Code.onclick = function(){
+					var phone = Account.value;					
+					if(RegPhone.test(phone)){
+						var userphone = 'NISHOTjds!$2fd'+Account.value;
+						var auth = md5(userphone).toUpperCase();
+						console.log(auth)
+						var Url = '?auth='+auth+'&phone='+phone;
+						jsajax({
+							method:'post',
+							url:'http://139.129.203.90/caibao/sms/code'+Url,
+							success:function(res){
+								phoneCode = JSON.parse(res).phoneCode;
+								console.log(phoneCode)
+							}
+						})
+					}else{
+						mui.alert('手机号码有误，请慎重');
+					}
+						
+				}
+				Login.onclick = function(){
+					//console.log(phoneCode)
+					var phone = Account.value;
+					var passCode = Password.value;
+					if(RegPhone.test(phone)){
+						
+					var Url = '?phone='+phone+'&code='+passCode
+						jsajax({
+							method:'post',
+							url:'http://139.129.203.90/caibao/login/phone'+Url,
+							success:function(res){
+								var Obj =  JSON.parse(res);
+								if(Obj.code == 0){
+									
+									localStorage.user = res;
+									
+									mui.openWindow({
+										url:'index.html',
+										id:'index.htlm'
+									})
+								}else{
+									mui.alert('验证码有误，请慎重')
+								}
+							}
+						})
+					}else{
+						mui.alert('手机号码有误，请慎重');
+					}
+				}
+				
+			})()
+			
+		</script>
+	</body>
+
+</html>

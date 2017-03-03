@@ -1,0 +1,155 @@
+ header.mui-bar-nav .icon-car{
+ 	position: absolute;
+ 	right: 0.3rem;
+ 	top: 0.1rem;
+ 	background: url(../image/icon_home_page3.png) no-repeat;
+ 	background-size: 100% 100%;
+ }
+ /*detailcon*/
+#DetaBan .mui-slider-item {
+	width: 100%;
+	height:2.5rem;
+	overflow: hidden;
+	background: #fff;
+}
+#DetaBan .mui-slider-item img{
+	box-sizing: border-box;
+	width: 80%;
+	height: 80%;
+	margin: 10%;
+	
+}
+.mui-slider-indicator .mui-indicator{
+	background: #FAFAFA;
+}
+.mui-slider-indicator .mui-active.mui-indicator {
+    background: lawngreen;
+}
+.detail-title{
+	background: #dec0c2;
+	height: .35rem;
+	line-height: .35rem;
+	font-size: .14rem;
+	overflow: hidden;
+}
+.detail-title .mui-btn{
+	color: #fff;
+	height: 0.25rem;
+	margin-top: 0.05rem;
+	padding: 0.03rem 0.1rem;
+	margin-left: 0.05rem;
+}
+.detail-title .btn-ing{
+	background: #F54A12;	
+}
+.detail-title .btn-ed{
+	background: none;	
+	color:lightgreen;
+	border-color: lightgreen;
+}
+.detail-title span{
+	margin-left: 0.05rem;
+}
+.detail-infor{
+	padding: 0 5%;
+	background: #FAFAFA;
+	overflow: hidden;
+	margin-bottom: .15rem;
+}
+.detail-infor p{
+	margin: 0;
+	line-height: .16rem;
+	font-size: .10rem;
+	margin: .05rem 0;
+}
+.detail-infor p:nth-child(1) span{
+	color: #F54A12;
+}
+
+.detail-infor p:nth-child(3){
+	width: 100%;
+	background: #C0C0C0;
+	height: .06rem;
+	border-radius: .04rem;
+	position: relative;
+}
+.detail-infor p:nth-child(3) span{
+	position: absolute;
+	background: darkorange;
+	display: block;
+	height: 100%;
+	border-radius: .04rem;	
+}
+.detail-infor p:nth-child(4) span{
+	float: right;
+}
+.detail-infor p:nth-child(4) span i{
+	color: cornflowerblue;
+	font-style: normal;
+}
+.past-ann {
+	font-size: .14rem;
+}
+.part-recode{
+	font-size: .14rem;
+	
+}
+
+/*buylist*/
+#BuyList .mui-media-body p{
+	margin: 0.05rem;
+	font-size: .10rem;
+	line-height: .16rem;
+}
+#BuyList .mui-media-body p:nth-child(1) span{
+	color: cornflowerblue;
+}
+#BuyList .mui-media-body p:nth-child(2) span{
+	color: orangered;
+}
+#BuyList li{
+	padding:.1rem;
+	border-bottom: .01rem solid #F7F7F7;
+}
+#BuyList li img{
+	border-radius: 50%;
+}
+.detail-range{
+	background: #fff;
+	margin-bottom: .5rem;
+}
+.mui-input-row.mui-input-range{
+	padding: 0 .1rem;
+}
+/*detail-footer*/
+
+.detail .mui-bar-tab{
+	background: rgba(0,0,0,0.3);
+	padding: 0 .1rem;
+}
+.detail .mui-bar-tab .mui-btn{
+	width: 45%;
+	border-radius:.2rem;
+	font-size: .12rem;
+	margin-top: .05rem;
+}
+.detail .mui-bar-tab .mui-btn:nth-child(1){
+	float: left;
+	color: #F54A12;
+	position: relative;
+}
+.detail .mui-bar-tab .mui-btn:nth-child(2){
+	float: right;
+	color: #F3F3F3;
+	background: #F54A12;
+	border-color: #F54A12;
+}
+.detail .mui-btn .icon-car{
+	vertical-align: text-top;
+	margin-right: 0.05rem;
+	display: inline-block;
+	width: .12rem;
+	height: .12rem;
+ 	background: url(../image/icon_home_page3.png) no-repeat;
+ 	background-size: 100% 100%;
+}

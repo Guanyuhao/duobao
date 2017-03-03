@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="css/com.css"/>
+	<link rel="stylesheet" type="text/css" href="css/announced.css"/>
+	
+</head>
+<body>
+	<header class="mui-bar mui-bar-nav">
+	    
+	    <h1 class="mui-title">揭晓</h1>
+	</header>
+	<footer>	
+		<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item" href="index.html">
+	        <span class="mui-icon indiana"></span>
+	        <span class="mui-tab-label">夺宝</span>
+	    </a>
+	    <a class="mui-tab-item active" href="announced.html">
+	        <span class="mui-icon announced"></span>
+	        <span class="mui-tab-label">揭晓</span>
+	    </a>
+	    <a class="mui-tab-item" href="bill.html" id="bill" off='1'>
+	        <span class="mui-icon bill">
+	        	<!--<img src="image/icon_home_page3.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">清单</span>
+	    </a>
+	    <a class="mui-tab-item" href="myset.html" id="myset" off='1'>
+	        <span class="mui-icon my">
+	        	<!--<img src="image/icon_home_page4.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">我的</span>
+	    </a>
+		</nav>		
+	</footer>
+	<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <ul class="mui-table-view mui-table-view-chevron" id="AnnList">
+	          	
+	        </ul>
+	      </div>
+	    </div>  
+	</div>
+</body>
+<script type="text/javascript">
+	var h5pullDown = true;
+</script>
+<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+mui.init({
+	pullRefresh :{
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){      	
+      	pageNum++;
+      	getAnnound({
+      		page:pageNum,
+			callback:function(res){
+				var arr = JSON.parse(res).goodsSales;			
+				proAnnList(arr)      	 		
+			}
+		})  	
+		this.endPullupToRefresh(false);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+})	
+var pageNum =1;	
+	//跳转详情页
+	mui('#AnnList').on('tap','li',function(){
+		var itemId = this.getAttribute('itemId')
+		//console.log(itemId)
+		mui.openWindow({
+			url:'detail.html',
+			id:'detail',
+			extras:{
+				itemId:itemId
+			},
+			createNew:true
+		})
+	});
+	//初始化上拉刷新 下拉加载
+
+	
+//即将揭晓
+function getAnnound(opt){
+	var config = {
+		page:1,
+		callback:function(res){
+			
+		}
+	}
+	for(var i in opt){
+		config[i] = opt[i]
+	}
+	jsajax({
+		method:"post",
+		url:'http://139.129.203.90/caibao/goods/announce?page='+config.page,
+		success:function(res){
+			
+			config.callback(res)
+		}
+	})
+}
+
+//anntlist
+function proAnnList(arr){
+	//console.log(arr)
+	var AnnList = document.querySelector('#AnnList');
+	var Fragment = document.createDocumentFragment();
+	for (var i = 0 ; l=arr.length, i<l; i++) {
+		var Oli = document.createElement('li');
+		Oli.className = '"mui-table-view-cell mui-media';
+		Oli.setAttribute('itemId',arr[i].itemId);
+		var Oimg = new Image();
+		Oimg.className = 'mui-media-object mui-pull-left';
+		Oimg.src = arr[i].image;
+		var Odiv = document.createElement('div');
+		Odiv.className = 'mui-media-body';
+		var Op01 = document.createElement('p');
+		Op01.innerText = arr[i].title;
+		var Op02 = document.createElement('p');
+		Op02.innerText = '期号：'+arr[i].num;	
+		var Op03 = document.createElement('p');
+		Op03.innerHTML= '幸运获奖：<span>'+arr[i].userName+'</span>';		
+		var Op04 = document.createElement('p');
+		Op04.innerHTML = '本期参与：<i>'+arr[i].payPerson+'人次</i>';
+		var Op05 = document.createElement('p');
+		Op05.innerHTML = '揭晓时间：<i>'+arr[i].showTime+'</i>';
+		Odiv.appendChild(Op01);
+		Odiv.appendChild(Op02);
+		Odiv.appendChild(Op03);
+		Odiv.appendChild(Op04);
+		Odiv.appendChild(Op05);
+		Oli.appendChild(Oimg);
+		Oli.appendChild(Odiv);
+		Fragment.appendChild(Oli)
+	}
+	AnnList.appendChild(Fragment);
+
+}
+
+getAnnound({
+	callback:function(res){
+		var arr = JSON.parse(res).goodsSales;		
+		 proAnnList(arr)
+	}
+})
+//跳转详情页
+	
+</script>
+
+
+</html>

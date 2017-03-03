@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    
+    <link href="../css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="../css/com.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    
+</head>
+<body>
+	
+	<header class="mui-bar mui-bar-nav">
+	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>
+	    <h1 class="mui-title">夺宝</h1>
+	    <span class="mui-icon mui-icon-chat"><a href="#"></a></span>
+	</header>
+	<!--吸顶结构-->
+	<div id="Mounting"></div>
+	<footer>	
+		<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item  active" href="index.html">
+	        <span class="mui-icon indiana"></span>
+	        <span class="mui-tab-label">夺宝</span>
+	    </a>
+	    <a class="mui-tab-item" href="announced.html">
+	        <span class="mui-icon announced"></span>
+	        <span class="mui-tab-label">揭晓</span>
+	    </a>
+	    <a class="mui-tab-item" href="bill.html" id="bill" off='1'>
+	        <span class="mui-icon bill">
+	        	<!--<img src="image/icon_home_page3.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">清单</span>
+	    </a>
+	    <a class="mui-tab-item" href="myset.html" id="myset" off='1'>
+	        <span class="mui-icon my">
+	        	<!--<img src="image/icon_home_page4.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">我的</span>
+	    </a>
+		</nav>		
+	</footer>
+	
+	<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->
+	        <div id="slider" class="mui-slider" >
+	          <div class="mui-slider-group mui-slider-loop" id="banner">
+	            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+	            <!--轮播位置-->
+	          </div>
+	          <div class="mui-slider-indicator">
+	            <!--轮播Sub-->
+	          </div>
+	        </div>
+    		<!--消息推送-->
+	        <div class="message-push">
+	        	<div class="left-mess">
+	        		
+	        	</div>
+	        	<div class="ani-push">
+	        		
+	        	</div>
+	        </div>
+	        <div class="function">
+	        	<a href="#">
+	        		<dl>
+		        		<dt><img src="../image/activity_main.png"/></dt>
+		        		<dd>优惠活动</dd>
+	        		</dl>
+	        	</a>	        	
+	        	<a href="#">
+	        		<dl>
+		        		<dt><img src="../image/showorder_camara.png"/></dt>
+		        		<dd>晒单分享</dd>
+	        		</dl>
+	        	</a>
+	        	<a href="#">
+	        		<dl>
+		        		<dt><img src="../image/quesion.png"/></dt>
+		        		<dd>常见问题</dd>
+	        		</dl>
+	        	</a>
+	        	<a href="#">
+	        		<dl>
+		        		<dt><img src="../image/contactservice.png"/></dt>
+		        		<dd>联系客服</dd>
+	        		</dl>
+	        	</a>
+	        </div>
+	        <!--navList-->
+	        <div class="nav-list">
+	        	<div id="nav-list-mounting">
+	        		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+						<div class="mui-scroll" id="NavList">
+							<button class="mui-btn active" itemid='0' sort='1' style="margin: 0;">全部商品<span class="mui-icon mui-icon-arrowthinup"></span></button>				
+						</div>
+					</div>
+	        	</div>
+	        </div>
+	        <ul class="mui-table-view mui-table-view-chevron" id="GoodsList">
+	          	
+	        </ul>
+	      </div>
+	    </div>  
+	</div>
+	
+</body>
+<script type="text/javascript">
+	var h5pullDown = true;
+</script>
+<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+mui('body').on('tap','a',function(){document.location.href=this.href;})
+
+//跳转详情页
+mui('#GoodsList').on('tap','.top',function(){
+	var itemId = this.getAttribute('itemId')
+	
+	mui.openWindow({
+		url:'../detail.html',
+		id:'detail',
+		extras:{
+			itemId:itemId
+		},
+		createNew:true
+	})
+})
+
+mui('.ani-push').on('tap','p',function(){
+	var itemId = this.getAttribute('itemId')
+	mui.openWindow({
+		url:'../detail.html',
+		id:'detail',
+		extras:{
+			itemId:itemId
+		},
+		createNew:true
+	})
+})
+
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+      	 this.endPullupToRefresh(true|false);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});
+//banner
+;(function(){
+	jsajax({
+		method:'get',
+		url:'http://139.129.203.90/caibao/index/banners',
+		success:function(res){
+			var arr = JSON.parse(res).banners;
+			//console.log(arr)
+			var Obanner = document.getElementById('banner');
+			var ObannerSub = document.querySelector('.mui-slider-indicator');
+			var Fragment = document.createDocumentFragment();
+			var FragmentSub= document.createDocumentFragment();
+			var Oindicator = document.createElement('div');
+			Oindicator.className = 'mui-slider-indicator';
+			for (var i = 0; i<arr.length; i++) {
+				var Odiv = document.createElement('div');
+				Odiv.className = 'mui-slider-item';
+				var Oa = document.createElement('a');
+				Oa.href = arr[i].url;
+				var Oimg = new Image();
+				Oimg.src = arr[i].image;
+				Oa.appendChild(Oimg);
+				Odiv.appendChild(Oa);
+				Fragment.appendChild(Odiv);			
+				var OdivSub = document.createElement('div');			
+				if(i == 0){
+					OdivSub.className = 'mui-indicator mui-active';
+				}else{
+					OdivSub.className = 'mui-indicator';
+				}
+				FragmentSub.appendChild(OdivSub);
+			}		
+			Obanner.appendChild(Fragment);
+			ObannerSub.appendChild(FragmentSub);
+			var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
+			var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
+			var clone01 = Odiv01.cloneNode(true);
+			//循环播放所需
+			var clone02 = Odiv02.cloneNode(true);
+			clone01.className = 'mui-slider-item mui-slider-item-duplicate';
+			clone02.className = 'mui-slider-item mui-slider-item-duplicate';
+			Odiv01.parentNode.insertBefore(clone02,Odiv01)
+			Obanner.appendChild(clone01);
+			var gallery = mui('.mui-slider');
+			gallery.slider({
+			  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+		}
+		
+	})
+})()
+//信息推送
+;(function(){
+	jsajax({
+		method:'get',
+		url:'http://139.129.203.90/caibao/message/announce',
+		success:function(res){
+			var arr = JSON.parse(res).messages;
+			//console.log(arr)
+			var AniPush = document.querySelector('.ani-push');
+			var Fragment = document.createDocumentFragment();
+			for (var i =0 ; i<arr.length; i++) {
+				var Op = document.createElement('p');
+				Op.setAttribute('itemId',arr[i].itemId)
+				var Oa = document.createElement('a');
+				var NewArr = arr[i].content.split(',');
+				var str = '';
+				NewArr.forEach(function(v,j){
+					if(j>0){
+						str +=v;
+					}
+				});
+				Oa.href = 'javascript:;';
+				Oa.innerHTML ='恭喜<span>'+arr[i].userName+'</span>'+str;
+				Op.appendChild(Oa);
+				Fragment.appendChild(Op);
+			}
+			AniPush.appendChild(Fragment);
+		}
+	})
+})()
+//分类列表
+;(function(){
+	
+	var NavList = document.querySelector('#NavList');
+	var GoodsList = document.querySelector('#GoodsList');
+	jsajax({
+		method:'get',
+		url:'http://139.129.203.90/caibao/goods/typeList',
+		success:function(res){
+			var arr = JSON.parse(res).cbData;
+			//console.log(arr)
+			var Fragment = document.createDocumentFragment();
+			for (var i = 0; i<arr.length;i++) {
+				var Obtn = document.createElement('button');
+				Obtn.className = 'mui-btn';
+				Obtn.innerHTML = arr[i].title;
+				Obtn.setAttribute('itemid',arr[i].itemid);
+				Obtn.setAttribute('sort','1');
+				Fragment.appendChild(Obtn);
+			}
+			NavList.appendChild(Fragment);		
+		}
+	});
+	//事件委托
+	mui(NavList).on('tap','button',function(ev){
+		var ev = ev||window.event;
+		var target = ev.target || ev.srcElement;
+		if(target.nodeName.toLowerCase() == "button"){//之前原生委托事件的处理不用馆
+			var typeId = target.getAttribute('itemid');
+			var arr = allSbiling(target);
+			//删除所有
+			arr.forEach(function(v,j){
+				v.classList.remove('active');
+				if(v.children.length>0){
+					v.removeChild(v.children[0])
+				}
+			})
+			//全部删除之后给自己加
+			target.classList.add('active');		
+			if(target.classList.contains("active")){
+				var sort = 3;
+				var Ospan = document.createElement('span');
+				//console.log(target.getAttribute('sort'))
+				if(Number(target.getAttribute('sort'))){
+					sort = 3;
+					target.setAttribute('sort','0')
+				}else{
+					sort = 4;
+					target.setAttribute('sort','1')
+				}
+				//判断排序方式  箭头显示方向
+				if(sort == 4){
+					Ospan.className = 'mui-icon mui-icon-arrowthindown';
+				}else if(sort==3){
+					Ospan.className = 'mui-icon mui-icon-arrowthinup';	
+				}
+				//如有span 点击不继续添加
+				//var realArr = Array.prototype.slice.call(target.children);
+				//console.log(target.children.length>0)
+				if(target.children.length>0){
+					if(sort == 4){
+						target.children[0].className = 'mui-icon mui-icon-arrowthindown';
+					}else if(sort==3){
+						target.children[0].className = 'mui-icon mui-icon-arrowthinup';	
+					}
+				}else{
+					
+					target.appendChild(Ospan);
+				}
+				getGoodsList({
+					typeId:typeId,
+					sort:sort,
+					callback:function(res){
+						//清楚dom
+						GoodsList.innerHTML = '';
+						productList(res)
+					}
+				})
+				
+			}//选中的一些点逻辑处理
+			
+		}//目标对象
+	})
+//分类吸顶
+//	var scroll = mui('#refreshContainer').scroll();
+//	
+//	var navEl = document.querySelector('#nav-list-mounting');
+//	var navMoun = document.querySelector('#Mounting');
+//	//var navT = navEl.offsetTop;
+//	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll',function (e) {
+//	　　console.log(-scroll.y);
+//	var scrollT = -scroll.y;
+//		if (scrollT > 473) {
+//      	if(navMoun.innerHTML == ''){
+//      		navMoun.innerHTML = navEl.innerHTML;
+//      		navEl.innerHTML = '';
+//      	}
+//	    }
+//	    else {
+//	        if(navEl.innerHTML == ''){
+//	        	navEl.innerHTML = navMoun.innerHTML;
+//	        	navMoun.innerHTML = '';
+//	        }
+//	    }
+//	})
+
+})()
+
+function allSbiling(elm) {
+	var a = [];
+	var p = elm.parentNode.children;
+	for(var i =0,pl= p.length;i<pl;i++) {
+		a.push(p[i]);
+	}
+	return a;
+}
+//商品列表 参数 分类goodsSaleId
+function getGoodsList(opt){
+	
+	var config ={
+		typeId:0,//分类的ID 也就是 button 的itemid
+		type:1,
+		itemId:0,
+		sort:4, //上 3 下 4 
+		callback:function(res){
+			
+		}
+	}
+	for (var i in opt){
+		config[i] = opt[i];
+	}
+	var Url = '?typeId='+config.typeId+'&type='+config.type+'&itemId='+config.itemId+'&sort='+config.sort;
+	jsajax({
+		method:'post',
+		url:'http://139.129.203.90/caibao/goods/typeGoodsList'+Url,
+		success:function(res){
+			
+			config.callback(res);
+		}
+	})
+}
+//默认调用 显示全部商品
+getGoodsList({
+	callback:function(res){
+		productList(res)
+	}
+})
+function productList (res){
+	var arr = JSON.parse(res).cbData;
+	//console.log(arr)
+	var Fragment = document.createDocumentFragment();
+	for(var i = 0 ;i<arr.length;i++){		
+		var Odiv01 = document.createElement('div');
+		Odiv01.className = 'goodslist';
+		//top
+		var Odiv02 = document.createElement('div');
+		Odiv02.className = 'top';
+		Odiv02.setAttribute('itemId',arr[i].itemId);
+		var TopDivBg = document.createElement('div');
+		TopDivBg.className = 'top-bg';
+		var OimgMoney = new Image();
+		var TopDivText = document.createElement('span');
+		TopDivBg.appendChild(OimgMoney);
+		TopDivBg.appendChild(TopDivText);
+		Odiv02.appendChild(TopDivBg)	
+		var Oimg = new Image();
+		Oimg.src = arr[i].image;
+		Oimg.className = 'goods-img'
+		Odiv02.appendChild(Oimg);
+		var Ospan = document.createElement('span');
+		Ospan.className = 'top-title';
+		Ospan.innerText = arr[i].title;
+		Odiv02.appendChild(Ospan);
+		//bottom
+		var Odiv04 = document.createElement('div');
+		Odiv04.className = 'bottom';
+		var Obtn = document.createElement('button');
+		Odiv04.appendChild(Obtn);
+		if(arr[i].price == 1){
+			
+			OimgMoney.src = '../image/ic_cover_money1.png';
+			TopDivText.innerHTML = '1元<br />商品';
+			Obtn.innerText = '一元抢购';
+			
+		}else if(arr[i].price == 10){
+			
+			OimgMoney.src = '../image/ic_cover_money10.png';
+			TopDivText.innerHTML = '10元<br />商品';
+			Obtn.innerText = '十元抢购';
+			
+			
+		}else if(arr[i].price == 50){
+			
+			OimgMoney.src = '../image/ic_cover_money50.png';
+			TopDivText.innerHTML = '50元<br />商品';
+			Obtn.innerText = '五十元抢购';
+			
+			
+		}else if(arr[i].price == 100){
+			
+			OimgMoney.src = '../image/ic_cover_money100.png';
+			TopDivText.innerHTML = '100元<br />商品';
+			Obtn.innerText = '一百元抢购';
+			
+		}
+		//center
+		var Odiv03 = document.createElement('div');
+		Odiv03.className = 'center';
+		var CenP01 = document.createElement('p');
+		var CenP02 = document.createElement('p');
+		var CenSpan = document.createElement('span');
+		var CenP03 = document.createElement('p');
+		CenP01.innerText = '总需：'+arr[i].totalPerson+'人次';
+		CenP02.className = 'progress';
+		CenP02.appendChild(CenSpan);
+		var per = (arr[i].finishPerson/arr[i].totalPerson)*100;
+		if( per > 0&&per < 1){
+			per = 1
+		}
+		var num = Math.floor(per);
+		CenSpan.style.width = num+'%';
+		CenP03.innerText = '揭晓进度 '+num+'%';
+		Odiv03.appendChild(CenP01);
+		Odiv03.appendChild(CenP02);
+		Odiv03.appendChild(CenP03);
+		
+		Odiv01.appendChild(Odiv02);
+		Odiv01.appendChild(Odiv03);		
+		Odiv01.appendChild(Odiv04);
+		Fragment.appendChild(Odiv01);
+	}
+	GoodsList.appendChild(Fragment);
+}
+
+
+
+mui('body').on('tap','a',function(){
+	
+	if(this.getAttribute('off')){
+		//需要登录权限
+		if(localStorage.getItem('username')){
+			
+			document.location.href=this.href;			
+			
+		}else{
+			//没有登录
+			
+//			 mui.confirm('您好，请你先登录',' ',['确认','取消'],function(e){
+//			 	//console.log(e.index)
+//			 	if(e.index == 0){
+//					document.location.href='login.html';	
+//			 	}
+//			 },'div');		
+			plus.nativeUI.confirm( "您好,请您先登录", function(e){
+				if(e.index == 0){
+						document.location.href='login.html';	
+				 	}
+			}, "提示", ["确认","取消"]);
+		}
+	}else{
+		
+		document.location.href=this.href;			
+	}
+
+});
+//窗口操作
+function plusReady(){
+// 获取所有Webview窗口
+	var wvs=plus.webview.all();
+	for(var i=1;i<wvs.length;i++){
+		//console.log(wvs[i].id)
+		if(wvs[i].id != 'homeList'){			
+			wvs[i].close();
+		}
+	}
+}
+if(window.plus){
+	plusReady();
+}else{
+	document.addEventListener("plusready",plusReady,false);
+}
+
+</script>
+</html>

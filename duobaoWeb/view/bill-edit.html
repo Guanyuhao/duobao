@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title> 
+    <link href="../css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="../css/com.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/bill.css"/>
+</head>
+<body>
+	
+	<footer class="mui-bar mui-bar-tab bill-list-footer list-edit">	
+			<div class="left">
+	            <div class="mui-input-row mui-checkbox mui-left">
+	                <label>全选</label>
+	                <input type="checkbox" id="checkAll">
+	            </div>
+			</div>
+			<div class="right">
+				<button class="mui-btn mui-btn-danger">删除</button>
+			</div>
+	</footer>
+		
+	<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <ul class="mui-table-view mui-table-view-chevron" id="billList">
+	          	
+	        </ul>
+	      </div>
+	    </div>  
+	</div>
+	
+</body>
+<script type="text/javascript">
+	var h5pullDown = true;
+</script>
+<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/car.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+;(function(){
+	
+	
+	getBillList({
+		callback:function(res){
+			//console.log(res)
+			var Obj = JSON.parse(res);
+			console.log(Obj)
+			var ListArr = Obj.goodsSales;
+			
+			proBillListDom(ListArr)
+		}
+	})
+	
+	document.getElementById('checkAll').addEventListener('change',function(e) {
+            var listBox = mui('.listCheckBox');
+            if (e.target.checked) {
+                listBox.each(function() {
+                    var ele = this;
+                    ele.checked=true
+                })
+            } else {
+                listBox.each(function() {
+                    var ele = this;
+                    ele.checked=false
+                })
+            }
+    })
+	
+	
+	
+	
+})()
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+		this.endPullupToRefresh(false||true);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});	
+
+function getBillList(opt){
+	//参数必穿
+	if(localStorage.user){
+		
+		var userInfo = JSON.parse(localStorage.user).userInfo;
+		var config = {
+			userId:userInfo.userId,
+			token:userInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for(var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:'http://139.129.203.90/caibao/car/list'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+		
+	}
+	
+}
+
+function proBillListDom(arr){
+	
+	var billList = document.querySelector('#billList');
+	var Fragment = document.createDocumentFragment();
+		for (var i = 0 ; l=arr.length, i<l; i++) {
+			var Oli = document.createElement('li');
+			Oli.className = '"mui-table-view-cell mui-media';
+			Oli.setAttribute('goodsId',arr[i].goodsId);
+			var Ocheck = document.createElement('div');
+			Ocheck.className = 'mui-input-row mui-checkbox mui-left check-warp';
+			var Olabel = document.createElement('label');
+			var OcheckInput = document.createElement('input');
+			OcheckInput.type = 'checkbox';
+			OcheckInput.name ='box';
+			OcheckInput.className = 'listCheckBox';
+			Ocheck.appendChild(Olabel);
+			Ocheck.appendChild(OcheckInput);
+			Oli.appendChild(Ocheck);
+			var Oimg = new Image();
+			Oimg.className = 'mui-media-object mui-pull-left';
+			Oimg.src = arr[i].image;
+			var Odiv = document.createElement('div');
+			Odiv.className = 'mui-media-body';
+			var Op01 = document.createElement('p');
+			Op01.innerHTML =arr[i].title
+			var Op02 = document.createElement('p');
+			Op02.innerHTML = '总需 '+arr[i].totalPerson+'人次';
+			var Op03 = document.createElement('p')
+			Op03.className = 'clearfloat';
+			var Obtn01 = document.createElement('button');
+			Obtn01.className = 'mui-btn';
+			Obtn01.innerText = '-';
+			var Obtn02 = document.createElement('button');
+			Obtn02.className = 'mui-btn';
+			Obtn02.innerText = '+';
+			var Ocen = document.createElement('div')
+			Ocen.className = 'center';
+			var Oinput = document.createElement('input');
+			Oinput.type = 'text';
+			Oinput.value = arr[i].num;
+			Oinput.readOnly="true";
+			Oinput.className = 'bill-input'
+			var Ospan = document.createElement('span');
+			Ospan.innerHTML = '(中奖率'+10+'%)'
+			Ocen.appendChild(Oinput);
+			Ocen.appendChild(Ospan);
+			Op03.appendChild(Obtn01);
+			Op03.appendChild(Ocen);
+			Op03.appendChild(Obtn02);
+			Odiv.appendChild(Op01);
+			Odiv.appendChild(Op02);
+			Odiv.appendChild(Op03);
+			Oli.appendChild(Oimg);
+			Oli.appendChild(Odiv);
+			Fragment.appendChild(Oli)
+		}
+		billList.appendChild(Fragment);
+}
+
+</script>
+</html>

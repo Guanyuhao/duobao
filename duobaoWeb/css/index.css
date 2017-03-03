@@ -1,0 +1,247 @@
+
+ header.mui-bar-nav .mui-icon-chat{
+ 	position: absolute;
+ 	right: 0.1rem;
+ }
+ 
+ #banner .mui-slider-item {
+	width: 100%;
+	height: 1.5rem;
+	overflow: hidden;
+}
+
+.mui-slider-indicator .mui-indicator{
+	background: #fff;
+	-webkit-box-shadow: 0 0 1px 1px #F2F2F2; 
+    box-shadow: 0 0 1px 1px #F2F2F2;
+}
+.mui-slider-indicator .mui-active.mui-indicator{
+	background: #4CD964;
+}
+
+ #banner .mui-slider-item img{
+	width: 100%;
+	height: 1.5rem;
+}
+.message-push{
+	position: relative;
+	width: 100%;
+	height: .35rem;
+	overflow: hidden;
+	background: #F9F9F9;
+}
+.message-push .left-mess {
+	position: absolute;
+	left: .08rem;
+	top: .1rem;
+	width: .15rem;
+	height: .15rem;
+	background: url(../image/ic_horn.png) no-repeat center center;
+	background-size: 100% 100%;
+}
+@keyframes messagepush{
+	from {transform: translateY(0);}
+	to {transform: translateY(-100%);}
+}
+@-webkit-keyframes messagepush{
+	from {-webkit-transform: translateY(0);}
+	to {-webkit-transform: translateY(-100%);}
+}
+.message-push .ani-push{
+	padding-left: .30rem;
+	animation: messagepush 25s linear infinite;
+	-webkit-animation: messagepush 25s linear infinite;
+	
+}
+.message-push p {
+	line-height: .35rem;
+	margin-bottom: 0;
+	font-size: .13rem;
+}
+.message-push p a{
+	 text-overflow:ellipsis; 
+	 white-space:nowrap; 
+	 overflow:hidden;
+	 color: #555;
+}
+.message-push p a span{
+	color: red;
+}
+.function{
+	width: 100%;
+	height: 0.8rem;
+	border-top:.001rem solid #F3F3F3 ;
+	background: #F9F9F9;
+}
+.function dl {
+	text-align: center;
+	float: left;
+	width: 25%;
+	box-sizing: border-box;
+	border-left: 0.01rem solid #f3f3f3;
+	margin-bottom: 0;
+}
+.function dl dt{
+	width: 100%;
+	text-align: center;
+}
+.function dl dt img {
+	width: .30rem;
+	height: .30rem;
+}
+.function dl dd{
+	font-size: .10rem;
+	margin-left: .05rem;
+	color: #666;
+}
+.nav-list{
+	-webkit-overflow-scrolling:touch; 
+	width: 100%;
+	height: .40rem;
+	margin:0.05rem 0;
+	padding: 0.07rem;
+	background: #f9f9f9;
+	position: relative;
+}
+.nav-list.fixed-top{
+	position: absolute;
+	left: 0;
+	top: 40px;
+	background: red;
+	z-index: 1000;
+	zoom: 1;
+}
+
+
+.nav-list button {
+	width: 0.80rem;
+	height: 0.25rem;
+	box-sizing: border-box;
+	margin: 0 0.04rem;
+	font-size: 0.12rem;
+	position: relative;
+	line-height: 0.14rem;
+}
+.nav-list button.active{
+	background: red;
+	color: #f9f9f9;
+}
+.nav-list button span.mui-icon{
+	position: absolute;
+	border: none;
+	right: 0.03rem;
+	width: 0.1rem;
+	height: 0.1rem;
+	line-height: 0.08rem;
+	font-size: 0.14rem;
+	color: #f9f9f9;
+}
+
+.mui-table-view{
+	overflow: hidden;
+	background: #f9f9f9;
+}
+.goodslist{
+	float: left;
+	box-sizing: border-box;
+	width: 50%;
+	border-right: 0.01rem solid #f3f3f3;
+	border-bottom: 0.01rem solid #f3f3f3;
+	height: 2rem;
+	background: #fff;
+	position: relative;
+}
+.goodslist .top{
+	position: relative;
+	width: 100%;
+	height: 60%;
+}
+.goodslist .top a{
+	display: block;
+	color: #000;
+	width: 100%;
+	height: 100%;
+}
+.goodslist .top .top-bg{
+	width: 0.3rem;
+	height: 0.3rem;
+	position: absolute;
+	left: 0.05rem;
+	top: 0;
+}
+.goodslist .top .top-bg img{
+	
+	width: 100%;
+	height: 100%;
+}
+.goodslist .top .top-bg span{
+	text-align: center;
+	font-size: 0.08rem;
+	position: absolute;
+	line-height: 0.1rem;
+	width: 0.27rem;
+	left: 0.01rem;
+	top: 0.02rem;
+	color: #fff;
+}
+.goodslist .top .top-title{
+	position: absolute;
+	bottom: 0;
+	font-size: 0.14rem;
+	padding-left: 0.05rem;
+}
+.goodslist .top .goods-img{
+	position:absolute ;
+	width: 1rem;
+	height: auto;
+	right: 0.1rem;
+	top: 0.05rem;
+}
+/*center*/
+.goodslist .center{
+	width: 100%;
+	height: 25%;
+	box-sizing: border-box;
+	padding: 0.05rem;
+}
+.goodslist .center p{
+	font-size: 0.10rem;
+	margin: 0;
+	line-height: 0.10rem;
+}
+.goodslist .center .progress{
+	width: 90%;
+	height: 0.06rem;
+	background: #ddd;
+	margin: 0.03rem 0;
+	border-radius: 0.06rem;
+}
+.goodslist .center .progress span{
+	height: 0.06rem;
+	background: darkorange;
+	border-radius: 0.06rem;
+
+	position: absolute;
+}
+/*bottom*/
+.goodslist .bottom{
+	width: 100%;
+	height: 15%;
+}
+.goodslist .bottom button{
+	width: 85%;
+	height: 80%;
+	text-align: center;
+	background: red;
+	color: #fff;
+	box-sizing: border-box;
+	margin-left: 0.12rem;
+	line-height: 0.12rem;
+}
+
+/*吸顶*/
+#Mounting{
+	position: fixed;
+	top: .44rem;
+	z-index: 15;
+}
