@@ -1,0 +1,116 @@
+{
+	"index.html": {
+		"resources": [
+			"image/icon_home_page2.png",
+			"image/contactservice.png",
+			"fonts/mui.ttf",
+			"image/quesion.png",
+			"js/car.js",
+			"image/icon_home_page3.png",
+			"image/icon_home_page4.png",
+			"css/index.css",
+			"css/com.css",
+			"image/ic_cover_money1.png",
+			"image/ic_horn.png",
+			"css/mui.min.css",
+			"image/ic_cover_money10.png",
+			"js/ajax.js",
+			"image/activity_main.png",
+			"js/mui.js",
+			"image/showorder_camara.png",
+			"image/icon_home_page1_selected.png",
+			"js/footer.js",
+			"myset.html"
+		],
+		"refer": [
+			"login.html",
+			"myset.html",
+			"detail.html"
+		]
+	},
+	"myset.html": {
+		"resources": [
+			"image/ic_treaure_underway.png",
+			"image/ic_red_packets.png",
+			"view/preson-show.html",
+			"image/icon_home_page4_selected.png",
+			"image/ic_about_we.png",
+			"image/ic_treaure_winning.png",
+			"css/myset.css",
+			"image/ic_message_center.png",
+			"image/icon_home_page1.png",
+			"image/ic_treaure_announced.png",
+			"image/ic_wallet.png",
+			"image/ic_problem.png",
+			"index.html",
+			"bill.html",
+			"image/icon_home_page2.png",
+			"fonts/mui.ttf",
+			"image/icon_home_page3.png",
+			"css/com.css",
+			"css/mui.min.css",
+			"js/ajax.js",
+			"js/mui.js",
+			"js/footer.js",
+			"view/indiana-recode.html"
+		],
+		"refer": [
+			"view/preson-show.html",
+			"index.html",
+			"bill.html",
+			"view/indiana-recode.html"
+		]
+	},
+	"login.html": {
+		"refer": [
+			"index.html"
+		]
+	},
+	"view/preson-show.html": {
+		"resources": [
+			"myset.html"
+		],
+		"refer": [
+			"myset.html"
+		]
+	},
+	"bill.html": {
+		"resources": [
+			"css/bill.css",
+			"image/ic_emptypage_shopping_cart.png",
+			"image/icon_home_page3_selected.png"
+		],
+		"refer": [
+			"announced.html"
+		]
+	},
+	"announced.html": {
+		"resources": [
+			"css/announced.css",
+			"image/icon_home_page2_selected.png"
+		],
+		"refer": [
+			"detail.html"
+		]
+	},
+	"detail.html": {
+		"resources": [
+			"css/detail.css",
+			"css/com.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/ajax.js",
+			"js/mui.js",
+			"js/car.js",
+			"image/icon_home_page3.png"
+		]
+	},
+	"view/indiana-recode.html": {
+		"resources": [
+			"css/view/indianarecode.css"
+		],
+		"refer": [
+			"detail.html"
+		]
+	}
+}

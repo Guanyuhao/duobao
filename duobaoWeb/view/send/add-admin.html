@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>地址管理</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			.fixe-bottom{
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+				z-index: 10;
+			}
+			.fixe-bottom>button{
+				width: 90%;
+				margin: 5%;
+			}
+			/*按钮*/
+			.address .mui-checkbox input[type=checkbox]:before,.mui-radio input[type=radio]:before{
+				font-size: .18rem;
+			}
+			.address .mui-radio label, .mui-checkbox label{
+				padding: 0;
+				padding-right: 20px;
+			}
+			.address .mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{
+				width: .2rem;
+				height: .2rem;
+				right: 0;
+				top: 0;
+			}			
+			.address .mui-table-view-cell:after {
+				left: 0;
+			}
+			/*addresslist*/
+			.addressWarp>.address{
+				background: #fff;
+				height: 1rem;
+				margin: .1rem 0;				
+			}
+			.address>.top{
+				padding: .05rem;
+				height: 70%;
+				border-bottom: .01rem solid #FAFAFA;
+			}
+			
+			.address>.top>.right{
+				padding-top: .05rem;
+			}
+			.address>.top>.right>p:first-child{
+				color: #000;
+			}
+			.address>.top>.right>p:last-child{
+				font-size: .12rem;
+			}
+			.address>.bottom{
+				height: 30%;
+				padding: .05rem;
+			}
+			/*css 更改出*/
+			.address>.bottom>.left{
+				position: relative;
+				
+				width: 20%;
+			}
+			.address>.bottom>.left label{
+				font-size: .1rem;
+				position: relative;
+				top: -2px;
+				margin-right: .05rem;
+			}
+			/*结束*/
+			.address>.bottom>span{
+				color: #8f8f94;
+				font-size: .2rem;
+			}
+			.address>.bottom>span>i{
+				font-size: .12rem;
+				font-style: normal;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">地址管理</h1>
+	    	
+		</header>
+		<footer class="fixe-bottom mui-bar-tab">
+			<button class="mui-btn mui-btn-danger">新建地址</button>
+		</footer>
+		
+	    <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <div class="addressWarp">
+		  				
+		  		
+		  	</div>
+	      </div>
+	    </div>
+		
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+;(function(){
+	
+	
+	
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});			
+			choiceaddData({
+				callback:function(res){
+					localStorage.editAddData = res;
+					var Obj = JSON.parse(res);
+					console.log(Obj);
+					var arr = Obj.userAddress;
+					proaddressDom(arr)
+				}
+			})
+			
+			//编辑地址
+			mui('.addressWarp').on('tap','.bottom>.mui-icon-compose',function(){
+				localStorage.editAddId = this.getAttribute('editAddId');
+				mui.openWindow({
+					url:'edit-add.html',
+					id:'editAdd'
+				})
+			})
+			//新建地址
+			mui('footer').on('tap','button',function(){
+				
+				mui.openWindow({
+					url:'add-address.html',
+					id:'addAddress'
+				})
+				
+			})
+			//删除地址
+			mui('.addressWarp').on('tap','.bottom>.mui-icon-trash',function(){
+				var itemid = this.getAttribute('delid')
+				 mui.confirm('您好，确定要删除吗？',' ',['确认','取消'],function(e){
+				 	if(e.index == 0){
+							deladdress({
+								itemid:itemid,
+								callback:function(res){
+									var Obj = JSON.parse(res);
+									if(Obj.code == 0){
+										
+										location.reload();
+									}else if(Obj.code == 777){
+										mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+										 	if(e.index == 0){
+												mui.openWindow({
+													url: 'login.html',
+													id:'login.html'								
+												})
+										 	}
+										},'div');
+									}
+									else{
+										mui.toast('删除失败，请重试')
+									}
+								}
+							})
+				 	}
+				 },'div');	
+				
+			})
+			//选择默认地址
+			mui('.addressWarp').on('tap','input[name=radioadd]',function(){
+				var itemid = this.getAttribute('addid');
+				updataadress({
+					itemid:itemid
+				})
+			})
+			
+		})();
+//用户地址列表		
+function choiceaddData(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+	}
+	for( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/addrList'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+// 删除收货地址
+function deladdress(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			itemid:'',
+			callback:function(res){
+			
+			}
+	}
+	for( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?userId='+config.userId+'&token='+config.token+'&itemid='+config.itemid;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/delAddr'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+// 更改默认收货地址
+function updataadress(opt){
+	
+	if( localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			issh:'1',
+			userId:UserInfo.userId,
+			itemid:'',
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+	}
+	for( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?userId='+config.userId+'&token='+config.token+'&issh='+config.issh+'&itemid='+config.itemid;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/updateAddr'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+	
+}
+
+
+
+function proaddressDom(arr){
+	if(arr.length == 0){
+		return false;
+	}
+	var addressWarp = mui('.addressWarp')[0];
+	var Fragment = document.createDocumentFragment();
+	arr.forEach(function(v,i){
+		var address = document.createElement('div');
+		address.className = 'address';
+		var addTop = document.createElement('div');
+		addTop.className = 'top clearfloat';
+		var addBottom = document.createElement('div');
+		addBottom.className = 'bottom clearfloat';
+		// 这是 下左 结构
+		var addTopLeft =  document.createElement('div');
+		addTopLeft.className = 'left mui-pull-left';
+		var addTopLeftRow = document.createElement('div');
+		addTopLeftRow.className = 'mui-input-row mui-radio mui-pull-left';
+		var addTopLeftLab = document.createElement('label');
+		//需要字  
+		addTopLeftLab.innerText = "默认地址"
+		
+		var addTopLeftInp = document.createElement('input');
+		addTopLeftInp.name = 'radioadd';		
+		addTopLeftInp.type = 'radio';
+		if( v.issh == 1){
+			addTopLeftInp.checked = true;
+		}
+		addTopLeftInp.setAttribute('addId',v.itemid);
+		//下左结构结束
+		var addTopRight = document.createElement('div');
+		addTopRight.className = 'right mui-pull-left';
+		var addTopRightOp1 = document.createElement('p');
+		addTopRightOp1.innerHTML = v.realname+'&ensp;&ensp;'+'<span>'+v.mobile+'</span>';	
+		var addTopRightOp2 = document.createElement('p');
+		addTopRightOp2.innerHTML = v.province+'&ensp;'+v.city+'&ensp;'+v.county+'&ensp;'+v.address;
+		var addBot = document.createElement('div');
+		addBot.className = 'bottom clearfloat';
+		//删除
+		var addBotOsp = document.createElement('span');
+		addBotOsp.className = 'mui-pull-right mui-icon mui-icon-compose';
+		addBotOsp.setAttribute('editAddId',v.itemid)
+		var addBotOi = document.createElement('i');
+		addBotOi.innerText = '编辑';
+		//删除 结束
+		var addBotdel = document.createElement('span');
+		addBotdel.className = 'mui-pull-right mui-icon mui-icon-trash';
+		addBotdel.setAttribute('delId',v.itemid)
+		var addBotdeli = document.createElement('i');
+		addBotdeli.innerText = '删除';
+		
+		addBotdel.appendChild(addBotdeli);
+		addBottom.appendChild(addBotdel);
+		addBotOsp.appendChild(addBotOi);
+		addBottom.appendChild(addBotOsp);
+		addTopRight.appendChild(addTopRightOp1);
+		addTopRight.appendChild(addTopRightOp2);
+		//单选结构的排版
+		addTopLeftRow.appendChild(addTopLeftLab);
+		addTopLeftRow.appendChild(addTopLeftInp);
+		addTopLeft.appendChild(addTopLeftRow);
+		addBottom.appendChild(addTopLeft); //修改之后单选结构在下左
+//		addTop.appendChild(addTopLeft);
+		addTop.appendChild(addTopRight);
+		address.appendChild(addTop);
+		address.appendChild(addBottom);
+		Fragment.appendChild(address);
+	})
+	addressWarp.appendChild(Fragment);
+}
+
+
+
+
+	</script>
+</html>

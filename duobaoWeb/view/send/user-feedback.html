@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>意见反馈</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			.fixe-bottom{
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+				z-index: 10;
+			}
+			.fixe-bottom>button{
+				width: 90%;
+				margin: 5%;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">意见反馈</h1>
+		</header>
+		<footer class="fixe-bottom">
+			<button class="mui-btn mui-btn-danger save">提交</button>
+		</footer>
+		<div class="mui-content">
+		    
+		    
+		    
+		</div>
+	</body>
+	
+	
+	<script type="text/javascript">
+
+
+
+		document.querySelector('.mui-action-back').addEventListener('touchend',function(){
+			
+			window.history.back();
+		})
+		
+	</script>
+</html>

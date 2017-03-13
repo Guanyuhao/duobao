@@ -401,7 +401,14 @@
 					"image/contactservice.png",
 					"image/ic_treaure_winning.png",
 					"css/myset.css",
-					"image/ic_treaure_announced.png"
+					"image/ic_treaure_announced.png",
+					"image/ic_red_packets.png",
+					"view/preson-show.html",
+					"image/ic_about_we.png",
+					"image/ic_message_center.png",
+					"image/ic_wallet.png",
+					"image/ic_problem.png",
+					"view/indiana-recode.html"
 				],
 				"refer": [],
 				"priority": 0
@@ -456,6 +463,22 @@
 					"js/mui.js"
 				],
 				"refer": [],
+				"priority": 0
+			},
+			"view/preson-show.html": {
+				"resources": [
+					"myset.html"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"view/indiana-recode.html": {
+				"resources": [
+					"css/view/indianarecode.css"
+				],
+				"refer": [
+					"detail.html"
+				],
 				"priority": 0
 			}
 		},
