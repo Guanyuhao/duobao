@@ -10,21 +10,21 @@ mui('footer').on('tap','a',function(){
 			var Url = '?userId='+userInfo.userId+'&token='+userInfo.caibaoToken;
 			jsajax({
 				method:'post',
-				url:'http://139.129.203.90/caibao/car/list'+Url,
+				url:HostPort+'/car/list'+Url,
 				success:function(res){
 					var User = JSON.parse(res);
 					if(User.code == 0){
 						mui.openWindow({
 							url: _this.href,
 							id:_this.href
-					})
+						})
 					}else if(User.code == 777){
 						localStorage.user = '';
 						mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
 						 	if(e.index == 0){
 								mui.openWindow({
 									url: 'login.html',
-									id:'login.html'
+									id:'login.html'								
 								})
 						 	}
 						 },'div');

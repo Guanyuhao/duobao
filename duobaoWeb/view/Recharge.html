@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>参加成功</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			.optmoney{
+				background: #fff;
+				overflow: hidden;
+				padding-bottom: .1rem;
+			}
+			.optmoney>p,.payway>p{
+				padding: .1rem 0;
+				padding-left: .1rem;
+				background: #efeff4;
+				color: #333;
+			}
+			.optmoney>button {
+				width: 20%;
+				height: .35rem;
+				color: #C0C0C0;
+				margin: 2% 1.9%;
+				box-sizing: border-box;
+				font-size: .12rem;
+			}		
+			.optmoney>input{
+				width: 20%;
+				height: .35rem;
+				margin: 2% 1.9%;
+				font-size: .12rem;
+				padding: 0;
+				text-align: center;
+				background: none;
+			}
+			.optmoney>input.active{
+				
+				color: red;
+				border-color: red;
+			}
+			.mui-input-row {
+				clear: none;
+			}
+			.mui-radio input[type='radio']:checked:before {
+				content: '\e442';
+			}
+			
+			.mui-checkbox input[type=checkbox]:before,.mui-radio input[type=radio]:before{
+				font-size: .20rem;
+			}
+			.mui-radio label, .mui-checkbox label{
+				padding: 0;
+				padding-right: 20px;
+			}
+			.mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{
+				width: .2rem;
+				height: .2rem;
+				right: 0;
+				top: 0;
+			}
+			.mui-table-view-cell:after {
+				left: 0;
+			}
+			.payway li .img{
+				width: .2rem;
+				height: .2rem;
+				margin-right: .05rem;
+			}
+			.payway li .img>img{
+				width: 100%;
+				height: 100%;
+			}
+			.btn-recharge{
+				width: 100%;
+				position: fixed;
+				bottom: .2rem;
+			}			
+			.btn-recharge>button{
+				width: 90%; 
+				margin: 0 5%;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-icon mui-icon-left-nav mui-pull-left"><a href="../detail.html"></a></span>			
+	    	<h1 class="mui-title">充值</h1>
+		</header>
+		<div class="mui-content">
+		   	<div class="optmoney">
+		   		<p>请选择充值金额</p>
+		   		<button class="mui-btn mui-btn-outlined">5</button>
+		   		<button class="mui-btn mui-btn-outlined">10</button>
+		   		<button class="mui-btn mui-btn-outlined">20</button>
+		   		<button class="mui-btn mui-btn-outlined">50</button>
+		   		<button class="mui-btn mui-btn-outlined">100</button>
+		   		<button class="mui-btn mui-btn-outlined">200</button>
+		   		<button class="mui-btn mui-btn-outlined">500</button>
+		   		<input class="" type="number" placeholder="输入金额"/>
+		   	</div>
+		   	<div class="payway mui-table-view">
+		   		<p>请选择充值方式</p>
+		   		<li class="mui-table-view-cell">
+		    		<div class="mui-pull-left img">
+		    			<img src="../image/ic_pay_ali.png"/>
+		    		</div>
+		    		支付宝支付
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+						<label></label>
+						<input name="radio2" type="checkbox">
+					</div>
+		    	</li>		    	
+		    	<li class="mui-table-view-cell">
+		    		<div class="mui-pull-left img">
+		    			<img src="../image/ic_pay_union.png"/>
+		    		</div>
+		    		银联支付
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+						<label></label>
+						<input name="radio2" type="checkbox">
+					</div>
+		    	</li>
+				
+		   	</div>
+		   	<p style="font-size: .12rem;margin: .1rem;">充值彩宝币(1元=1彩宝币)，充值款项不支持退款</p>
+		   	<div class="btn-recharge">
+		   		<button class="mui-btn mui-btn-danger" id="RechargeBtn">充值</button>
+		   	</div>
+		</div>
+	</body>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		;(function(){
+			
+		document.querySelector('.mui-icon-left-nav').addEventListener('touchend',function(){
+			window.history.back();
+		})
+		document.querySelector('.optmoney').addEventListener('touchend',function(ev){
+			var ev = ev || window.event;
+			var target = ev.target || ev.srcElement;
+			var silb = target.parentNode.children;
+			var arr = Array.prototype.slice.call(silb);
+			arr.forEach(function(v,i){
+				if(v.classList.contains('mui-btn-danger')){ //移除所有button 红色
+					v.classList.remove('mui-btn-danger')
+				}
+				if(v.classList.contains('active')){ // input 的红色
+					v.classList.remove('active')
+				}
+			})
+			if(target.nodeName.toLocaleLowerCase()=='button'){			
+				target.classList.add('mui-btn-danger');
+			}else if(target.nodeName.toLocaleLowerCase()=='input'){
+				target.classList.add('active')
+			}
+		})
+	//多选处理成单选
+		var radio2 = document.querySelectorAll('.payway input[name=radio2]');
+		var arr2 = Array.prototype.slice.call(radio2);
+			arr2.forEach(function(v,i){
+				v.onchange = function(){				
+					arr2.forEach(function(vs,is){
+						if( v == vs){
+							
+						}else{
+							vs.checked = false;
+						}
+					})
+				}
+			})
+	//充值按钮
+	document.querySelector('#RechargeBtn').addEventListener('touchend',function(){
+		var ValEl = document.querySelector('.optmoney').children;
+		var	ValArr = Array.prototype.slice.call(ValEl);
+		var Val;
+		ValArr.forEach(function(v,i){
+			if(v.classList.contains('active')){
+				Val = v.value;
+			}else if(v.classList.contains('mui-btn-danger')){
+				Val = v.innerText;
+			}
+		})
+		var money = Number(Val);
+		if(money){ //确保选择
+			console.log('money：'+money)
+			
+			if(arr2.some(function(v,i){return v.checked})){
+				//判读支付方式
+			}else{
+				mui.alert('请选择支付方式'," ")
+			}
+		}else{
+			mui.alert('请选择充值金额'," ")
+		}
+	})
+		})()
+	</script>
+</html>

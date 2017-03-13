@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,telephone=no"/>
+		<title>常见问题</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			#my-about .logo{
+				height: 1.8rem;
+				position: relative;
+			}
+			#my-about .logo img {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 1rem;
+				height: 1rem;
+				margin-left: -0.5rem;
+				margin-top: -0.5rem;
+			}
+			#my-about .logo span{
+				position: absolute;
+				left: 42%;
+				bottom: 9%;
+				font-size: .14rem;
+				color: red;
+			}
+			#my-about .bottom li{
+				font-size: .14rem;
+			}
+			#my-about .bottom li span{
+				float: right;
+				color: red;
+			}
+			#my-about .bottom li i{
+				float: right;
+				font-size: .12rem;
+				color: #C0C0C0;
+				font-style: normal;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">关于彩宝</h1>
+		</header>
+		<div class="mui-content" id="my-about">
+		   <div class="logo">
+		   		<img src="../image/activity_main.png" alt="" />
+		   		<span>彩宝v1.0</span>
+		   </div>
+		   <div class="bottom  mui-table-view">
+		   		<li class="mui-table-view-cell"><a href="">意见反馈</a></li>
+		   		<li class="mui-table-view-cell">官方客服QQ<span>14700991084</span></li>
+		   		<li class="mui-table-view-cell">官方客服微信号<span>14700991084</span><i>(推荐)&ensp;</i></li>
+		   </div>
+		</div>
+	</body>
+	
+	<script type="text/javascript">
+
+
+
+		document.querySelector('.mui-action-back').addEventListener('touchend',function(){
+			
+			window.history.back();
+		})
+		
+	</script>
+</html>

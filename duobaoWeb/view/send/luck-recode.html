@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>幸运记录</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			
+			.goodsstatus,.goodsInfor,.address,.transferName{
+				
+				margin-bottom: .1rem;
+				background: #fff;
+			}
+			.goodsstatus>h4,.goodsInfor>h4,.address>h4,.transferName>h4{
+				padding: .1rem 0.05rem;
+				font-weight: normal;
+				font-size: .14rem;
+				margin: 0;	
+			}
+			.goodsstatus>.expressInfos{
+				border-top: .01rem solid #FAFAFA;
+				padding: 0;
+				margin: 0;
+			}
+			.goodsstatus>.expressInfos>li{
+				position: relative;
+				padding: 0 .1rem;
+				line-height: .3rem;
+			}
+			.goodsstatus>.expressInfos>li>span{
+				color: #8f8f94;
+				font-size: .12rem;
+			}
+			.expressInfos>.shareorder{
+				color: #8F8F94;
+				font-size: .12rem;
+				position: relative;
+				padding-left:.1rem;
+				line-height: .4rem;
+			}
+			.expressInfos>.shareorder>.shareBtn{
+				top: .05rem;
+				font-size: .12rem;
+				position: absolute;
+				right: .1rem;
+			}
+			
+			/**/
+			.address>p{
+				padding: 0 .1rem;
+				margin: 0;
+				font-size: .10rem;
+			}
+			
+			/**/
+			.goodsdetail{
+				padding: .1rem 0;
+			}
+			.goodsdetail>.left{
+				width: 40%;
+				float: left;
+				
+			}
+			.goodsdetail>.left>img{
+				width:80%;				
+				margin: 10%;
+			}
+			.goodsdetail>.right{
+				width: 60%;
+				float: left;
+			}
+			.goodsdetail>.right>h4{
+				font-weight: normal;
+				margin: 0;
+				font-size: .14rem;
+			}
+			.goodsdetail>.right>p{
+				margin: 0;
+				font-size: .10rem;
+			}
+			.goodsdetail>.right>p>span{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">幸运记录</h1>
+	    	
+		</header>
+		<div class="mui-content">
+			<div class="mui-scroll-wrapper" id="scroll">
+				<div class="mui-scroll">
+					
+					<div class="goodsstatus">
+				  		<h4>商品状态</h4>
+				  		<ul class="expressInfos">
+				  			
+				  		</ul>
+				  	</div>
+				  	
+				  	<div class="transferName">
+				  		<!--物流信息-->
+				  	</div>
+				  	
+				  	<div class="address">
+				  		<!--用户收货地址信息-->
+				  	</div>
+				  	
+				  	<div class="goodsInfor">
+				  		<h4>商品信息</h4>
+				  		<div class="goodsdetail clearfloat">
+				  			
+				  		</div>
+				  	</div>
+					
+				</div>
+			</div>
+			
+		  	
+		</div>
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	;(function(){
+		mui('.mui-scroll-wrapper').scroll({
+			deceleration: 0.0006 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+		});
+		luckrecodeData({
+		 	callback:function(res){
+		 		var Obj = JSON.parse(res);
+		 		console.log(Obj);
+		 		var arr = Obj.expressInfos;
+		 		wuliuDom(arr,Obj)
+		 		wulishouhuoDom(Obj)
+		 		goodsInforDom(Obj)	
+		 
+		 	}
+		})
+		//晒单
+		mui('.expressInfos').on('tap','button',function(){
+			
+			mui.openWindow({
+				url:'new-sunshare.html'
+			})
+		})
+		
+		
+	})();
+	
+
+function luckrecodeData(opt){
+	
+	if(localStorage.luckitemId){
+		var goodsSaleId = localStorage.luckitemId
+		var config = {
+			goodsSaleId:goodsSaleId,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?goodsSaleId='+config.goodsSaleId;
+		jsajax({
+			method:'POST',
+			url:HostPort+'/topic/awradItem'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+
+function wuliuDom(arr,obj){
+	
+	var expressInfos = document.querySelector('.expressInfos');
+	var Fragment = document.createDocumentFragment();
+	arr.forEach(function(v,i){
+		var Oli = document.createElement('li');
+		var Ospan = document.createElement('span');
+		Ospan.innerText = v.content;
+		var Oi = document.createElement('i');
+		Oi.className = "inforimg"+i;
+		var Ospan2 = document.createElement('span');
+		Ospan2.innerText = v.addTime;
+		Ospan2.className = "mui-pull-right";
+		Oli.appendChild(Ospan);
+		Oli.appendChild(Ospan2);
+		Fragment.appendChild(Oli);
+	})
+	expressInfos.appendChild(Fragment)
+	if(obj){
+		if( obj.finishStatus == 1){
+			var Odivshare = document.createElement('div');
+			Odivshare.innerText = "已确认收货";
+			Odivshare.className = "shareorder";
+			var shareBtn = document.createElement('button')
+			shareBtn.className = "shareBtn mui-btn mui-btn-danger";
+			shareBtn.innerText = "去晒单";
+			Odivshare.appendChild(shareBtn);
+			expressInfos.appendChild(Odivshare);
+		}
+	}
+}
+function wulishouhuoDom(obj){
+	
+	if(obj.transferName){
+		//
+		var transferName = mui('.transferName')[0];
+		
+		
+	}
+	if(obj.address){
+		var address = mui('.address')[0];
+		var h4 = document.createElement('h4');
+		h4.innerText = "收货信息"
+		var op01 = document.createElement('p');
+		op01.innerHTML = obj.trueName+"<span class='mui-pull-right'>"+obj.mobile+"</span>"
+		var op02 = document.createElement('p');
+		op02.innerText = obj.address;
+		address.appendChild(h4);
+		address.appendChild(op01);
+		address.appendChild(op02);
+	}
+}
+
+
+
+function goodsInforDom(v){
+	
+	var goodsInfor = mui('.goodsdetail')[0];
+	var Odiv01 = document.createElement('div');
+	Odiv01.className = "left";
+	var imgs = new Image();
+	imgs.src = 	v.goodsImage;
+	Odiv01.appendChild(imgs);
+	var Odiv02 = document.createElement('div');
+	Odiv02.className = "right";
+	var h4 = document.createElement('h4');
+	h4.innerHTML = v.goodsTitle;
+	var Op02 = document.createElement('p');
+	Op02.innerHTML = "总需："+v.totalPerson+"人次";
+	var Op03 = document.createElement('p');
+	Op03.innerText = "期号："+v.goodsNum;
+	var Op04 = document.createElement('p');
+	Op04.innerHTML = "幸运号码：<span>"+v.awardNumber+'</span>'
+	var Op05 = document.createElement('p');
+	Op05.innerText = "本期参与："+v.payPerson;
+	var Op06 = document.createElement('p');
+	Op06.innerText = "揭晓时间："+v.finishTime;
+	Odiv02.appendChild(h4);
+	Odiv02.appendChild(Op02);
+	Odiv02.appendChild(Op03);
+	Odiv02.appendChild(Op04);
+	Odiv02.appendChild(Op05);
+	Odiv02.appendChild(Op06);
+	goodsInfor.appendChild(Odiv01);
+	goodsInfor.appendChild(Odiv02);
+}
+
+	</script>
+</html>

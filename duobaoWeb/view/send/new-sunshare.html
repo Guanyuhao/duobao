@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>新建晒单</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			
+			
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">新建晒单</h1>
+	    	
+		</header>
+		<div class="mui-content">
+			<div class="mui-scroll-wrapper" id="scroll">
+				<div class="mui-scroll">
+					
+					<form action="" method="post">
+						
+						<input type="submit" value=""/>
+					</form>
+					
+				</div>
+			</div>
+			
+		  	
+		</div>
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	;(function(){
+		mui('.mui-scroll-wrapper').scroll({
+			deceleration: 0.0006 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+		});
+		buildshareData({
+		 	callback:function(res){
+		 		var Obj = JSON.parse(res);
+		 		console.log(Obj);
+		 			 		
+		 	}
+		})
+		
+	})();
+	
+
+function buildshareData(opt){
+	
+	if(localStorage.luckitemId){
+		var goodsSaleId = localStorage.luckitemId
+		var config = {
+			goodsSaleId:goodsSaleId,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?goodsSaleId='+config.goodsSaleId;
+		jsajax({
+			method:'POST',
+			url:HostPort+'/topic/saveTopic'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+
+
+
+
+
+
+
+	</script>
+</html>

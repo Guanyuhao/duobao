@@ -91,7 +91,7 @@ function getAnnound(opt){
 	}
 	jsajax({
 		method:"post",
-		url:'http://139.129.203.90/caibao/goods/announce?page='+config.page,
+		url:HostPort+'/goods/announce?page='+config.page,
 		success:function(res){
 			
 			config.callback(res)

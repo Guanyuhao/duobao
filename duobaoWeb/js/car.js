@@ -18,7 +18,7 @@ function addcar(opt){
 			var Url ='?goodsSaleId='+config.goodsSaleId+'&userId='+config.userId+'&token='+config.token;
 			jsajax({
 				method:'post',
-				url:'http://139.129.203.90/caibao/car/save'+Url,
+				url:HostPort+'/car/save'+Url,
 				success:function(res){
 					config.callback(res)
 				}
@@ -55,9 +55,9 @@ function delcar(opt){
 		var Url ='?carIds='+config.carIds+'&userId='+config.userId+'&token='+config.token;
 		jsajax({
 			method:'post',
-			url:'http://139.129.203.90/caibao/car/delBatch'+Url,
+			url:HostPort+'/car/delBatch'+Url,
 			success:function(res){
-				console.log(res)
+				
 				config.callback(res)
 			}
 		})
@@ -82,7 +82,32 @@ function numupdate(opt){
 		var Url ='?num='+config.num+'&itemId='+config.itemId+'&userId='+config.userId+'&token='+config.token;
 		jsajax({
 			method:'post',
-			url:'http://139.129.203.90/caibao/car/num'+Url,
+			url:HostPort+'/car/num'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+// 结算
+function carjiesuan(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url ='?userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/order/save'+Url,
 			success:function(res){
 				config.callback(res)
 			}

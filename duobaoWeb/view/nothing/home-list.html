@@ -175,7 +175,7 @@ mui.init({
 ;(function(){
 	jsajax({
 		method:'get',
-		url:'http://139.129.203.90/caibao/index/banners',
+		url:HostPort+'/index/banners',
 		success:function(res){
 			var arr = JSON.parse(res).banners;
 			//console.log(arr)
@@ -226,7 +226,7 @@ mui.init({
 ;(function(){
 	jsajax({
 		method:'get',
-		url:'http://139.129.203.90/caibao/message/announce',
+		url:HostPort+'/message/announce',
 		success:function(res){
 			var arr = JSON.parse(res).messages;
 			//console.log(arr)
@@ -259,7 +259,7 @@ mui.init({
 	var GoodsList = document.querySelector('#GoodsList');
 	jsajax({
 		method:'get',
-		url:'http://139.129.203.90/caibao/goods/typeList',
+		url:HostPort+'/goods/typeList',
 		success:function(res){
 			var arr = JSON.parse(res).cbData;
 			//console.log(arr)
@@ -386,7 +386,7 @@ function getGoodsList(opt){
 	var Url = '?typeId='+config.typeId+'&type='+config.type+'&itemId='+config.itemId+'&sort='+config.sort;
 	jsajax({
 		method:'post',
-		url:'http://139.129.203.90/caibao/goods/typeGoodsList'+Url,
+		url:HostPort+'/goods/typeGoodsList'+Url,
 		success:function(res){
 			
 			config.callback(res);

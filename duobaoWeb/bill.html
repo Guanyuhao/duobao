@@ -10,7 +10,7 @@
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav">
-	    <span class="mui-icon mui-pull-left" id="edit">编辑</span>
+	    <span class="mui-icon mui-pull-left" id="edit"  off="3">编辑</span>
 	    <h1 class="mui-title">清单</h1>
 	</header>
 	<footer>	
@@ -37,129 +37,528 @@
 	    </a>
 		</nav>		
 	</footer>
-
-	
+<!--empty-->
+		<div id="empty">
+			<div class="emp-img"></div>
+			<div class="emp-com" id="aaaa">
+				<p>当前没用参与活动哦~试试手气吧</p>
+				<button class="mui-btn mui-btn-danger">查看商品</button>
+			</div>
+		</div>
+<!--bill-list-->
+		<div id="CarList">
+			<footer class="bill-list-footer">	
+				<div class="left">
+					<span>共<b id="SumNum">2</b>件商品，总计<strong id="SumPrice">15.0</strong>元</span><br />
+					<i>夺宝有风险，参与需要谨慎</i>
+				</div>
+				<div class="right">
+					<button class="mui-btn mui-btn-danger" id="jiesuan">结算</button>
+				</div>
+			</footer>
+				
+			<div class="mui-content">
+			    <!--下拉刷新容器-->
+			    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+			      <div class="mui-scroll" id="scroll">
+			        <!--数据列表-->	        
+			        <ul class="mui-table-view mui-table-view-chevron" id="billList">
+			          	
+			        </ul>
+			      </div>
+			    </div>  
+			</div>
+		</div>
+<!--bill-edit-->
+		<div id = 'CarEdit'>
+			<footer class="bill-list-footer list-edit">	
+				<div class="left">
+		            <div class="mui-input-row mui-checkbox mui-left">
+		                <label>全选</label>
+		                <input type="checkbox" id="checkAll">
+		            </div>
+				</div>
+				<div class="right">
+					<button class="mui-btn mui-btn-danger" id="BigDel">删除</button>
+				</div>
+			</footer>
+			
+			<div class="mui-content">
+			    <!--下拉刷新容器-->
+			    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+			      <div class="mui-scroll" id="scroll">
+			        <!--数据列表-->	        
+			        <ul class="mui-table-view mui-table-view-chevron" id="careditlist">
+			          	
+			        </ul>
+			      </div>
+			    </div>  
+			</div>
+			
+			
+		</div>
 </body>
 <script type="text/javascript">
 	var h5pullDown = true;
 </script>
 <script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/car.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	
-
-
-mui.init({
-  subpages:[
-	{
-	    url:'view/bill-empty.html',//下拉刷新内容页面地址
-	    id:'billEmpty',
-	    styles:{
-	    	top:'45px',
-	    	bottom:'50px'
-	    }
-	},
-	{
-	  url:'view/bill-edit.html',//下拉刷新内容页面地址
-      id:'billEdit',
-      styles:{
-      	top:'45px',
-      	bottom:'50px'
-      }
-	},
-	{
-      url:'view/bill-list.html',//下拉刷新内容页面地址
-      id:'billList',
-      styles:{
-      	top:'45px',
-      	bottom:'50px'
-      }
-	}	
-  ]
+	//空商品的跳转index
+mui('.emp-com').on('tap','button',function(){
+	mui.openWindow({
+		url:"index.html",
+		id:'index.html',
+		createNew:false
+	})
 });
-
-if(localStorage.user){
-//先确保又userId既用户可以进来
-	//再判断晒出 是 哪个子页面 既 空  商品 编辑
-	var User = JSON.parse(localStorage.user);
-	var UserInfo = User.userInfo;
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+		this.endPullupToRefresh(false||true);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});	
+//判读显示什么页
+function judgeshowpage(){
+	var Edit = document.querySelector('#edit');
+	var CarList = document.querySelector('#CarList');
+	var CarEdit = document.querySelector('#CarEdit');
+	var Empty = document.querySelector("#empty");
+	var num =Number(Edit.getAttribute('off'));
+	if(num == 3){
+		Edit.innerText = '编辑'
+		CarList.className = 'hide';
+		CarEdit.className = 'hide';
+		Empty.className = 'show';
+	}else if( num == 1){
+		//编辑1  
+		Empty.className = 'hide';
+		CarList.className = 'show';
+		CarEdit.className = 'hide';
+		Edit.setAttribute('off','1'); //需要记录以下确保下次进来还是这个页面
+	}else if (num == 0){
+		//完成  0
+		Empty.className = 'hide';
+		CarList.className = 'hide';
+		CarEdit.className = "show";
+		Edit.setAttribute('off','0');
+	}
+	sumnum () //更新 总数量
+	sumprice() //更新 总价格
+}
+judgeshowpage() //进来页面需要判断一次
+//bill-list
+ //列表展示
+getBillList({
+	callback:function(res){
+		//console.log(res)
+		var Obj = JSON.parse(res);
+		//console.log(Obj)
+		var ListArr = Obj.goodsSales;		
+		var num = Number(document.querySelector('#edit').getAttribute('off'));
+		if(!ListArr.length){
+			document.querySelector('#edit').setAttribute('off','3')
+		}else {		
+			document.querySelector('#edit').setAttribute('off','1'); //默认显示 carlist
+			proBillListDom(ListArr) //生成carlist				
+			proeditListDom(ListArr) //生成 editlist
+		}
+		judgeshowpage()
+		
+	}
+})
+function updatacar (){
 	getBillList({
-		userId:UserInfo.userId,
-		token:UserInfo.caibaoToken,
 		callback:function(res){
-			console.log(res)
+			//console.log(res)
 			var Obj = JSON.parse(res);
-			if(Obj.code == 0){
-				var ListArr = Obj.goodsSales;		
-				if(!ListArr.length){
-					//数组没数据					
-					mui.openWindow({
-						url:'view/bill-empty.html',
-						id:'billEmpty',
-						createNew:false
-					})
-					
-				}else{
-					//数组又长度 既有商品
-					mui.openWindow({
-						url:'view/bill-list.html',
-						id:'billList',
-						createNew:false
-					})	
-					var edit = document.querySelector('#edit');					
-					var Drag = 1;
-					edit.addEventListener('tap',function(){					
-						if(Drag){
-							//console.log('edit')
-							this.innerHTML = '完成'
-							mui.openWindow({
-								url:'view/bill-edit.html',
-								id:'billEdit',
-								createNew:false
-							})
-							Drag = 0;
-						}else{
-							//console.log('list')
-							this.innerHTML = '编辑'
-							mui.openWindow({
-								url:'view/bill-list.html',
-								id:'billList',
-								createNew:false
-							})
-							Drag = 1;
-						}
-					})
-				}
-			}else if (Obj.code == 777){
-				mui.toast('有人正在其他地方使用你的账户',{ duration:1000, type:'div' })
+			var ListArr = Obj.goodsSales;
+			var num = Number(document.querySelector('#edit').getAttribute('off'));						
+			if(!ListArr.length){
+				document.querySelector('#edit').setAttribute('off','3');
+				//为了除了空的时候显示 empty
+				judgeshowpage()
+			}else {		
+				proBillListDom(ListArr) //生成carlist				
+				proeditListDom(ListArr) //生成 editlist
+				sumnum () //更新 总数量
+				sumprice() //更新 总价格
 			}
 		}
 	})
+	
 }
-//没做处理记得要再 user 下调用
-function getBillList(opt){
-	//参数必穿
-	var config = {
-		userId:'',//UserInfo.userId
-		token:'',//UserInfo.userId
+
+ //del 逻辑
+mui('#billList').on('tap','#del',function(el){
+var id = el.target.parentNode.parentNode.parentNode.getAttribute('itemId')
+	//单个删除 多个需要，隔开
+	delcar({
+		carIds:id,
 		callback:function(res){
-			
-		}
-	}
-	for(var i in opt ){
-		config[i] = opt[i]
-	}
-	var Url = '?userId='+config.userId+'&token='+config.token;
-	jsajax({
-		method:'post',
-		url:'http://139.129.203.90/caibao/car/list'+Url,
-		success:function(res){
-			config.callback(res)
+			var Obj = JSON.parse(res);
+			if( Obj.code == 0){
+				mui.toast('删除成功',{ duration:1000, type:'div' })
+				updatacar()
+			}
 		}
 	})
+})
+	// 数量更改逻辑
+mui('#billList').on('tap','button',function(el){
+	var target = el.target;
+	var itemId = this.getAttribute('itemId')
+	var iden = Number(this.getAttribute('iden'));
+	if( iden == 1){
+		var Max = Number(this.getAttribute('max'));
+		var PreNode = target.previousSibling;
+		var preinput = PreNode.children[0];
+		
+		if(preinput.value >= Max){
+			preinput.value = Max
+			mui.toast('商品已达上限',{ duration:1000, type:'div' })
+			return false;
+		}else{
+			preinput.value = Number(preinput.value)+1;
+		}
+		numupdate({
+			num:preinput.value,
+			itemId:itemId,
+			callback:function(res){
+				//console.log(res)
+			}
+		})	
+	}else if( iden == -1 ){
+		var Min = 1;
+		var NexNode = target.nextSibling;
+		var nexinput = NexNode.children[0];
+		if(nexinput.value<=1){
+			nexinput.value = Min;
+			return false;
+		}else{
+			nexinput.value = Number(nexinput.value)-1;
+		}
+		numupdate({
+			num:nexinput.value,
+			itemId:itemId,
+			callback:function(res){
+				//console.log(res)
+			}
+		})
+	}
+	sumnum ()
+	sumprice()
+})
+// 总价 总数计算
+
+function sumnum (){
+	var allval = document.querySelectorAll('#billList .bill-input');
+	var Sum = 0;
+	for(var i = 0 ; l=allval.length,i<l;i++){
+		
+		Sum += Number(allval[i].value)
+	}
+	document.querySelector('#SumNum').innerText = Sum;
+	return Sum ;
+}
+function sumprice(){
+	var allval = document.querySelectorAll('#billList .bill-input');
+	var SumPrice = 0;
+	for(var i = 0 ; l=allval.length,i<l;i++){
+		SumPrice = Number(allval[i].value)*Number(allval[i].getAttribute('price'))+SumPrice
+	}
+	document.querySelector('#SumPrice').innerText = SumPrice;
+	return SumPrice;
 }
 
 
+//bill -edit
+	//全选按钮
+document.getElementById('checkAll').addEventListener('change',function(e) {
+    var listBox = mui('.listCheckBox');
+    if (e.target.checked) {
+        listBox.each(function() {
+            var ele = this;
+            ele.checked=true
+        })
+    } else {
+        listBox.each(function() {
+            var ele = this;
+            ele.checked=false
+        })
+    }
+})
+	//其他选中 全选亮起  需要委托
+mui('#careditlist').on('change','.listCheckBox',function(){
+	
+	var listBox = mui('.listCheckBox');
+	var checkall = mui('#checkAll')[0];
+	//这 0 是转换成原生对象
+	var Drag = true;
+	listBox.each(function(){
+		if(!this.checked){
+			Drag = false;
+			
+			return false;
+		}else{
+			Drag = true;
+		}
+	})
+	
+	if(Drag){
+		checkall.checked = true;
+	}else{
+		checkall.checked = false;
+	}
+})
+// 删除选中
+mui("#BigDel")[0].addEventListener('tap',function(){
+	
+	var arr = [];
+	var checkall = mui('#checkAll')[0];
+	var listBox = mui('.listCheckBox');
+	if(checkall.checked){
+		//全部删除
+		listBox.each(function(){
+			arr.push(this.getAttribute('itemId'));
+		})
+		
+	}else{
+		listBox.each(function(){
+			if(this.checked){
+				arr.push(this.getAttribute('itemId'));
+			}
+		})
+	}
+	var str = arr.toString();
+	delcar({
+		carIds:str,
+		callback:function(res){
+			var Obj = JSON.parse(res);
+			if( Obj.code == 0){
+				mui.toast('删除成功',{ duration:1000, type:'div' })
+				updatacar()
+			}
+		}
+	})
+	
+})
+
+//头部 编辑逻辑
+document.querySelector('#edit').addEventListener('tap',function(){
+	
+	var CarList = document.querySelector('#CarList');
+	var CarEdit = document.querySelector('#CarEdit');
+	var num = Number(this.getAttribute('off'))
+	if(num == 1){
+		this.innerHTML = '完成';
+		CarList.className = 'hide';
+		CarEdit.className = 'show';
+		this.setAttribute('off','0');
+	}else if(num == 0){
+		this.innerHTML = '编辑';
+		CarList.className = 'show';
+		CarEdit.className = 'hide';
+		this.setAttribute('off','1');
+		
+	}else if(num == 3){
+		mui.toast('没有商品',{ duration:1000, type:'div' })
+		this.setAttribute('off','3');
+	}
+	updatacar ()
+})
+
+
+//结算 逻辑
+mui('#jiesuan')[0].addEventListener('tap',function(){
+	carjiesuan({
+		callback:function(res){
+			var Obj = JSON.parse(res).buyData;
+			var str = JSON.stringify(Obj);
+			localStorage.account = str;
+			document.location.href = 'view/settle-account.html'
+		}
+	})
+})
+
+
+
+//记得要再 user 下调用
+function getBillList(opt){
+	//参数必穿
+	if(localStorage.user){
+		
+		var userInfo = JSON.parse(localStorage.user).userInfo;
+		var config = {
+			userId:userInfo.userId,
+			token:userInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for(var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/car/list'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+		
+	}
+	
+}
+//show list
+function proBillListDom(arr){
+	
+	var billList = document.querySelector('#billList');
+	billList.innerHTML = '';
+	var Fragment = document.createDocumentFragment();
+		for (var i = 0 ; l=arr.length, i<l; i++) {
+			var Oli = document.createElement('li');
+			Oli.className = '"mui-table-view-cell mui-media';
+			Oli.setAttribute('itemId',arr[i].itemId);
+			var Oimg = new Image();
+			Oimg.className = 'mui-media-object mui-pull-left';
+			Oimg.src = arr[i].image;
+			var Odiv = document.createElement('div');
+			Odiv.className = 'mui-media-body';
+			var Op01 = document.createElement('p');
+			Op01.innerHTML =arr[i].title
+			var Op02 = document.createElement('p');
+			Op02.innerHTML = '总需 '+arr[i].totalPerson+'人次';
+			var Op03 = document.createElement('p')
+			Op03.className = 'clearfloat';
+			var Obtn01 = document.createElement('button');
+			Obtn01.className = 'mui-btn';
+			Obtn01.innerText = '-';
+			Obtn01.setAttribute('iden','-1')
+			Obtn01.setAttribute('itemId',arr[i].itemId);		
+			var Obtn02 = document.createElement('button');
+			Obtn02.className = 'mui-btn';
+			Obtn02.innerText = '+';
+			Obtn02.setAttribute('iden','+1')
+			Obtn02.setAttribute('itemId',arr[i].itemId);
+			var Max = arr[i].totalPerson - arr[i].finishPerson;
+			Obtn02.setAttribute('max',Max);
+			var Ocen = document.createElement('div')
+			Ocen.className = 'center';
+			var Oinput = document.createElement('input');
+			Oinput.type = 'text';
+			Oinput.value = arr[i].num;
+			Oinput.setAttribute('price',arr[i].price);
+			Oinput.readOnly="true";
+			Oinput.className = 'bill-input'
+			var Ospan = document.createElement('span');
+			Ospan.innerHTML = '(中奖率'+10+'%)'
+			Ocen.appendChild(Oinput);
+			Ocen.appendChild(Ospan);
+			var Odel = document.createElement('i');
+			Odel.className = 'mui-icon mui-icon-trash';
+			Odel.id = 'del';
+			Op03.appendChild(Obtn01);
+			Op03.appendChild(Ocen);
+			Op03.appendChild(Obtn02);
+			Op03.appendChild(Odel);
+			Odiv.appendChild(Op01);
+			Odiv.appendChild(Op02);
+			Odiv.appendChild(Op03);
+			Oli.appendChild(Oimg);
+			Oli.appendChild(Odiv);
+			Fragment.appendChild(Oli)
+		}
+		billList.appendChild(Fragment);
+}
+//编辑列表
+function proeditListDom(arr){
+	var billList = document.querySelector('#careditlist');
+	billList.innerHTML = '';
+	var Fragment = document.createDocumentFragment();
+		for (var i = 0 ; l=arr.length, i<l; i++) {
+			var Oli = document.createElement('li');
+			Oli.className = '"mui-table-view-cell mui-media';
+			Oli.setAttribute('itemId',arr[i].itemId);
+			var Ocheck = document.createElement('div');
+			Ocheck.className = 'mui-input-row mui-checkbox mui-left check-warp';
+			var Olabel = document.createElement('label');
+			var OcheckInput = document.createElement('input');
+			OcheckInput.type = 'checkbox';
+			OcheckInput.name ='box';
+			OcheckInput.className = 'listCheckBox';
+			OcheckInput.setAttribute('itemId',arr[i].itemId)
+			Ocheck.appendChild(Olabel);
+			Ocheck.appendChild(OcheckInput);
+			Oli.appendChild(Ocheck);
+			var Oimg = new Image();
+			Oimg.className = 'mui-media-object mui-pull-left';
+			Oimg.src = arr[i].image;
+			var Odiv = document.createElement('div');
+			Odiv.className = 'mui-media-body';
+			var Op01 = document.createElement('p');
+			Op01.innerHTML =arr[i].title
+			var Op02 = document.createElement('p');
+			Op02.innerHTML = '总需 '+arr[i].totalPerson+'人次';
+			var Op03 = document.createElement('p')
+			Op03.className = 'clearfloat';
+			var Obtn01 = document.createElement('button');
+			Obtn01.className = 'mui-btn';
+			Obtn01.innerText = '-';
+			Obtn01.setAttribute('itemId',arr[i].itemId);		
+			Obtn01.setAttribute('iden','-1')
+			var Obtn02 = document.createElement('button');
+			Obtn02.className = 'mui-btn';
+			Obtn02.innerText = '+';
+			Obtn02.setAttribute('itemId',arr[i].itemId);	
+			Obtn02.setAttribute('iden','+1');
+			var Max = arr[i].totalPerson - arr[i].finishPerson;
+			Obtn02.setAttribute('max',Max);		
+			var Ocen = document.createElement('div')
+			Ocen.className = 'center';
+			var Oinput = document.createElement('input');
+			Oinput.type = 'text';
+			Oinput.value = arr[i].num;
+			Oinput.setAttribute('price',arr[i].price);
+			Oinput.readOnly="true";
+			Oinput.className = 'bill-input'
+			var Ospan = document.createElement('span');
+			Ospan.innerHTML = '(中奖率'+10+'%)'
+			Ocen.appendChild(Oinput);
+			Ocen.appendChild(Ospan);
+			Op03.appendChild(Obtn01);
+			Op03.appendChild(Ocen);
+			Op03.appendChild(Obtn02);
+			Odiv.appendChild(Op01);
+			Odiv.appendChild(Op02);
+			Odiv.appendChild(Op03);
+			Oli.appendChild(Oimg);
+			Oli.appendChild(Odiv);
+			Fragment.appendChild(Oli)
+		}
+		billList.appendChild(Fragment);
+}
 </script>
 </html>

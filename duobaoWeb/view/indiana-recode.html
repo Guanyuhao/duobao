@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>夺宝记录</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/view/indianarecode.css"/>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">夺宝记录</h1>
+		</header>
+		
+		<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <nav class="fixed-nav">
+	    	<ul id="nav-slide">
+	    		<li type='0'>全部</li>
+	    		<li type='1'>进行中</li>
+	    		<li type='2'>已揭奖</li>
+	    		<li type='3'>中奖</li>
+	    	</ul>
+	    	<div class="nav-border"></div>
+	    </nav>
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <div class="mui-slider">
+			  <div class="mui-slider-group" id="reSlide">
+			    <!--第一个内容区容器-->
+			    <div class="mui-slider-item" id="item1" type='0'></div>
+			    <div class="mui-slider-item" id="item2" type='1'></div>
+			    <div class="mui-slider-item" id="item3" type='2'></div>
+			    <div class="mui-slider-item" id="item4" type='3'></div>
+			  </div>
+			</div>
+	        
+	        
+	      </div>
+	    </div>  
+	</div>
+		
+	</body>
+	
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//cdn.bootcss.com/move.js/0.5.0/move.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript">
+;(function(){		
+	
+	//显示 缓存的样式
+if(localStorage.type){
+	var item = localStorage.type;
+	var pre = item*25+'%';
+	mui('.mui-slider').slider().gotoItem(item);
+	mui('.nav-border')[0].style.left = pre;
+	mui('#nav-slide li')[item].classList.add('active');
+}
+var repage = 1;
+mui.init({
+	pullRefresh :{
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+      	
+      	if(localStorage.type){
+      		repage++;
+      		inrecode({
+      			page:repage,
+				type:localStorage.type,
+				callback:function(res){
+					var Obj  = JSON.parse(res);
+					console.log(Obj)
+					var arr = Obj.orderList;
+					proitem1Dom(arr,'#item1');
+					inrecodeEvent('#item1')
+				}
+			})
+      		
+      	}
+		this.endPullupToRefresh(false||true);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});	
+// 全部
+mui('#nav-slide').on('tap','li',function(){
+	var item = this.getAttribute('type');
+	var pre = item*25+'%';
+	mui('.mui-slider').slider().gotoItem(item);
+	navmove(item)
+})
+
+var item2Show = false,item3Show = false,item4Show=false;//子选项卡是否显示标志
+document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+	var num = event.detail.slideNumber;
+  if (num === 1&&!item2Show) {
+  	
+    item2Show = true;
+  } else if (num === 2&&!item3Show) {
+  	
+  	
+    item3Show = true;
+  }  else if (num === 3&&!item4Show) {
+    
+	
+    item4Show = true;
+  }
+  // 缓存type  为了使下次进来还是当前页
+  localStorage.type = num;
+  repage = 1; //初始化分页
+  
+ navmove(num)
+ 
+});
+
+
+function navmove(num){
+mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100)
+var l = mui('#nav-slide li').length;
+for (var i = 0 ; i<l;i++) {
+		mui('#nav-slide li')[i].classList.remove('active');
+	}
+mui('#nav-slide li')[num].classList.add('active')
+  var pre = num*25+'%';
+  move('.nav-border')
+  	.set('left', pre)
+  	.end();
+}
+
+
+
+inrecode({
+	type:0,
+	callback:function(res){
+		var Obj  = JSON.parse(res);
+		console.log(Obj)
+		var arr = Obj.orderList;
+		proitem1Dom(arr,'#item1');
+		inrecodeEvent('#item1')
+	}
+})
+inrecode({
+	type:1,
+	callback:function(res){
+		var Obj  = JSON.parse(res);			
+		var arr = Obj.orderList;
+		proitem1Dom(arr,'#item2');
+		inrecodeEvent('#item2');
+	}
+})
+inrecode({
+	type:2,
+	callback:function(res){
+		var Obj  = JSON.parse(res);			
+		var arr = Obj.orderList;
+		proitem1Dom(arr,'#item3');
+		inrecodeEvent('#item3');
+	}
+})
+inrecode({
+	type:3,
+	callback:function(res){
+		var Obj  = JSON.parse(res);		
+		var arr = Obj.orderList;
+		proitem1Dom(arr,'#item4');
+		inrecodeEvent('#item4');
+	}
+})
+
+
+
+})();
+
+//event
+function inrecodeEvent(id){
+	var item = mui(id);
+	//按钮事件
+	item.on('tap','button',function(){
+		if( this.innerText == '待发货' || this.innerText == '已出库'){
+			console.log(this.innerText)
+		}else if(this.innerText == '再次购买' || this.innerText == '追加'){
+			var itemId = this.getAttribute('itemId');			
+			localStorage.itemId =itemId;
+			mui.openWindow({
+				url:'../detail.html',
+				id:'detail'
+			})
+		}else if( this.innerText == '请确认收获'){
+			var itemId = this.getAttribute('itemId');
+			var type = item.getAttribute('type');
+			mui.confirm('是否确认收货',' ',['是','否'],function(e){
+			 	if(e.index == 0){
+					sureReceived({
+						goodsSaleId:itemId,
+						callback:function(ress){
+							//成功更新dom 
+							localStorage.type = type;
+							location.reload();							
+						}
+					})
+			 	}
+			 },'div');
+		}else if( this.innerText == '请填写收货地址' ){			
+			var itemId = this.getAttribute('itemId');			
+			localStorage.addgoodsSaleId =itemId;
+			mui.openWindow({
+				url:'send/choice-add.html',
+				id:'choiceAdd'
+			})
+			
+		}
+	})
+	//跳转详情页
+	if(id == "#item4"){
+		
+		item.on('tap','.recode-list>.top',function(){
+			var itemId = this.parentNode.getAttribute('itemId');
+			//唯一标识幸运记录
+			localStorage.luckitemId = itemId;
+			mui.openWindow({
+				url:'send/luck-recode.html',
+				id:'luckRecode'
+			})
+		})
+		
+	}else{
+		item.on('tap','.recode-list>.top',function(){
+			var itemId = this.parentNode.getAttribute('itemId');
+			localStorage.itemId =itemId;
+				mui.openWindow({
+					url:'../detail.html',
+					id:'detail'
+				})
+		})
+	}
+	
+	//夺宝详情
+	item.on('tap','.seedetail',function(){
+		
+		var goodsSaleId = this.parentNode.parentNode.getAttribute('itemId');
+		//需要换个名字 
+		localStorage.duobaoDetail = goodsSaleId;
+		mui.openWindow({
+			url:'send/duobao-detail.html',
+			id:'duobaoDetail'
+		})
+	})
+}
+
+//夺宝记录
+function inrecode(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			type: 0, // type 0 all 1进行中 2 已揭晓 3 中奖
+			page: 0,
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?type='+config.type+'&page='+config.page+'&userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/order/list'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+//确认收货 API
+function sureReceived(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			goodsSaleId:'',
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?goodsSaleId='+config.goodsSaleId+'&userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/confimGoods'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+//创建 itemDom	
+function proitem1Dom(arr,id){
+	var item1 = document.querySelector(id);
+	if( arr.length == 0 ){				
+		return false			
+	}
+	var Fragment = document.createDocumentFragment();
+	for (var i = 0 ;l=arr.length,i<l;i++) {
+		var recodeList = document.createElement('div');
+		recodeList.className = 'recode-list';
+		recodeList.setAttribute('itemId',arr[i].itemId);
+		var Top = document.createElement('div');
+		Top.className = 'top';
+		var TopLeft = document.createElement('div');
+		var TopRight = document.createElement('div');
+		TopLeft.className = 'left';
+		var Oimg = new Image();
+		Oimg.src = arr[i].image
+		TopLeft.appendChild(Oimg);
+		TopRight.className = 'right';
+		var h4 = document.createElement('h4');
+		h4.innerHTML = arr[i].title;
+		TopRight.appendChild(h4);
+		var Op01 = document.createElement('p');
+		Op01.innerText = '商品期号：'+arr[i].num;
+		TopRight.appendChild(Op01);
+		//总需人数
+		var Op03 = document.createElement('p');
+		Op03.className = 'totalperson';
+		Op03.innerText = '总需人次：'+arr[i].totalPerson;
+		//op03 会在if里面append
+		//bottom
+		var Bottom = document.createElement('div');
+		Bottom.className = 'bottom';
+		var BLeft = document.createElement('div');
+		BLeft.className = 'left';
+		var Ospan02 = document.createElement('span');
+		Ospan02.innerHTML = '本次我参与：<b>'+arr[i].payNum+'</b>人次'
+		BLeft.appendChild(Ospan02);
+		var Bcen = document.createElement('div');
+		Bcen.className = 'center seedetail';
+		Bcen.innerText = "查看详情"
+		var Bright = document.createElement('div');
+		Bright.className = 'right';
+		var Obtn = document.createElement('button');
+		Obtn.setAttribute('itemId',arr[i].itemId);
+		//状态判读 是否有灰色框			
+		if(arr[i].status == 0){ //没有 未完成
+			//3展示剩余人数
+			var Oi = document.createElement('i');
+			Oi.innerText = '剩余：'+(arr[i].totalPerson-arr[i].finishPerson);
+			Op03.appendChild(Oi);
+			//进度条
+			var Op02 = document.createElement('p');
+			Op02.className = 'progress-recode';
+			var Ospan = document.createElement('span');
+			var per = (arr[i].finishPerson/arr[i].totalPerson)*100;
+			if( per > 0&&per < 1){
+				per = 1
+			}
+			var num = Math.floor(per);
+			Ospan.style.width = num+'%';
+			Op02.appendChild(Ospan);
+			TopRight.appendChild(Op02); //2在3前面
+			TopRight.appendChild(Op03);
+			// bottom 按钮设置
+			Obtn.innerText = "追加";
+			Obtn.className = "mui-btn-danger mui-btn";				
+		}else if(arr[i].status == 1){ //有灰色框 已完成
+			TopRight.appendChild(Op03); //3在灰框前面
+			//灰色框结构
+			var garyDiv = document.createElement('div');
+			garyDiv.className = 'garyDiv';
+			var garyp01 = document.createElement('p');
+			var garyp02 = document.createElement('p');
+			var garyp03 = document.createElement('p');
+			var garyp04 = document.createElement('p');
+			garyp01.innerHTML = '幸运获奖：<span>'+arr[i].userName+'</span>';
+			garyp02.innerText = '本期参与：'+arr[i].payNum+'人次';
+			garyp03.innerHTML = '幸运获奖：<span>'+arr[i].awardNum+'</span>';
+			garyp04.innerText = '揭晓时间：'+arr[i].showTime;
+			garyDiv.append(garyp01);
+			garyDiv.append(garyp02);
+			garyDiv.append(garyp03);
+			garyDiv.append(garyp04);
+			TopRight.appendChild(garyDiv);
+			//button 样式死了
+			//0 未收货地址 1未发货 2已发货 3 再次购买 4已出库
+			Obtn.className = "mui-btn-danger mui-btn mui-btn-outlined";
+			if(arr[i].type == 0){ //未发货						
+				Obtn.innerText = "请填写收货地址";
+			}else if(arr[i].type == 1){//已发货					
+				Obtn.innerText = "待发货";
+			}else if(arr[i].type == 2){//已收货状态
+				Obtn.innerText = "请确认收货"
+				//下面显示一条 订单信息
+				var transfName = document.createElement('div');
+				transfName.className = 'transfName';
+				transfName.innerText = '已发货，运单号：'+arr[i].transfName;
+			}else if(arr[i].type == 3){ //暂时使用已收货状态
+				Obtn.innerText = "再次购买";				
+			}else if(arr[i].type == 4){
+				Obtn.innerText = '已出库';
+			}
+		}
+		//是否参与活动
+		if(arr[i].isShow == 1){
+			var isShowAci = document.createElement('div');
+			isShowAci.className = 'ishowaci';
+			TopRight.appendChild(isShowAci);
+		}
+		Top.appendChild(TopLeft);
+		Top.appendChild(TopRight);
+		Bright.appendChild(Obtn);
+		Bottom.appendChild(BLeft);
+		Bottom.appendChild(Bcen);
+		Bottom.appendChild(Bright);
+		recodeList.appendChild(Top);
+		recodeList.appendChild(Bottom);
+		if(transfName){
+			recodeList.appendChild(transfName);
+		}
+		Fragment.appendChild(recodeList);
+	}
+	item1.appendChild(Fragment);
+		
+}
+		
+	</script>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>消息中心</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			#newsList{
+				background: #f7f7f7;
+			}
+			#newsList li{
+				padding-right: .1rem;
+				background: #fff;
+				margin-bottom:.1rem ;
+				border: none;
+			}
+			#newsList .mui-table-view-cell:after {
+				height: 0;
+			}
+			#newsList .mui-media-body{
+				font-size: .14rem;
+				position: relative;
+				
+			}
+			#newsList .mui-media-body span{
+				font-size: .12rem;
+				color: #C0C0C0;
+				float: right;
+			}
+			#newsList .mui-media-body>p{
+				font-size: .12rem;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">消息中心</h1>
+	    	<span class="mui-icon mui-icon-trash mui-pull-right"></span>
+		</header>
+		<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+				<ul class="mui-table-view mui-table-view-chevron" id="newsList">
+	          	 	
+	        	</ul>
+	      </div>
+	    </div> 
+	</body>
+	
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+;(function(){	
+	
+var newpage = 1;
+mui.init({
+	pullRefresh :{
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){ 
+      	var _this = this;
+      	newpage++
+      	getnewdata({
+      		page:newpage,
+			callback:function(res){
+				var Obj = JSON.parse(res);
+				var arr = Obj.messages;
+				if(arr.length == 0){
+					
+				}else{
+					pronewDom(arr)
+				}			
+			}
+		})
+		this.endPullupToRefresh(false);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});	
+
+ mui('.mui-icon-trash')[0].addEventListener('tap',function(){
+ 	
+ 	
+ 	mui.confirm('您确定要删除所有信息吗？',' ',['确认','取消'],function(e){
+	 	if(e.index == 0){
+			delnewList({
+		 		callback:function(res){
+		 			var Obj = JSON.parse(res);
+		 			if( Obj.code == 0){
+		 				mui.toast('删除成功',{ duration:1000, type:'div' })
+		 				location.reload()
+		 			}
+		 		}
+		 	})
+	 	}
+	 },'div');
+ 	
+ 	
+ })
+	
+	getnewdata({
+		callback:function(res){
+			var Obj = JSON.parse(res);
+			var arr = Obj.messages;
+			
+			if(arr.length == 0){
+				var newsList = document.querySelector('#newsList');
+				newsList.innerHTML = '<li class="mui-table-view-cell">您好，最近没有您的消息。</li>'
+			}else{
+				pronewDom(arr)
+			}
+			
+		}
+	})
+	
+})()
+
+
+function getnewdata(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			type: 1, // type 0 all 1进行中 2 已揭晓 3 中奖
+			page: 1,
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?type='+config.type+'&page='+config.page+'&userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/message/list'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+function delnewList(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/message/del'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+
+function pronewDom(arr){
+	
+	var newsList = document.querySelector('#newsList');
+	if(newsList.innerText == '您好，最近没有您的消息。'){
+		newsList.innerHTML = '';
+	}
+	var Fragment = document.createDocumentFragment();
+	for(var i = 0 ; l = arr.length, i<l ; i++ ){
+		var Oli = document.createElement('li');
+		Oli.className = 'mui-table-view-cell mui-media';
+		var Odiv = document.createElement('div');
+		Odiv.className = 'mui-media-body';
+		Odiv.innerText = '恭喜您！中奖了！'
+		var Ospan = document.createElement('span');
+		Ospan.innerText = arr[i].time
+		var Op = document.createElement('p');
+		Op.className = 'mui-ellipsis'
+		Op.innerText = arr[i].content;
+		Oli.appendChild(Odiv);
+		Odiv.appendChild(Ospan);
+		Odiv.appendChild(Op);
+		Fragment.appendChild(Oli);
+	}
+	newsList.appendChild(Fragment);
+}
+
+</script>
+</html>

@@ -10,15 +10,13 @@
 </head>
 <body>
 	
-	<footer class="mui-bar mui-bar-tab bill-list-footer list-edit">	
+	<footer class="mui-bar mui-bar-tab bill-list-footer">	
 			<div class="left">
-	            <div class="mui-input-row mui-checkbox mui-left">
-	                <label>全选</label>
-	                <input type="checkbox" id="checkAll">
-	            </div>
+				<span>共<b id="SumNum">2</b>件商品，总计<strong id="SumPrice">15.0</strong>元</span><br />
+				<i>夺宝有风险，参与需要谨慎</i>
 			</div>
 			<div class="right">
-				<button class="mui-btn mui-btn-danger">删除</button>
+				<button class="mui-btn mui-btn-danger">结算</button>
 			</div>
 	</footer>
 		
@@ -42,39 +40,59 @@
 <script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/car.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-;(function(){
+	
+
+		getBillList({
+			callback:function(res){
+				//console.log(res)
+				var Obj = JSON.parse(res);
+				console.log(Obj)
+				var ListArr = Obj.goodsSales;
+				
+				proBillListDom(ListArr)
+			}
+		})
 	
 	
-	getBillList({
-		callback:function(res){
-			//console.log(res)
-			var Obj = JSON.parse(res);
-			console.log(Obj)
-			var ListArr = Obj.goodsSales;
-			
-			proBillListDom(ListArr)
-		}
+	//删除
+//	numupdate({
+//		num:5,
+//		itemId:515,
+//		callback:function(res){
+//			console.log(res)
+//		}
+//	})
+	
+
+	mui('#billList').on('tap','#del',function(el){
+		var id = el.target.parentNode.parentNode.parentNode.getAttribute('itemId')
+		//单机进行单个删除
+		delcar({
+			carIds:id,
+			callback:function(res){
+				var Obj = JSON.parse(res);
+				if( Obj.code == 0){
+					mui.toast('删除成功',{ duration:1000, type:'div' })
+					getBillList({
+						callback:function(res){
+							//console.log(res)
+							var Obj = JSON.parse(res);
+							
+							var ListArr = Obj.goodsSales;						
+							proBillListDom(ListArr)
+							if(!ListArr.length){
+								mui.openWindow({
+									url:'bill-empty.html',
+									id:'billEmpty'
+								})
+							}
+						}
+					})
+				}
+			}
+		})
 	})
-	
-	document.getElementById('checkAll').addEventListener('change',function(e) {
-            var listBox = mui('.listCheckBox');
-            if (e.target.checked) {
-                listBox.each(function() {
-                    var ele = this;
-                    ele.checked=true
-                })
-            } else {
-                listBox.each(function() {
-                    var ele = this;
-                    ele.checked=false
-                })
-            }
-    })
-	
-	
-	
-	
-})()
+
 mui.init({
   pullRefresh : {
     container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
@@ -119,7 +137,7 @@ function getBillList(opt){
 		var Url = '?userId='+config.userId+'&token='+config.token;
 		jsajax({
 			method:'post',
-			url:'http://139.129.203.90/caibao/car/list'+Url,
+			url:HostPort+'/car/list'+Url,
 			success:function(res){
 				config.callback(res)
 			}
@@ -132,21 +150,12 @@ function getBillList(opt){
 function proBillListDom(arr){
 	
 	var billList = document.querySelector('#billList');
+	billList.innerHTML = '';
 	var Fragment = document.createDocumentFragment();
 		for (var i = 0 ; l=arr.length, i<l; i++) {
 			var Oli = document.createElement('li');
 			Oli.className = '"mui-table-view-cell mui-media';
-			Oli.setAttribute('goodsId',arr[i].goodsId);
-			var Ocheck = document.createElement('div');
-			Ocheck.className = 'mui-input-row mui-checkbox mui-left check-warp';
-			var Olabel = document.createElement('label');
-			var OcheckInput = document.createElement('input');
-			OcheckInput.type = 'checkbox';
-			OcheckInput.name ='box';
-			OcheckInput.className = 'listCheckBox';
-			Ocheck.appendChild(Olabel);
-			Ocheck.appendChild(OcheckInput);
-			Oli.appendChild(Ocheck);
+			Oli.setAttribute('itemId',arr[i].itemId);
 			var Oimg = new Image();
 			Oimg.className = 'mui-media-object mui-pull-left';
 			Oimg.src = arr[i].image;
@@ -175,9 +184,13 @@ function proBillListDom(arr){
 			Ospan.innerHTML = '(中奖率'+10+'%)'
 			Ocen.appendChild(Oinput);
 			Ocen.appendChild(Ospan);
+			var Odel = document.createElement('i');
+			Odel.className = 'mui-icon mui-icon-trash';
+			Odel.id = 'del';
 			Op03.appendChild(Obtn01);
 			Op03.appendChild(Ocen);
 			Op03.appendChild(Obtn02);
+			Op03.appendChild(Odel);
 			Odiv.appendChild(Op01);
 			Odiv.appendChild(Op02);
 			Odiv.appendChild(Op03);
@@ -187,6 +200,8 @@ function proBillListDom(arr){
 		}
 		billList.appendChild(Fragment);
 }
+
+
 
 </script>
 </html>

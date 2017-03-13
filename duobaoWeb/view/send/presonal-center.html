@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>TA的个人中心</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/view/indianarecode.css"/>
+		
+		<style type="text/css">
+			
+			.presonalTop{
+				position: relative;
+			}
+			.presonalTop>.presonal-user{
+				overflow: hidden;
+				height: 1rem;
+				width: 100%;
+				background: #F54A12;
+			}
+			.presonal-user .left{
+				width: 80%;
+				padding: .1rem;
+				height: 100%;
+				position: relative;
+				
+			}
+			.presonal-user .left>img {
+				width: 30%;
+				margin-right: 10%;
+				border-radius: 50%;
+				height: .7rem;
+			}
+			.presonal-user .left span {
+				font-size: .14rem;
+				color: yellow;
+			}
+			.presonal-user .left b{
+				position: absolute;
+				color: #fff;
+				font-size: .14rem;
+			}
+			#scroll{
+				top: 1.8rem;
+			}
+			#nav-slide li{
+				width: 50%;
+			}
+			.presonal-nav{
+				background: #fff;
+				position: relative;
+			}
+			.nav-border{
+				width: 50%;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">TA的个人中心</h1>
+		</header>
+		<div class="presonalTop fixed-nav">
+			<div class="presonal-user">
+				<div class="left">
+	      			<img src="" alt="你的头像在来的路上" title="大兄弟你要发财" id="userphoto"/>
+	      			<b id="username"></b>
+	      			<span id="userid"></span>
+	      		</div>
+			</div>
+			<nav class="presonal-nav">
+				<ul id="nav-slide" class="clearfloat">
+					<li class="active" index="0">夺宝记录</li>
+					<li index="1">幸运记录</li>
+				</ul>
+				<div class="nav-border"></div>
+			</nav>
+		</div>
+		 <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <div class="mui-slider">
+			  <div class="mui-slider-group" id="presonalSlide">
+			    <!--第一个内容区容器-->
+			    <div class="mui-slider-item" id="item1"></div>
+			    <div class="mui-slider-item" id="item2"></div>
+			    
+			  </div>
+			</div>
+	        
+	        
+	      </div>
+	    </div> 
+	</body>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//cdn.bootcss.com/move.js/0.5.0/move.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+
+
+;(function(){
+	
+	//Ta 的展示
+	if(localStorage.tadeuser){
+		
+		var tadeuser = JSON.parse(localStorage.tadeuser);
+		mui('#userphoto')[0].src = tadeuser.img;
+		mui('#userid')[0].innerText = "用户ID："+tadeuser.tadeuserId;
+		mui('#username')[0].innerText = tadeuser.tadeuserName;
+	}
+	
+	
+	
+	
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+      	 this.endPullupToRefresh(true|false);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});
+mui('#nav-slide').on('tap','li',function(){
+	var item = this.getAttribute('index');
+	var pre = item*50+'%';
+	mui('.mui-slider').slider().gotoItem(item);
+	navmove(item)
+})
+
+var item2Show = false;
+document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+	var num = event.detail.slideNumber;
+  if (num === 1&&!item2Show) {
+  	
+  	
+  	inrecode({
+		type:3,
+		callback:function(res){
+			var Obj  = JSON.parse(res);
+			
+			var arr = Obj.orderList;
+			proitem1Dom(arr,'#item2',3);
+			presoncenEvent('#item2');
+		}
+	})
+  	
+  	
+    item2Show = true;
+  }
+  // 缓存type  为了使下次进来还是当前页
+  //初始化分页
+  
+ navmove(num)
+ 
+});
+function navmove(num){
+mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100)
+var l = mui('#nav-slide li').length;
+for (var i = 0 ; i<l;i++) {
+		mui('#nav-slide li')[i].classList.remove('active');
+	}
+mui('#nav-slide li')[num].classList.add('active')
+  var pre = num*50+'%';
+  move('.nav-border')
+  	.set('left', pre)
+  	.end();
+}
+
+inrecode({
+	type:0,
+	callback:function(res){
+		var Obj  = JSON.parse(res);
+		var arr = Obj.orderList;
+		proitem1Dom(arr,'#item1',0);
+		presoncenEvent('#item1');	
+	}
+})
+
+
+
+mui('#item1').on('tap','button',function(){
+	
+	var itemId = this.getAttribute('itemId');			
+	localStorage.itemId =itemId;
+	mui.openWindow({
+		url:'../../detail.html',
+		id:'detail'
+	})
+})
+
+function presoncenEvent(id){
+	var item = mui(id);
+	//按钮事件
+	
+	//跳转详情页
+	item.on('tap','.recode-list>.top',function(){
+		var itemId = this.parentNode.getAttribute('itemId');
+		localStorage.itemId =itemId;
+			mui.openWindow({
+				url:'../../detail.html',
+				id:'detail'
+			})
+	})
+	
+	//夺宝详情
+	item.on('tap','.seedetail',function(){		
+		var goodsSaleId = this.parentNode.parentNode.getAttribute('itemId');
+		//需要换个名字 
+		localStorage.duobaoDetail = goodsSaleId;
+		mui.openWindow({
+			url:'duobao-detail.html',
+			id:'duobaoDetail'
+		})
+	})
+}
+
+})()
+	
+	//夺宝记录
+		function inrecode(opt){
+			if(localStorage.user){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var config = {
+					type: 0, // type 0  3 中奖
+					page: 1,
+					userId:15533,
+					otherUserId:15530,
+					//token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?type='+config.type+'&page='+config.page+'&userId='+config.userId+"&otherUserId="+config.otherUserId//;
+				jsajax({
+					method:'post',
+					url:HostPort+'/order/userList'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+		}	
+	function proitem1Dom(arr,id,type){
+		
+	if( arr.length == 0 ){				
+		return false;			
+	}		
+	var item1 = document.querySelector(id);
+	
+	var Fragment = document.createDocumentFragment();
+	for (var i = 0 ;l=arr.length,i<l;i++) {
+		var recodeList = document.createElement('div');
+		recodeList.className = 'recode-list';
+		recodeList.setAttribute('itemId',arr[i].itemId);
+		var Top = document.createElement('div');
+		Top.className = 'top';
+		var TopLeft = document.createElement('div');
+		var TopRight = document.createElement('div');
+		TopLeft.className = 'left';
+		var Oimg = new Image();
+		Oimg.src = arr[i].image
+		TopLeft.appendChild(Oimg);
+		TopRight.className = 'right';
+		var h4 = document.createElement('h4');
+		h4.innerHTML = arr[i].title;
+		TopRight.appendChild(h4);
+		var Op01 = document.createElement('p');
+		Op01.innerText = '商品期号：'+arr[i].num;
+		TopRight.appendChild(Op01);
+		//总需人数
+		var Op03 = document.createElement('p');
+		Op03.className = 'totalperson';
+		Op03.innerText = '总需人次：'+arr[i].totalPerson;
+		//op03 会在if里面append
+		//bottom
+		var Bottom = document.createElement('div');
+		Bottom.className = 'bottom';
+		var BLeft = document.createElement('div');
+		BLeft.className = 'left';
+		var Ospan02 = document.createElement('span');
+		Ospan02.innerHTML = '本次我参与：<b>'+arr[i].payNum+'</b>人次'
+		BLeft.appendChild(Ospan02);
+		var Bcen = document.createElement('div');
+		Bcen.className = 'center seedetail';
+		Bcen.innerText = "查看详情"
+		var Bright = document.createElement('div');
+		Bright.className = 'right';
+		var Obtn = document.createElement('button');
+		Obtn.setAttribute('itemId',arr[i].itemId);
+		//状态判读 是否有灰色框			
+		if(type == 0){ //全部 夺宝记录
+			//3展示剩余人数
+			var Oi = document.createElement('i');
+			Oi.innerText = '剩余：'+(arr[i].totalPerson-arr[i].finishPerson);
+			Op03.appendChild(Oi);
+			//进度条
+			var Op02 = document.createElement('p');
+			Op02.className = 'progress-recode';
+			var Ospan = document.createElement('span');
+			var per = (arr[i].finishPerson/arr[i].totalPerson)*100;
+			if( per > 0&&per < 1){
+				per = 1
+			}
+			var num = Math.floor(per);
+			Ospan.style.width = num+'%';
+			Op02.appendChild(Ospan);
+			TopRight.appendChild(Op02); //2在3前面
+			TopRight.appendChild(Op03);
+			// bottom 按钮设置
+			Obtn.innerText = "跟买";
+			Obtn.className = "mui-btn-danger mui-btn";
+			Bright.appendChild(Obtn);
+		}else if(type == 3){ //中奖 幸运记录
+			TopRight.appendChild(Op03); //3在灰框前面
+			//灰色框结构
+			var garyDiv = document.createElement('div');
+			garyDiv.className = 'garyDiv';
+			var garyp01 = document.createElement('p');
+			var garyp02 = document.createElement('p');
+			var garyp03 = document.createElement('p');
+			var garyp04 = document.createElement('p');
+			garyp01.innerHTML = '幸运获奖：<span>'+arr[i].userName+'</span>';
+			garyp02.innerText = '本期参与：'+arr[i].payNum+'人次';
+			garyp03.innerHTML = '幸运获奖：<span>'+arr[i].awardNum+'</span>';
+			garyp04.innerText = '揭晓时间：'+arr[i].showTime;
+			garyDiv.append(garyp01);
+			garyDiv.append(garyp02);
+			garyDiv.append(garyp03);
+			garyDiv.append(garyp04);
+			TopRight.appendChild(garyDiv);
+
+		}
+		//是否参与活动
+		if(arr[i].isShow == 1){
+			var isShowAci = document.createElement('div');
+			isShowAci.className = 'ishowaci';
+			TopRight.appendChild(isShowAci);
+		}
+		Top.appendChild(TopLeft);
+		Top.appendChild(TopRight);
+		
+		Bottom.appendChild(BLeft);
+		Bottom.appendChild(Bcen);
+		Bottom.appendChild(Bright);
+		recodeList.appendChild(Top);
+		recodeList.appendChild(Bottom);
+		Fragment.appendChild(recodeList);
+	}
+	item1.appendChild(Fragment);
+}
+	
+		
+	</script>
+</html>

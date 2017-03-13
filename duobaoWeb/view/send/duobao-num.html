@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>夺宝号码</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			.duobao-infor{
+				position: relative;
+				padding: .1rem;
+			}
+			.duobao-infor>h4{
+				font-weight: normal;
+				font-size: .14rem;
+			}
+			.duobao-infor>p{
+				font-size: .12rem;
+				margin: .05rem 0;
+			}
+			.duobao-infor>p>span{
+				color: red;
+			}
+			.duobao-infor>.awarluck{
+				position: absolute;
+				width: .3rem;
+				height: .3rem;
+				background: url(../../image/lucky.png) no-repeat;
+				background-size: cover;
+				right: .2rem;
+				top: .2rem;
+			}
+			.results-show>.table{
+				background: #fff;
+				padding: .1rem;
+			}
+			.results-show>.table>table{
+				text-align: center;
+				width: 100%;
+				height: 100%;
+				font-size: .12rem;
+				color: #8f8f94;
+			}		
+			.results-show>.table>table tr th{
+				font-weight: normal;
+			}
+			.results-show>.table>table tr>th>p{
+				font-size: .12rem;
+				margin: 0;
+			}
+			.results-show>.table>table tr th>p>span{
+				color: red;
+			}
+			.allnum>span{
+				font-size: .12rem;
+				display: inline-block;
+				width: 25%;
+				box-sizing: border-box;
+			}
+			.allnum>span.off{
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">夺宝号码</h1>
+		</header>
+		<div class="mui-content">
+		  	<div class="duobao-infor">
+		  		
+		  	</div>
+		  	<div class="results-show">
+		  		<div class="table">
+		  			<table border="0" cellspacing="10" cellpadding="10">  				
+		  				<thead>
+		  					<tr>
+			  					<th colspan="4">
+			  						<p>我参与了<span id="sumpreson"></span>人次，以下是所有夺宝记录</p>
+			  					</th>
+		  					</tr>
+		  				</thead>	
+		  			</table>
+		  			<div class="allnum clearfloat">
+		  				
+		  			</div>
+		  		</div>
+		  	</div>
+		</div>
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+
+	;(function(){
+		
+		duobaonumdetail({
+			callback:function(res){
+				var Obj = JSON.parse(res);
+				var arr = Obj.results;
+				console.log(Obj)
+				var userId = this.userId;
+				duobaonuminforDom(Obj,userId)
+				document.querySelector('#sumpreson').innerText = Obj.payPerson;
+				var winnum = Number(Obj.awardNo)
+				resultsshowDom(arr,winnum)
+				duobaonumdetailEvent()
+			}
+		})
+		
+	})()
+function duobaonumdetailEvent(){
+	document.querySelector('.duobao-infor').addEventListener('tap',function(){
+		localStorage.itemId = this.getAttribute('goodsSaleId');
+		mui.openWindow({
+			url:'../../detail.html',
+			id:'detail'
+		})
+	})
+}
+		
+		
+function duobaonumdetail(opt){
+	if(localStorage.user&&localStorage.duobaoDetail&&localStorage.orderItemId){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var goodsSaleId = localStorage.duobaoDetail;
+		var orderItemId = localStorage.orderItemId;
+		var config = {
+			orderItemId:orderItemId,
+			goodsSaleId:goodsSaleId,
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+		}
+		for( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?orderItemId='+config.orderItemId+'&goodsSaleId='+config.goodsSaleId+'&userId='+config.userId+'&token='+config.token;
+		jsajax({
+			method:'post',
+			url:HostPort+'/goods/userBuyNo'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+function duobaonuminforDom(Obj,userId){
+	
+	var duobaoInfor = document.querySelector('.duobao-infor');
+	duobaoInfor.setAttribute('goodsSaleId',Obj.goodsSaleId);
+	var h4 = document.createElement('h4');
+	h4.innerText = Obj.goodsTitle;
+	duobaoInfor.appendChild(h4);
+	var Op01 = document.createElement('p');
+	Op01.innerHTML = '参与期号：'+Obj.goodsNum;
+	duobaoInfor.appendChild(Op01);
+	if(Obj.finishTime){//揭晓时间
+		var Op02 = document.createElement('p');
+		Op02.innerHTML = '揭晓时间：'+Obj.finishTime;
+		duobaoInfor.appendChild(Op02);
+	}
+	if(Obj.awardNo){//幸运号码
+		var Op03 = document.createElement('p');
+		Op03.innerHTML = '幸运号码：<span>'+Obj.awardNo+'</span>';
+		duobaoInfor.appendChild(Op03);
+	}
+	if(Obj.awardUserId){//中奖用户
+		
+		if( Obj.awardUserId == userId ){
+			var awarluck = document.createElement('div');
+			awarluck.className = 'awarluck';
+			duobaoInfor.appendChild(awarluck);
+		}
+	}
+	
+}
+
+function resultsshowDom(arr,winnum){
+	if(arr.length == 0){
+		return false;
+	}
+	var allnum = mui('.allnum')[0];
+	var Fragement = document.createDocumentFragment();
+	arr.forEach(function(v,i){
+		var Ospan = document.createElement('span');
+		if(v == winnum){
+			Ospan.className = 'off';
+		}
+		Ospan.innerText = v;
+		Fragement.appendChild(Ospan);
+	})
+	allnum.appendChild(Fragement);
+	
+}
+
+
+	</script>
+</html>

@@ -131,24 +131,14 @@
 		<script>
 			
 			;(function(){
-				function plusReady(){
-//				var wvs=plus.webview.all();
-//				for(var i=1;i<wvs.length;i++){				
-//					wvs[i].close();
-//				}
-			}
-			if(window.plus){
-				plusReady();
-			}else{
-				document.addEventListener("plusready",plusReady,false);
-			}
 				var Login = document.querySelector('#login');
 				var Code = document.querySelector('#code');
 				var Account = document.querySelector('#account');
 				var Password = document.querySelector('#password');
 				var RegPhone = /^1(3|4|5|7|8)\d{9}$/;
 				var phoneCode;//手机验证码
-				Code.onclick = function(){
+				
+				Code.addEventListener('tap',function(){					
 					var phone = Account.value;					
 					if(RegPhone.test(phone)){
 						var userphone = 'NISHOTjds!$2fd'+Account.value;
@@ -157,18 +147,19 @@
 						var Url = '?auth='+auth+'&phone='+phone;
 						jsajax({
 							method:'post',
-							url:'http://139.129.203.90/caibao/sms/code'+Url,
+							url:HostPort+'/sms/code'+Url,
 							success:function(res){
 								phoneCode = JSON.parse(res).phoneCode;
 								console.log(phoneCode)
+								Password.value = phoneCode;
 							}
 						})
 					}else{
 						mui.alert('手机号码有误，请慎重');
 					}
 						
-				}
-				Login.onclick = function(){
+				})
+				Login.addEventListener('tap',function(){
 					//console.log(phoneCode)
 					var phone = Account.value;
 					var passCode = Password.value;
@@ -177,7 +168,7 @@
 					var Url = '?phone='+phone+'&code='+passCode
 						jsajax({
 							method:'post',
-							url:'http://139.129.203.90/caibao/login/phone'+Url,
+							url:HostPort+'/login/phone'+Url,
 							success:function(res){
 								var Obj =  JSON.parse(res);
 								if(Obj.code == 0){
@@ -196,7 +187,7 @@
 					}else{
 						mui.alert('手机号码有误，请慎重');
 					}
-				}
+				})
 				
 			})()
 			

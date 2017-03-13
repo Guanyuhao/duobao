@@ -58,13 +58,13 @@
 	margin-bottom: 0;
 	font-size: .13rem;
 }
-.message-push p a{
+.message-push p {
 	 text-overflow:ellipsis; 
 	 white-space:nowrap; 
 	 overflow:hidden;
 	 color: #555;
 }
-.message-push p a span{
+.message-push p  span{
 	color: red;
 }
 .function{
@@ -193,7 +193,7 @@
 .goodslist .top .goods-img{
 	position:absolute ;
 	width: 1rem;
-	height: auto;
+	height: .9rem;
 	right: 0.1rem;
 	top: 0.05rem;
 }

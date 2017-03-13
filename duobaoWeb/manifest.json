@@ -243,7 +243,9 @@
 					"js/footer.js",
 					"fonts/mui.ttf",
 					"view/bill-list.html",
-					null
+					null,
+					"image/ic_emptypage_shopping_cart.png",
+					"js/car.js"
 				],
 				"refer": [
 					"bill-empty.html",
@@ -394,7 +396,12 @@
 					"image/icon_home_page4_selected.png",
 					"index.html",
 					"fonts/mui.ttf",
-					"announced.html"
+					"announced.html",
+					"image/ic_treaure_underway.png",
+					"image/contactservice.png",
+					"image/ic_treaure_winning.png",
+					"css/myset.css",
+					"image/ic_treaure_announced.png"
 				],
 				"refer": [],
 				"priority": 0
@@ -431,9 +438,12 @@
 					"css/bill.css",
 					"image/icon_home_page1_selected.png",
 					"image/icon_home_page3.png",
-					"image/activity_main.png"
+					"image/activity_main.png",
+					"js/car.js"
 				],
-				"refer": [],
+				"refer": [
+					"view/bill-empty.html"
+				],
 				"priority": 0
 			},
 			"view/bill-edit.html": {

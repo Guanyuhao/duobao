@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>订单</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			.infor-show{
+				font-size: .14rem;
+				margin: .1rem 0;
+			}
+			.infor-show span{
+				color: red;
+			}
+			.pay-infor{
+				font-size: .14rem;
+			}
+			.pay-infor li .img{
+				width: .2rem;
+				height: .2rem;
+				margin-right: .05rem;
+			}
+			.pay-infor li .img img{
+				width: 100%;
+				height: 100%;
+			}
+			.pay-infor li i{
+				color: red;
+				font-style: normal;
+			}
+			.mui-input-row {
+				clear: none;
+			}
+			.mui-radio input[type='radio']:checked:before {
+				content: '\e442';
+			}
+			
+			.mui-checkbox input[type=checkbox]:before,.mui-radio input[type=radio]:before{
+				font-size: .20rem;
+			}
+			.mui-radio label, .mui-checkbox label{
+				padding: 0;
+				padding-right: 20px;
+			}
+			.mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{
+				width: .2rem;
+				height: .2rem;
+				right: 0;
+				top: 0;
+			}
+			
+			.mui-table-view-cell:after {
+				left: 0;
+			}
+			.red-pack-send p{
+			
+				margin: .05rem 0;
+			}
+			.red-pack-send p>span{
+				color: red;
+			}
+			#surepay{
+				width: 90%;
+				margin: 0 5%;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">订单</h1>
+		</header>
+		<div class="mui-content">
+		    <div class="infor-show mui-table-view">
+		    	<div class="mui-table-view-cell">商品数量：<span id="accountnum"></span>件</div>
+		    	<div class="mui-table-view-cell">应付金额：<span id="accountprice"></span>元</div>
+		    </div>
+		    <ul class="pay-infor mui-table-view">
+		    	<li class="mui-table-view-cell">红包抵扣 <span class="mui-pull-right" id="bagId"></span></li>
+		    	<li class="mui-table-view-cell">
+		    		余额抵扣(账户余额<i id="balance"></i>彩宝币)	    		
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+					  <label></label>
+					  <input name="checkbox123" type="checkbox" checked id="caibaobi">
+					</div>
+					<i class="mui-pull-right reducemoney"></i>
+		    	</li>
+		    	<li class="mui-table-view-cell">
+		    		<div class="mui-pull-left img">
+		    			<img src="../image/ic_pay_chongzhi.png"/>
+		    		</div>
+		    		充值
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+						<label></label>
+						<input name="radio1" type="checkbox" id="Recharge">
+					</div>
+		    	</li>
+		    	<li class="mui-table-view-cell">
+		    		<div class="mui-pull-left img">
+		    			<img src="../image/ic_pay_ali.png"/>
+		    		</div>
+		    		支付宝支付
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+						<label></label>
+						<input name="radio1" type="checkbox">
+					</div>
+		    	</li>		    	
+		    	<li class="mui-table-view-cell">
+		    		<div class="mui-pull-left img">
+		    			<img src="../image/ic_pay_union.png"/>
+		    		</div>
+		    		银联支付
+		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+						<label></label>
+						<input name="radio1" type="checkbox">
+					</div>
+		    	</li>
+		    	<li class="mui-table-view-cell">
+		    		<div class="mui-pull-right">还需要支付：<i id="realpay"></i>元</div>
+		    	</li>
+		    </ul>
+		    <div class="red-pack-send">
+		    	<p>充值随机赠送红包</p>
+		    	<p>充值<span>20</span>元，随机赠送红包<span>1~3</span>个</p>
+		    	<p>充值<span>50</span>元，随机赠送红包<span>1~8</span>个</p>
+		    	<p>充值<span>100</span>元，随机赠送红包<span>1~15</span>个</p>
+		    	<button class="mui-btn mui-btn-danger" id="surepay">确认支付</button>
+		    </div>
+		</div>
+	</body>
+<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>	
+	<script type="text/javascript">
+		document.querySelector('.mui-action-back').addEventListener('touchend',function(){	
+			window.history.back();
+			
+		})
+		if(localStorage.account){
+
+			var account = JSON.parse(localStorage.account);
+			var balance = account.account;	
+			console.log(account)
+			//console.log(balance)
+			document.querySelector('#accountnum').innerText = account.goodsCount;
+			document.querySelector('#accountprice').innerText = account.payMoney;
+			if(account.bagId){
+				document.querySelector('#bagId').innerText = '-￥1';
+				document.querySelector('.reducemoney').innerText = '-￥'+account.payMoney - 1;
+				var answermoney = account.payMoney -1;
+			}else{
+				document.querySelector('#bagId').innerText = '无可用';
+				document.querySelector('.reducemoney').innerText ='-￥'+ account.payMoney;
+				var answermoney = account.payMoney;
+			}
+			
+			document.querySelector('#balance').innerText = balance;
+			//账户钱 大于 应付欠
+			
+			if( Number(balance) >= Number(answermoney) ){
+				document.querySelector('#realpay').innerText = '0'
+			}else{
+				document.querySelector('#realpay').innerText = Number(balance)-Number(answermoney);
+			}
+			
+		}
+
+// 处理多选 
+   		var InputRadio = document.querySelectorAll('input[name=radio1]');
+   		for(var i = 0 ; i<InputRadio.length; i++){
+   			InputRadio[i].onclick=(function(index){			
+   				return function(){
+   					for(var j = 0 ; j<InputRadio.length; j++){
+   						if( j == index ){
+   							// 不做处理继续 延续多选按钮 的默认操作
+   							
+   						}else{
+   							InputRadio[j].checked = false;  							
+   						}
+   					}
+   				}
+   			})(i);
+   		}
+   		
+//综合处理支付方式
+		document.querySelector('.pay-infor').addEventListener('change',function(ev){
+			var ev = ev || window.event;
+   			var target = ev.target || ev.srcElement;
+   			if( target.nodeName.toLocaleLowerCase()=='input' ){
+   				if(target.id == 'Recharge'){
+   					if(target.checked){
+   						document.querySelector('#surepay').innerHTML = '去充值'
+   						document.querySelector('#surepay').href = 'Recharge.html';
+   					}else{
+   						document.querySelector('#surepay').innerHTML = '立即购买'
+   					}
+   				}else if(target.id == 'caibaobi'){
+   					//多选框选中处理
+
+   					if(target.checked == false){
+   						
+   						document.querySelector('#realpay').innerText = answermoney;
+   					}else{
+   						
+   						if( Number(balance) >= Number(answermoney) ){
+							document.querySelector('#realpay').innerText = '0'
+						}else{
+							document.querySelector('#realpay').innerText = Number(balance)-Number(answermoney);
+						}
+   					}
+   				
+   				}else{
+   					document.querySelector('#surepay').innerHTML = '立即购买'
+   				}
+   			}
+		})
+//处理支付
+		document.querySelector('#surepay').addEventListener('touchend',function(){
+			var Allinput = document.querySelectorAll('.pay-infor input')
+			var arr = Array.prototype.slice.call(Allinput);
+			var drag = arr.some(function(v,i){return v.checked}); 
+			var realpay = document.querySelector('#realpay').innerText; 
+			var Recharge = document.querySelector('#Recharge');
+			if(drag){ // 判读是否没选支付方式
+				
+				//是否选了充值  无论与否都去充值页面
+				if(Recharge.checked){
+					
+					document.location.href = 'Recharge.html';
+					
+				}else{
+					//这里处理支付宝 支付 或者 银联支付
+					if(realpay == 0){ //判读是否需要加钱
+					
+						paybuyAccount({
+							callback:function(res){
+								document.location.href = 'paysuccess.html';
+							}
+						})
+					
+					}
+					
+				}
+				
+				
+			}else{
+				
+				mui.alert('请选择支付方式')
+			}
+			
+			
+		})
+		
+		function paybuyAccount(opt){
+			var User = JSON.parse(localStorage.user);
+			var UserInfo = User.userInfo;
+			var account = JSON.parse(localStorage.account);
+			var config = {
+				type:0, //0余额支付 1 充钱支付
+				orderId:account.orderId,
+				channel:'', //支付方式 alipay nowpay_qq payeco
+				userBagsId:account.bagId,
+				userId:UserInfo.userId,
+				token:UserInfo.caibaoToken,
+				callback:function(res){
+				
+				}
+			}
+			for( var i in opt ){
+				config[i] = opt[i]
+			}
+			var Url ='?type='+config.type+'&orderId='+config.orderId+'&userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&userBagsId='+config.userBagsId;
+			jsajax({
+				method:'post',
+				url:HostPort+'/pay/buyAccount'+Url,
+				success:function(res){
+					config.callback(res)
+				}
+			})
+		}
+	</script>
+</html>

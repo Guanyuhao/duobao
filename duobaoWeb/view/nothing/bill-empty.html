@@ -43,6 +43,26 @@
 				<button class="mui-btn mui-btn-danger">查看商品</button>
 			</div>
 		</div>
+		
+		
+<div id="sheet1" class="mui-popover mui-popover-bottom mui-popover-action ">
+    <!-- 可选择菜单 -->
+    <ul class="mui-table-view">
+      <li class="mui-table-view-cell">
+        <a href="#">菜单1</a>
+      </li>
+      <li class="mui-table-view-cell">
+        <a href="#">菜单2</a>
+      </li>
+    </ul>
+    <!-- 取消菜单 -->
+    <ul class="mui-table-view">
+      <li class="mui-table-view-cell">
+        <a href="#sheet1"><b>取消</b></a>
+      </li>
+    </ul>
+</div>
+		
 	</body>
 	<script type="text/javascript">
 		var h5pullDown = true;
@@ -57,6 +77,6 @@
 				createNew:false
 			})
 		})
-		
+		mui('#sheet1').popover('toggle');
 	</script>
 </html>

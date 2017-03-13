@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>个人资料</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			.presondata>li{
+				font-size: .12rem;
+			}
+			.presondata>li>span{
+				color: #C0C0C0;
+			}
+			.presondata>li>span>i{
+				font-style: normal;
+				display: inline-block;
+				width: .2rem;
+			}
+			.presondata>li>span>b{
+				font-weight: normal;
+			}
+			.presondata>li>span>.photo{
+				width: .4rem;
+				height: .4rem;
+				border-radius: 50%;
+				vertical-align: text-top;
+				
+			}
+			.presondata .mui-table-view-cell:after{
+				left: 0;
+			}
+			.presondata>li:first-child{
+				position: relative;
+			}
+			.presondata>li:first-child>span:first-child{
+				position: absolute;
+				top: 40%;
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">个人资料</h1>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view presondata">
+			    <li class="mui-table-view-cell">
+			    	<span class="mui-pull-left">头像</span>
+			        <span class="mui-pull-right"><img src="" class="photo"/><i class="mui-navigate-right"></i></span>
+			    </li>
+			    <li class="mui-table-view-cell">ID 
+			        <span class="mui-pull-right"><b class="presonId"></b></span>
+			    </li>
+			    <li class="mui-table-view-cell">性别 
+			        <span class="mui-pull-right">男<i class="mui-navigate-right"></i></span>
+			    </li>
+			    <li class="mui-table-view-cell">昵称
+			        <span class="mui-pull-right"><b class="presonname"></b><i class="mui-navigate-right"></i></span>
+			    </li>
+			    <li class="mui-table-view-cell">手机号 
+			        <span class="mui-pull-right"><b class="presonnum"></b></span>
+			    </li>
+			    <li class="mui-table-view-cell" onclick="addAdmin()">地址管理
+			        <span class="mui-pull-right"> <i class="mui-navigate-right"></i></span>
+			    </li>
+			</ul>
+		</div>
+	</body>
+	
+	
+	<script type="text/javascript">
+
+		document.querySelector('.mui-action-back').addEventListener('touchend',function(){
+			
+			window.history.back();
+		})
+		
+		if(localStorage.user){
+			var user = JSON.parse(localStorage.user).userInfo;
+			document.querySelector('.photo').src = user.photo;
+			document.querySelector('.presonId').innerText = user.userId;
+			document.querySelector('.presonname').innerText = user.name;
+			document.querySelector('.presonnum').innerText = user.phone;
+		}
+		function addAdmin(){
+			
+		}
+	</script>
+</html>

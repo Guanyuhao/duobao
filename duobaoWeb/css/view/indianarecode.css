@@ -1,0 +1,162 @@
+#scroll{
+	top: .88rem;
+}
+.fixed-nav{
+	position: fixed;
+	top: .44rem;
+	height: .44rem;
+	background: #fff;
+	z-index: 10;
+	width: 100%;
+}
+.fixed-nav ul{
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+	line-height: .44rem;
+}
+.fixed-nav li{
+	float: left;
+	box-sizing: border-box;
+	width: 25%;
+	text-align: center;
+	color: #C0C0C0;
+	font-size: .14rem
+}
+.fixed-nav li.active{
+	color: #F54A12;
+}
+
+.nav-border{
+	position: absolute;
+	height: 0.02rem;
+	background: #F54A12;
+	width: 25%;
+	left: 0;
+}
+
+
+.recode-list{
+	width: 100%;
+	background: #fff;
+	margin: 3% 0;
+	overflow: hidden;
+	
+}
+.recode-list>.top{
+	
+	width: inherit;
+	border-bottom: .01rem solid #FAFAFA;
+}
+
+.recode-list>.top>.left{
+	width: 40%;
+	height: 1rem;
+	float: left;
+}
+.recode-list>.top>.left img{
+	box-sizing: border-box;
+	width: 60%;
+	height: 80%;
+	margin: 10% 20%;
+}
+.recode-list>.top>.right{
+	position: relative;
+	overflow: hidden;
+	padding-right: 0.1rem;
+}
+.recode-list>.top>.right p{
+	margin: 0;
+	padding: 0;
+	font-size: 0.12rem;
+	line-height: .16rem;
+}
+.recode-list>.top>.right h4{
+	margin-top: 0.1rem;
+	font-size: .14rem;
+	font-weight: normal;
+}
+.recode-list>.top>.right p:nth-child(2){
+	margin: .1rem 0;
+}
+.recode-list>.top>.right p.progress-recode{
+	height: 0.04rem;
+	width: 100%;
+	background: #C0C0C0;
+	border-radius: 0.06rem;
+	margin-bottom: .1rem;
+	position: relative;
+}
+/*进度条*/
+.recode-list>.top>.right p.progress-recode span{
+	height: 100%;
+	position: absolute;
+	background: darkorange;
+	border-radius: 0.06rem;
+}
+.recode-list>.top>.right p.totalperson i{
+	float: right;
+	font-style: normal;
+}
+/*灰色框*/
+.recode-list>.top>.right>.garyDiv{
+	background: lightgray;
+	margin: 0.1rem 0;
+	padding: .05rem;
+}
+.recode-list>.top>.right>.garyDiv>p{
+	color: #000;
+	margin: 0;
+}
+.recode-list>.top>.right>.garyDiv>p:nth-child(1)>span{
+	color: #007AFF;
+}
+.recode-list>.top>.right>.garyDiv>p:nth-child(3)>span{
+	color: red;
+}
+/*是否参加活动*/
+.recode-list>.top>.right>.ishowaci{
+	background: url(../../image/activity.png) no-repeat;
+	width: .3rem;
+	height: .3rem;
+	position: absolute;
+	background-size: cover;
+	right: .1rem;
+	top: .1rem;
+}
+
+.recode-list>.bottom{
+	
+	width: inherit;
+	overflow: hidden;
+	line-height: .45rem;
+	padding:0 .1rem;
+	font-size: .12rem
+}
+.recode-list>.bottom div{
+	float: left;
+}
+.recode-list>.bottom>.left>span>b{
+	font-weight: normal;
+	color: red;
+}
+.recode-list>.bottom>.center{
+	margin-left: .15rem;
+	color: #0062CC;
+}
+.recode-list>.bottom>.right{
+	float: right;
+	height: 100%;
+}
+.recode-list>.bottom>.right button{
+	width: 100%;
+	margin-top: .05rem;
+	text-align: center;
+	font-size: .12rem
+}
+/**/
+.recode-list>.transfName{
+	line-height: .2rem;
+	padding-left: .1rem;
+}

@@ -6,7 +6,7 @@
     <title></title>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/com.css"/>
-
+	<link rel="stylesheet" type="text/css" href="css/myset.css"/>
 </head>
 <body>
 	<header class="mui-bar mui-bar-nav">
@@ -40,24 +40,80 @@
 	    <!--下拉刷新容器-->
 	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
 	      <div class="mui-scroll" id="scroll">
+	      	<!--个人信息show-->
+	      	<div class="presonshow clearfloat">
+	      		<div class="left">
+	      			<img src="" alt="你的头像在来的路上" title="大兄弟你要发财" id="userphoto"/>
+	      			<b id="username"></b>
+	      			<span id="usermoney"></span>
+	      		</div>
+	      		<div class="right">
+	      			<a class="mui-btn-outlined mui-btn" href="view/Recharge.html">充值</a>
+	      		</div>
+	      	</div>
+	      	<div class="indianarecode clearfloat">
+	      		<div class="top mui-table-view">
+	      			<li class="mui-table-view-cell">
+			        	<a class="mui-navigate-right" href="view/indiana-recode.html" type="0">夺宝记录</a>
+	   				</li>
+	      		</div>
+	      		<div class="bottom clearfloat">
+	      			<div class="left">
+	      				<a href="view/indiana-recode.html" type="1">
+	      					<img src="image/ic_treaure_underway.png" alt="大兄弟你要发财" />
+	      					<span>正在进行</span>	
+	      				</a>
+	      			</div>
+		      		<div class="center">
+		      			<a href="view/indiana-recode.html" type='2'>
+		      				<img src="image/ic_treaure_announced.png" alt="大兄弟你要发财" />
+	      					<span>已揭晓</span>
+		      			</a>		      			
+		      		</div>
+		      		<div class="right">
+		      			<a href="view/indiana-recode.html" type="3">
+		      				<img src="image/ic_treaure_winning.png" alt="大兄弟你要发财" />
+	      					<span>已中奖</span>
+		      			</a>	      			
+		      		</div>
+	      		</div>
+	      	</div> 
 	        <!--数据列表-->	        
-	        <ul class="mui-table-view mui-table-view-chevron" id="AnnList">
-	          	
+	        <ul class="mui-table-view mui-table-view-chevron" id="setInfor">
+	          	<li class="mui-table-view-cell"><a href="view/my-wallet.html"><img src="image/ic_wallet.png"/>钱包</a></li>
+			    <li class="mui-table-view-cell"><a href="view/red-pack.html"><img src="image/ic_red_packets.png"/>红包</a></li>
+			    <li class="mui-table-view-cell"><a href="view/news-core.html"><img src="image/ic_message_center.png"/>消息中心</a></li>
+			    <li class="mui-table-view-cell"><a href="view/com-ques.html"><img src="image/ic_problem.png"/>常见问题</a></li>
+    			<li class="mui-table-view-cell"><a href="view/my-about.html"><img src="image/ic_about_we.png"/>关于彩宝</a></li>
 	        </ul>
 	      </div>
 	    </div>  
 	</div>
-	
 	
 </body>
 <script type="text/javascript">
 	var h5pullDown = true;
 </script>
 <script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+
 <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	
+
+mui('body').on('tap','a',function(){
+	var type = this.getAttribute('type');
+	if(type){
+		localStorage.type = type;
+		document.location.href = this.href;
+		
+	}else{
+		document.location.href = this.href;		
+	}
+})
+
+mui('.presonshow')[0].addEventListener('tap',function(){
+	document.location.href = 'view/preson-show.html'
+})
 
 mui.init({
   pullRefresh : {
@@ -72,19 +128,18 @@ mui.init({
       	
       	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-    },
-    up : {
-      height:50,//可选.默认50.触发上拉加载拖动距离
-      auto:true,//可选,默认false.自动上拉加载一次
-      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
-      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
-      callback :function up(){
-		this.endPullupToRefresh(false||true);
-      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
   }
 });	
 
+if(localStorage.user){
+	
+	var Obj = JSON.parse(localStorage.user);
+	var User = Obj.userInfo;
+	mui('#userphoto')[0].src = User.photo;
+	mui('#username')[0].innerText = User.name;
+	mui('#usermoney')[0].innerText ='余额：'+ User.money;
+}
 
 
 </script>

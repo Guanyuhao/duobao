@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>我的钱包</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			.wallet{
+				background: #fff;
+				height: 1.3rem;
+				padding: 5% ;
+				border-bottom: .01rem solid #FAFAFA;
+			}
+			.wallet h5{
+				color: #333;
+			}
+			.wallet h4{
+				margin-top: .3rem;
+				margin-bottom: .1rem;
+			}
+			.wallet span{
+				font-size: .12rem;
+				color: #C0C0C0;
+			}
+			.pay{
+				text-align: center;
+				line-height: .4rem;
+				background: #fff;
+				
+			}
+			.pay a{
+				color: #F54A12;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">钱包</h1>
+		</header>
+		<div class="mui-content">
+		    <div class="wallet">
+		    	<h5>余额账户</h5>
+		    	<h4 id="moeny">11111111</h4>
+		    	<span>彩宝币(1元=1彩宝币)</span>	    	
+		    </div>
+		    <div class="pay">
+		    	<a href="">充值</a>
+		    </div>
+		</div>
+	</body>
+	
+	
+	<script type="text/javascript">
+
+if(localStorage.user){
+	var user  = JSON.parse(localStorage.user).userInfo;
+	document.querySelector('#moeny').innerText = user.money;
+}
+
+		document.querySelector('.mui-action-back').addEventListener('touchend',function(){
+			
+			window.history.back();
+		})
+		
+	</script>
+</html>

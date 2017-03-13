@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>晒单分享</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<style type="text/css">
+			
+			.sunshare-list{
+				width: 100%;
+				height: 1.6rem;
+				border-bottom: 0.01rem solid #FAFAFA;
+				overflow: hidden;	
+			}
+			.sunshare-list>.left{
+				width: 30%;
+				box-sizing: border-box;
+				height: 100%;
+				
+			}
+			.sunshare-list>.left>img{
+				width: 70%;
+				margin: 15%;
+			}
+			.sunshare-list>.right{
+				width: 70%;
+				box-sizing: border-box;
+				padding: .1rem;
+			}
+			.sunshare-list>.right>p{
+				font-size: .12rem;
+				margin:.05rem;
+			}
+			.sunshare-list>.right>p:first-child{
+				color: #333;
+			}
+			.sunshare-list>.right>p:first-child>span{
+				color: #8f8f94;
+			}
+			.sunshare-list>.right>p:nth-child(3){
+				color: #333;
+			}
+			.sunshare-list>.right>.shareimg>img{
+				width: 30%;
+				margin-right: 3%;
+				height: .6rem;
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">最新发布</h1>
+		</header>
+		<!--下拉刷新容器-->
+		    <div id="refreshContainer" class="mui-content mui-scroll-wrapper sunshare">
+		      <div class="mui-scroll" id="scroll">
+		        <!--数据列表-->	        
+		        <ul class="mui-table-view mui-table-view-chevron clearfloat" id="sunsharelist">
+		        	
+		        	
+		        </ul>
+		      </div>
+		    </div> 
+	</body>
+	
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+
+;(function(){
+			
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+      
+      	 this.endPullupToRefresh(false||true);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});
+			
+cardListData({
+	callback:function(res){
+		var Obj = JSON.parse(res);
+		console.log(Obj)
+		var arr = Obj.cbData;		
+		sunshareDom(arr)
+	}
+})
+//个人中心跳转
+mui('#sunsharelist').on('tap','.presonphoto',function(){
+	var _this = this;
+	var tadeuser = {
+		tadeuserId:_this.getAttribute('tauserId'),
+		tadeuserName:_this.getAttribute('tauserName'),
+		img:_this.src
+	}
+	var str = JSON.stringify(tadeuser)
+	
+	localStorage.tadeuser = str;
+	mui.openWindow({
+		url:'send/presonal-center.html',
+		id:'presonalCenter'
+	})
+})
+// 晒单详情跳转
+mui('#sunsharelist').on('tap','.sunshare-list-right',function(){
+	localStorage.sunshareDetail = this.getAttribute('itemId');
+	mui.openWindow({
+		url:'send/share-detail.html',
+		id:'shareDetail'
+	})
+	
+})
+})();
+		
+function cardListData(opt){
+	var config = {
+		topicId:0,
+		type:1,
+		callback:function(res){
+			
+		}
+	}
+	for ( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?topicId='+config.topicId+'&type='+config.type;
+	jsajax({
+		method:'post',
+		url:HostPort+'/topic/list'+Url,
+		success:function(res){
+			config.callback(res)
+		}
+	})
+}
+		
+		function sunshareDom(arr){
+			
+			if(arr.length == 0){
+				return false;
+			}
+			
+			var sunsharelist = document.querySelector('#sunsharelist');
+			var Fragment = document.createDocumentFragment();
+			arr.forEach(function(v,i){
+				var Odiv01 = document.createElement('div');
+				var Odiv02 = document.createElement('div');
+				var Odiv03 = document.createElement('div');
+				var Odiv04 = document.createElement('div');
+				Odiv01.className = 'sunshare-list';
+				Odiv02.className = 'left mui-pull-left';
+				Odiv03.className = 'right mui-pull-left sunshare-list-right';
+				Odiv03.setAttribute('itemId',v.itemId);
+				Odiv04.className = 'shareimg';
+				var Img01 = new Image();
+				Img01.src = v.userPhoto;			
+				Img01.setAttribute('tauserId',v.userId);
+				Img01.setAttribute('tauserName',v.userName);
+				Img01.className = "presonphoto";
+				Odiv02.appendChild(Img01);
+				if(v.thumb1){
+					var Img02 = new Image();
+					Img02.src = v.thumb1;
+					Odiv04.appendChild(Img02);
+				}
+				if(v.thumb2){
+					var Img03 = new Image();
+					Img03.src = v.thumb2;				
+					Odiv04.appendChild(Img03);				
+				}
+				if(v.thumb3){
+					var Img04 = new Image();
+					Img04.src = v.thumb3;					
+					Odiv04.appendChild(Img04);					
+				}
+				
+				var Op01 = document.createElement('p');
+				Op01.innerText = v.userName;
+				var Ospan = document.createElement('span');
+				Ospan.className = 'mui-pull-right';
+				Ospan.innerText = v.note;
+				Op01.appendChild(Ospan);
+				var Op02 = document.createElement('p');
+				Op02.innerText = '获得商品：'+v.goodsTitle;
+				var Op03 = document.createElement('p');
+				Op03.innerText = v.content;			
+				Odiv03.appendChild(Op01);
+				Odiv03.appendChild(Op02);
+				Odiv03.appendChild(Op03);
+				Odiv03.appendChild(Odiv04);
+				Odiv01.appendChild(Odiv02);
+				Odiv01.appendChild(Odiv03);
+				Fragment.appendChild(Odiv01);
+			})
+			sunsharelist.appendChild(Fragment);
+		}
+		
+	</script>
+</html>

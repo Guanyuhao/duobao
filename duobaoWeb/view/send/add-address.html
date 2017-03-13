@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>新建地址</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+   		<link rel="stylesheet" type="text/css" href="../../css/libs/mui.picker.all.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			.fixe-bottom{
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+				z-index: 10;
+			}
+			.fixe-bottom>button{
+				width: 90%;
+				margin: 5%;
+			}
+			.editAddBom,.editAddTop{
+				margin: .15rem 0;
+				background: #fff;
+			}
+			.editAddTop>div,.editAddBom>div{
+				width: 100%;
+				
+				padding: .05rem;
+				border-bottom: .01rem solid #FAFAFA;
+			}
+			.editAddTop>div>span,.editAddBom>div>span{
+				line-height: .4rem;
+				width: 25%;
+				font-size: .14rem;
+				float: left;
+			}
+			.editAddTop>div>input,.editAddBom>div>input{
+				width: 75%;
+				border: none;
+				margin: 0;
+				font-size: .14rem;
+				
+			}
+			.editAddBom>div>.switch{
+				float: right;
+				padding-top:.07rem ;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">新建地址</h1>
+		</header>
+		<footer class="fixe-bottom mui-nav-tab">
+			<button class="mui-btn mui-btn-danger save">保存</button>
+		</footer>
+		 <!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper editAddress">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <div class="editAddTop">
+				<div class="clearfloat">
+					<span>收货人：</span>
+					<input type="text"  name="recive"/>
+				</div>
+				
+				<div class="clearfloat">
+					<span>联系方式：</span>
+					<input type="text" name="contactWay" />
+				</div>
+			</div>
+			
+			<div class="editAddBom">
+				<div class="clearfloat">
+					<span>所在地区：</span>
+					<input type="text" name="wherearea" readonly/>
+					<a class="mui-navigate-right"></a>
+				</div>
+				<div class="clearfloat">
+					<span>详细地址：</span>
+					<input type="text" name="detailAdd" />
+				</div>
+				<div class="clearfloat" style="position: relative;">
+					<span>设为默认：</span>
+					<div class="switch">
+						<div class="mui-switch mui-switch-blue">
+							<div class="mui-switch-handle"></div>
+						</div>
+					</div>
+				</div>				
+			</div>
+			
+	      </div>
+	    </div>
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/city.data-3.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	;(function(){
+		
+//用户当前地址显示
+
+//城市数据 省份
+
+//实例化 城市选择器 3级联动
+var picker = new mui.PopPicker({
+    layer: 3
+});
+//传入生成的城市数据
+picker.setData(cityData3)
+    //默认选择
+mui('input[name=wherearea]')[0].addEventListener('tap',function(){
+	var _this = this;
+	picker.show(function(SelectedItem) {
+		
+		_this.value = SelectedItem[0].text+" "+SelectedItem[1].text+" "+SelectedItem[2].text;
+	})
+})
+mui('footer').on('tap',".save",function(){
+	var inputText = document.querySelectorAll('.editAddress input[type=text]')
+	var arr = Array.prototype.slice.call(inputText);
+	var Drag = arr.every(function(v,i){return v.value })
+	if(!Drag ){
+		mui.alert('请您填写完整地址'," ")
+		return false;
+	}
+	var issh = 0;
+	var MuiSwitch = mui('.mui-switch')[0];
+	if( MuiSwitch.classList.contains('mui-active') ){
+		issh = 1;
+	}else{
+		issh = 0;
+	}
+	var realname = mui('input[name=recive]')[0].value;
+	var mobile = mui('input[name=contactWay]')[0].value;
+	var RegPhone = /^1(3|4|5|7|8)\d{9}$/;
+	
+	if(!RegPhone.test(mobile)){		
+		mui.alert('请输入正确手机号'," ");
+		return false;
+	}
+	
+	var str2 = mui('input[name=wherearea]')[0].value;
+	var province = str2.split(' ')[0];
+	var city = str2.split(' ')[1];
+	var county = str2.split(' ')[2];
+	var address = mui('input[name=detailAdd]')[0].value;
+	
+	usersaveAddrData({
+		realname:realname,
+		mobile:mobile,
+		province:province,
+		city:city,
+		issh:issh,
+		county:county,
+		address:address,
+		callback:function(res){
+			console.log(res)
+		}
+	})
+	
+})
+
+
+})();
+
+
+function usersaveAddrData(opt){
+	if( localStorage.user && localStorage.addgoodsSaleId){
+		var goodsSaleId = localStorage.addgoodsSaleId;
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var goodsSaleId = localStorage.addgoodsSaleId;
+		var config = {
+			realname:'',
+			mobile:'',
+			province:'',
+			city:'',
+			county:'',
+			address:'',
+			issh:'1',
+			goodsSaleId:goodsSaleId,
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+				
+			}
+	}
+	for( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?userId='+config.userId+'&token='+config.token+'&goodsSaleId='+config.goodsSaleId+'&issh='+config.issh+"&county="+config.county+"&city="+config.city+"&province="+config.province+"&mobile="+config.mobile+"&realname="+config.realname+"&address="+config.address;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/saveAddr'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+	
+}
+
+	
+	</script>
+</html>
+

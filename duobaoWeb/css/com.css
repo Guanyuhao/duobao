@@ -64,3 +64,63 @@ footer .mui-bar-tab .mui-tab-item.active{
 				clear:both;
 				overflow:hidden;}
 .clearfloat{zoom:1;/*这个转为解决IE6的bug的*/}
+ul,li,ol{list-style: none;}
+/*立即购买弹框*/
+.mui-popover.mui-popover-action .mui-table-view{
+	border-radius: 0;
+	margin: 0;
+	color: #333;
+}
+.now-buy {
+	height: 2.5rem;
+}
+.now-buy>.top{
+	padding-top: .1rem;
+	height: 35%;
+	background: #F2F2F2;
+}
+.now-buy>.top>h5{
+	position: relative;
+	color: #333;
+	
+}
+.now-buy>.top>h5>a{
+	color: #ccc;
+	position: absolute;
+	right: .1rem;
+	top: -.1rem;
+}
+.now-buy>.top>span{
+	font-size: .12rem;
+	color: #C0C0C0;
+}
+.now-buy>.top>span>i{
+	color: red;
+	font-style: normal;
+}
+.now-buy>.bottom{
+	height: 65%;
+}
+.now-buy>.bottom>.mui-numbox{
+	width: 2rem;
+	margin: .1rem 0;
+}
+.now-buy>.bottom>.people button{
+	margin-right: .05rem;
+	height: .3rem;
+	
+}
+.now-buy>.bottom>.btn-buy>span{
+	font-size: .12rem;
+}
+.now-buy>.bottom>.btn-buy>span>i{
+	font-style: normal;
+	color: red;
+}
+.now-buy>.bottom>.btn-buy>a{
+	width: 2.5rem;
+}
+/*radio*/
+.mui-radio input[type='radio']:checked:before {
+	content: '\e442';
+}

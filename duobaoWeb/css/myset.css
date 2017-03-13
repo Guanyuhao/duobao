@@ -1,0 +1,84 @@
+.presonshow{
+	background: #F54A12;
+	width: 100%;
+	height: 1.3rem;
+	box-sizing: border-box;
+	padding-top: 10%;
+	padding-left: 5%;
+}
+.presonshow .left{
+	float: left;
+	width:80%;
+	position: relative;
+	height: 100%;
+}
+.presonshow .left>img {
+	width: 30%;
+	margin-right: 10%;
+	border-radius: 50%;
+	height: .7rem;
+}
+.presonshow .left span {
+	font-size: .14rem;
+	color: yellow;
+}
+.presonshow .left b{
+	position: absolute;
+	color: #fff;
+	font-size: .14rem;
+}
+.presonshow .right{
+	float: right;
+	width:20%;
+	height: 100%;
+	position: relative;
+}
+.presonshow .right>a{
+	position: absolute;
+	top: 30%;
+	right: 30%;
+	color: #fff;
+}
+
+.indianarecode{
+	margin: 0.1rem 0;
+	height: 1rem;
+	background: #fff;
+	
+}
+.indianarecode .top{
+	height: 40%;
+	font-size: .14rem;
+	color: #666666;
+}
+.indianarecode .bottom{
+	height: 60%;
+}
+.indianarecode .bottom div{
+	float: left;
+	width: 33.3%;
+	box-sizing: border-box;
+	text-align: center;
+	height: 100%;
+	padding-top: 2%;
+}
+.indianarecode .bottom div img{
+	width: 20%;
+	height: auto;
+	display: block;
+	margin: 3% 40%;
+}
+.indianarecode .bottom div span{
+	font-size: .12rem;
+	color: #C0C0C0;
+}
+#setInfor li{
+	font-size: .14rem;
+	color: #333;
+}
+#setInfor li img{
+	width: .15rem;
+	height:.15rem;
+	vertical-align: text-bottom;
+	margin-right: 3%;
+}

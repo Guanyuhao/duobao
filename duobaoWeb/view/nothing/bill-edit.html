@@ -10,13 +10,15 @@
 </head>
 <body>
 	
-	<footer class="mui-bar mui-bar-tab bill-list-footer">	
+	<footer class="mui-bar mui-bar-tab bill-list-footer list-edit">	
 			<div class="left">
-				<span>共<b id="SumNum">2</b>件商品，总计<strong id="SumPrice">15.0</strong>元</span><br />
-				<i>夺宝有风险，参与需要谨慎</i>
+	            <div class="mui-input-row mui-checkbox mui-left">
+	                <label>全选</label>
+	                <input type="checkbox" id="checkAll">
+	            </div>
 			</div>
 			<div class="right">
-				<button class="mui-btn mui-btn-danger">结算</button>
+				<button class="mui-btn mui-btn-danger">删除</button>
 			</div>
 	</footer>
 		
@@ -25,7 +27,7 @@
 	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
 	      <div class="mui-scroll" id="scroll">
 	        <!--数据列表-->	        
-	        <ul class="mui-table-view mui-table-view-chevron" id="billList">
+	        <ul class="mui-table-view mui-table-view-chevron" id="EditList">
 	          	
 	        </ul>
 	      </div>
@@ -43,31 +45,35 @@
 ;(function(){
 	
 	
-	getBillList({
+	getEditList({
 		callback:function(res){
 			//console.log(res)
 			var Obj = JSON.parse(res);
 			console.log(Obj)
 			var ListArr = Obj.goodsSales;
 			
-			proBillListDom(ListArr)
+			proEditListDom(ListArr)
 		}
 	})
-	//删除
-//	numupdate({
-//		num:5,
-//		itemId:515,
-//		callback:function(res){
-//			console.log(res)
-//		}
-//	})
-	delcar({
-		
-	})
-
-	mui('#billList').on('tap','#del',function(){
-		 
-	})
+	
+	document.getElementById('checkAll').addEventListener('change',function(e) {
+            var listBox = mui('.listCheckBox');
+            if (e.target.checked) {
+                listBox.each(function() {
+                    var ele = this;
+                    ele.checked=true
+                })
+            } else {
+                listBox.each(function() {
+                    var ele = this;
+                    ele.checked=false
+                })
+            }
+    })
+	
+	
+	
+	
 })()
 mui.init({
   pullRefresh : {
@@ -95,7 +101,7 @@ mui.init({
   }
 });	
 
-function getBillList(opt){
+function getEditList(opt){
 	//参数必穿
 	if(localStorage.user){
 		
@@ -113,7 +119,7 @@ function getBillList(opt){
 		var Url = '?userId='+config.userId+'&token='+config.token;
 		jsajax({
 			method:'post',
-			url:'http://139.129.203.90/caibao/car/list'+Url,
+			url:HostPort+'/car/list'+Url,
 			success:function(res){
 				config.callback(res)
 			}
@@ -123,14 +129,24 @@ function getBillList(opt){
 	
 }
 
-function proBillListDom(arr){
+function proEditListDom(arr){
 	
-	var billList = document.querySelector('#billList');
+	var EditList = document.querySelector('#EditList');
 	var Fragment = document.createDocumentFragment();
 		for (var i = 0 ; l=arr.length, i<l; i++) {
 			var Oli = document.createElement('li');
 			Oli.className = '"mui-table-view-cell mui-media';
-			Oli.setAttribute('itemId',arr[i].itemId);
+			Oli.setAttribute('goodsId',arr[i].goodsId);
+			var Ocheck = document.createElement('div');
+			Ocheck.className = 'mui-input-row mui-checkbox mui-left check-warp';
+			var Olabel = document.createElement('label');
+			var OcheckInput = document.createElement('input');
+			OcheckInput.type = 'checkbox';
+			OcheckInput.name ='box';
+			OcheckInput.className = 'listCheckBox';
+			Ocheck.appendChild(Olabel);
+			Ocheck.appendChild(OcheckInput);
+			Oli.appendChild(Ocheck);
 			var Oimg = new Image();
 			Oimg.className = 'mui-media-object mui-pull-left';
 			Oimg.src = arr[i].image;
@@ -159,13 +175,9 @@ function proBillListDom(arr){
 			Ospan.innerHTML = '(中奖率'+10+'%)'
 			Ocen.appendChild(Oinput);
 			Ocen.appendChild(Ospan);
-			var Odel = document.createElement('i');
-			Odel.className = 'mui-icon mui-icon-trash';
-			Odel.id = 'del';
 			Op03.appendChild(Obtn01);
 			Op03.appendChild(Ocen);
 			Op03.appendChild(Obtn02);
-			Op03.appendChild(Odel);
 			Odiv.appendChild(Op01);
 			Odiv.appendChild(Op02);
 			Odiv.appendChild(Op03);
@@ -173,10 +185,8 @@ function proBillListDom(arr){
 			Oli.appendChild(Odiv);
 			Fragment.appendChild(Oli)
 		}
-		billList.appendChild(Fragment);
+		EditList.appendChild(Fragment);
 }
-
-
 
 </script>
 </html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>晒单详情</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			.goods-detail,.sunshare-detail{
+				background: #fff;
+				padding: .1rem;
+				margin-bottom: .1rem;
+			}
+			.goods-detail>.bottom{
+				padding: .1rem;
+				background: #F2F2F2;
+			}
+			.goods-detail>h4,.sunshare-detail>h4{
+				padding: .1rem 0;
+				font-weight: normal;
+				font-size: .14rem;
+				margin: 0;	
+			}
+			.sunshare-detail>img{
+				width: 100%;
+			}
+			.blue{
+				color: blue;
+			}
+			.red{
+				color: red;
+			}
+			.nor{
+				font-weight: normal;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">晒单详情</h1>
+		</header>
+		<div class="mui-content">
+		    <div class="mui-scroll-wrapper" id="scroll">
+				<div class="mui-scroll">
+					
+					<div class="goods-detail">
+						
+					</div>
+					
+					<div class="sunshare-detail">
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+
+
+		
+		;(function(){
+			mui('.mui-scroll-wrapper').scroll({
+				deceleration: 0.0006
+			});
+			sunshareDetail({
+				callback:function(res){
+					var Obj = JSON.parse(res);
+					console.log(Obj)				
+					 goodsdetailDom(Obj);
+					 sunsharedetailDom(Obj.topicItem);
+				}
+			})
+			
+			mui('.goods-detail').on('tap','.duobaoDetail',function(){
+				var duobaoDetail = this.getAttribute('goodsid');
+				localStorage.duobaoDetail = duobaoDetail;
+				mui.openWindow({
+					url:'duobao-detail.html'
+				})
+			})
+			
+		})()
+			
+function sunshareDetail(opt){
+	
+	if(localStorage.sunshareDetail){
+		var topicId = localStorage.sunshareDetail;
+		var config = {
+			topicId:topicId,
+			callback:function(res){
+				
+			}
+		}
+		for ( var i in opt ){
+			config[i] = opt[i]
+		}
+		var Url = '?topicId='+config.topicId
+		jsajax({
+			method:'post',
+			url:HostPort+'/topic/item'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+		
+	}
+}
+function goodsdetailDom(obj){
+	
+	var goodsDetail = mui('.goods-detail')[0];
+	goodsDetail.innerHTML = `<h4>${obj.goodsTitle}</h4>
+						<p><span>${obj['topicItem']['userName']}</span><span class="mui-pull-right">${obj['topicItem']['note']}</span></p>
+						<div class="bottom">
+							<p>获取商品：<span class="blue">${obj.goodsTitle}</span></p>
+							<p>参与期号：<span>${obj.goodsNum}</span></p>
+							<p>幸运号码：<span class="red">${obj.awardNumber}</span></p>
+							<p>本期参与：<span class="red" >${obj.payPerson}</span>次
+							<b style="margin-left:.1rem; display:ininle-block" class="duobaoDetail blue nor" goodsId=${obj['topicItem']['goodsId']}>产看详情</b></p>
+							<p>揭晓时间：<span>${obj.finishTime}</span></p>
+						</div>`
+}
+
+function sunsharedetailDom(topicItem){
+	var shareDetail = mui('.sunshare-detail')[0];
+	var h4 = document.createElement('h4')
+	h4.innerText = topicItem.content;
+	shareDetail.append(h4)
+	if(topicItem.thumb1){
+		var img01 = new Image()
+		img01.src = topicItem.thumb1
+		shareDetail.append(img01)
+	}
+	if(topicItem.thumb2){
+		var img02 = new Image()
+		img02.src = topicItem.thumb2
+		shareDetail.append(img02)
+	}
+	if(topicItem.thumb3){
+		var img03 = new Image()
+		img03.src = topicItem.thumb3
+		shareDetail.append(img03)
+	}
+}
+
+
+		
+	</script>
+</html>

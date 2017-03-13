@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>红包</title>
+   		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/view/indianarecode.css"/>
+		<style type="text/css">
+			#redpack .mui-table-view{
+				padding: .1rem;
+				background: #efeff4;
+			}
+			#redpack li{
+				background: #fff;
+				margin-bottom: .1rem;
+			}
+			.cff0{
+				color:red ;
+			}
+			#redpack li p{
+				
+				font-size: .10rem;
+			}
+			#redpack .mui-table-view:after{
+				height: 0;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">红包</h1>
+		</header>
+		
+		<div class="mui-content">
+	    <!--下拉刷新容器-->
+	    <nav class="fixed-nav">
+	    	<ul id="nav-slide">
+	    		<li type="0" class="active">全部</li>
+	    		<li type="1">可使用</li>
+	    		<li type="2">已使用</li>
+	    		<li type="3">已过期</li>
+	    	</ul>
+	    	<div class="nav-border"></div>
+	    </nav>
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        <div class="mui-slider">
+			  <div class="mui-slider-group" id="redpack">
+			    <!--第一个内容区容器-->
+			    <div class="mui-slider-item mui-table-view" id="red1">
+			    	
+			    	
+			    	
+			    </div>
+			    <div class="mui-slider-item mui-table-view" id="red2"></div>
+			    <div class="mui-slider-item mui-table-view" id="red3"></div>
+			    <div class="mui-slider-item mui-table-view" id="red4"></div>
+			  </div>
+			</div>
+	        
+	        
+	      </div>
+	    </div>  
+	</div>
+		
+	</body>
+	<script type="text/javascript">
+		var h5pullDown = true;
+	</script>
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="//cdn.bootcss.com/move.js/0.5.0/move.min.js" type="text/javascript" charset="utf-8"></script>
+	
+	<script type="text/javascript">
+
+mui.init({
+	pullRefresh :{
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){      		
+		this.endPullupToRefresh(false||true);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});	
+// 全部
+mui('#nav-slide').on('tap','li',function(){
+	var item = this.getAttribute('type');
+	var pre = item*25+'%';
+	mui('.mui-slider').slider().gotoItem(item);
+	navmove(item)
+})
+
+var item2Show = false,item3Show = false,item4Show=false;//子选项卡是否显示标志
+document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+	var num = event.detail.slideNumber;
+  if (num === 1&&!item2Show) {
+  	redpack({
+		type:1,
+		callback:function(res){
+			var Obj  = JSON.parse(res);
+			var arr = Obj.bagList;
+			redpackDom(arr,'#red2')
+		}
+	})
+    item2Show = true;
+  } else if (num === 2&&!item3Show) {
+  	redpack({
+		type:2,
+		callback:function(res){
+			var Obj  = JSON.parse(res);
+			var arr = Obj.bagList;
+			redpackDom(arr,'#red3')
+		}
+	})
+  	
+    
+    item3Show = true;
+  }  else if (num === 3&&!item4Show) {
+    redpack({
+		type:3,
+		callback:function(res){
+			var Obj  = JSON.parse(res);
+			var arr = Obj.bagList;
+			redpackDom(arr,'#red4')
+		}
+	})
+	
+    item4Show = true;
+  }
+  
+ navmove(num)
+ 
+});
+
+
+function navmove(num){
+	
+	var l = mui('#nav-slide li').length;
+	for (var i = 0 ; i<l;i++) {
+		 mui('#nav-slide li')[i].classList.remove('active');
+	}
+mui('#nav-slide li')[num].classList.add('active')
+  var pre = num*25+'%';
+  move('.nav-border')
+  	.set('left', pre)
+  	.end();
+}
+
+
+
+redpack({
+	type:0,
+	callback:function(res){
+		var Obj  = JSON.parse(res);
+		console.log(Obj)
+		var arr = Obj.bagList;
+		redpackDom(arr,'#red1')
+	}
+})
+		//夺宝记录
+		function redpack(opt){
+			if(localStorage.user){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var config = {
+					type: 0, // type 0 all 1进行中 2 已揭晓 3 中奖
+					page: 0,
+					userId:UserInfo.userId,
+					token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?type='+config.type+'&page='+config.page+'&userId='+config.userId+'&token='+config.token;
+				jsajax({
+					method:'post',
+					url:HostPort+'/order/bagList'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+		}
+
+
+function redpackDom(arr,id){
+	
+	var item =  document.querySelector(id);
+	var Fragment = document.createDocumentFragment();
+	for( var i = 0 ; l=arr.length,i<l;i++){
+		var Oli = document.createElement('li')
+		Oli.className = 'mui-table-view-cell mui-media'	
+		var Odiv = document.createElement('div');
+
+		Odiv.innerHTML = "￥"+arr[i].fee;
+		var Odiv02 = document.createElement('div');
+		Odiv02.className = 'mui-media-body';
+		Odiv02.innerText = '支付满'+arr[i].money+'元可抵扣';
+		var Op01 = document.createElement('p');
+		Op01.className = 'mui-ellipsis';
+		Op01.innerText = '有效期'+arr[i].startTime+'至'+arr[i].endTime;
+		Odiv02.appendChild(Op01);
+		var Op02 = document.createElement('p');
+		Op02.innerText = arr[i].useRule;
+		var Osapn = document.createElement('span');
+		
+		if(arr[i].type == 1){
+			Oli.className = 'mui-table-view-cell mui-media cff0';	
+			Odiv.className = 'mui-media-object mui-pull-right cff0';	
+			Osapn.innerText = '可使用';		
+			Osapn.className = 'mui-pull-right cff0';
+			
+		}else if(arr[i].type == 2){
+			Oli.className = 'mui-table-view-cell mui-media';
+			Odiv.className = 'mui-media-object mui-pull-right';
+			Osapn.innerText = '已使用';	
+			Osapn.className = 'mui-pull-right';	
+			
+		}else if(arr[i].type ==3){
+			Oli.className = 'mui-table-view-cell mui-media';
+			Odiv.className = 'mui-media-object mui-pull-right';
+			Osapn.innerText = '已过期';	
+			Osapn.className = 'mui-pull-right';
+		}
+		Op02.appendChild(Osapn);
+		Oli.appendChild(Odiv);
+		Oli.appendChild(Odiv02);
+		Oli.appendChild(Op02);
+		Fragment.appendChild(Oli);
+	}
+	item.appendChild(Fragment)
+	if(!item.innerHTML){
+		item.innerHTML = "没有红包"
+	}
+}
+
+
+	</script>
+</html>
