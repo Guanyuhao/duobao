@@ -7,7 +7,18 @@
    		<link href="../../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
 		<style type="text/css">
-			
+			.countway-warp{
+				height: 1rem;
+				padding: .1rem;
+			}
+			.countway-warp>.countway{
+				background: #F54A12;
+				height: 100%;
+				border-radius: .1rem;
+				color: #fff;
+				font-size: .12rem;
+				padding: .1rem;
+			}
 		</style>
 	</head>
 	<body>
@@ -17,10 +28,37 @@
 	    	<h1 class="mui-title">彩宝骑兵-计算结果</h1>
 		</header>
 		
-		<div class="mui-content">
-		    
-		    
-		</div>
+		<!--下拉刷新容器-->
+	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        	<div class="countway-warp">
+	        		<div class="countway">
+	        			<span>计算方式</span>
+	        			<div style="text-align: center;">(数值A/数值B)取余数+10000001</div>
+	        		</div>
+	        	</div>
+	        	<ul class="mui-table-view">
+	        		<li class="mui-table-view-cell mui-collapse">
+	        			<h4>数值A</h4>
+	        			<span>=截止该奖品开奖时间点前本站全部奖品的最后50参与时间所呆逼数值之和</span><br />
+	        			<span>=	<i>1841541</i></span>
+	        			<a class="mui-navigate-right" href="#">查看数据</a>
+	        			<div class="mui-collapse-content">
+			                <p>面板1子内容</p>
+			            </div>
+	        		</li>
+	        		<li class="mui-table-view-cell">
+	        			<h4>数值B</h4>
+	        		</li>
+	        		<li class="mui-table-view-cell">
+	        			<h4>数值A</h4>
+	        			<span>幸运号码：<i>21</i></span>
+	        		</li>
+	        	</ul>
+	      </div>
+	    </div>
+	    
 	</body>
 	
 	<script src="../../js/mui.js"></script>
@@ -35,7 +73,22 @@
 					console.log(Obj)
 				}
 			})
-			
+			mui.init({
+			  pullRefresh : {
+			    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+			    down : {
+			      height:50,//可选,默认50.触发下拉刷新拖动距离,
+			      auto: true,//可选,默认false.自动下拉刷新一次
+			      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+			      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+			      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+			      callback:function down(){
+			      	
+			      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+			      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+			    }
+			  }
+			});	
 			
 		})()
 		
