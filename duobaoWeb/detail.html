@@ -16,8 +16,19 @@
 	</header>
 	<footer class="detail">
 		<nav class="mui-bar mui-bar-tab">
-			<button class="mui-btn" id="addbill"> <span class="icon-car"></span>加入夺宝清单</button>
-			<button class="mui-btn" id="NowBuy">立即购买</button>		
+			<div class="now-btn hide">
+				<button class="mui-btn" id="addbill"> <span class="icon-car"></span>加入夺宝清单</button>
+				<button class="mui-btn" id="NowBuy">立即购买</button>	
+			</div>
+			<div class="now-go clearfloat hide" style="position: relative;">
+				<div class="left mui-pull-left" style="font-size: .14rem;">
+					<p>新的一起正在火热进行...</p>
+					<span>夺宝有风险，参与需谨慎</span>
+				</div>
+				<div class="right"  style="width: 25%;height: 100%; position: absolute; right: -.1rem; font-size: .14rem; text-align: center;">
+					<span class="mui-btn-danger" style="line-height: .51rem; display: block;" id="NowGo">立即前往</span>
+				</div>
+			</div>
 		</nav>
 	</footer>
 	<div class="mui-content">
@@ -41,12 +52,16 @@
 	        <div class="detail-infor">
 	        	<p>说明：<span>一元夺宝</span>所有商品都是从正规渠道采购，100%正品。参与夺宝后人数满足该商品所需总人数时5分钟之后开奖。</p>
 	        </div>
+	        <!--计时-->
+	        <div class="countdown">
+	        	
+	        </div>
 	        <!--获奖者-->
 	        <div class="detail-win">
 	        	
 	        </div>
 	        <!--往期揭晓-->
-	        <div class="past-ann mui-table-view">
+	        <div class="past-ann mui-table-view ">
 	        	<li class="mui-table-view-cell">
 			        <a class="mui-navigate-right">往期揭晓</a>
 			    </li>			     
@@ -57,7 +72,7 @@
 	       	
 	        <!--数据列表-->
 	        
-	        <ul class="mui-table-view mui-table-view-chevron" id="BuyList">
+	        <ul class="mui-table-view mui-table-view-chevron" id="BuyList" style="margin-bottom: .6rem">
 	        
 	        </ul>
 	        <!--滑块-->
@@ -171,7 +186,8 @@
 ;(function(){
 	//app的处理
 function plusReady(){
-	
+	// 暂时 取消这个处理
+	return false;
 	var detailCon=plus.webview.currentWebview();
 	//console.log(detailCon.itemId)
 	var addbill = document.querySelector('#addbill')
@@ -212,6 +228,7 @@ if(window.plus){
 	plusReady();
 }else{
 	document.addEventListener("plusready",plusReady,false);
+	//网页处理
 	brower();
 }
 //浏览器的处理   因为webview 无法传值
@@ -237,9 +254,16 @@ console.log(detailConitemId)
 getDetaData({
 	goodsSaleId:detailConitemId,
 	callback:function(res){
+		
 		detaBanDom (res)
 		detaTitleDom(res)
 		detaInforDom(res)
+		// 已揭晓
+		var detailwin = JSON.parse(res).prevSale;
+		
+		detailwinDom(detailwin,1)
+		//倒计时
+		coutDownDom(res)
 	}
 })
 getBuyListData({
@@ -299,11 +323,72 @@ mui('#nowpay')[0].addEventListener('tap',function(){
 			document.location.href = 'view/settle-account.html';		
 		}
 	})
+})
+//立即前往
+mui('#NowGo')[0].addEventListener('tap',function(){
+	var goodsId = this.getAttribute('goodsId');
+	nowgoBtn({
+		goodsId:goodsId,
+		callback:function(res){
+			var Obj = JSON.parse(res);
+			var itemId = Obj['goodsSale']['itemId'];		
+			localStorage.itemId = itemId;
+			location.reload();
+		}
+	})
 	
+})
+//TA的个人中心
+	//获奖者
+mui('.detail-win').on('tap','.top',function(){
+	var _this = this;
+	var tadeuser = {
+		tadeuserId:_this.getAttribute('tauserId'),
+		tadeuserName:_this.getAttribute('tauserName'),
+		img:_this.getAttribute('tasrc')
+	}
+	var str = JSON.stringify(tadeuser)	
+	localStorage.tadeuser = str;
+	mui.openWindow({
+		url:'view/send/presonal-center.html',
+		id:'presonalCenter'
+	})
+})
+	//li
+mui('#BuyList').on('tap','li',function(){
+	var _this = this;
+	var tadeuser = {
+		tadeuserId:_this.getAttribute('tauserId'),
+		tadeuserName:_this.getAttribute('tauserName'),
+		img:_this.getAttribute('tasrc')
+	}
+	var str = JSON.stringify(tadeuser)	
+	localStorage.tadeuser = str;
+	mui.openWindow({
+		url:'view/send/presonal-center.html',
+		id:'presonalCenter'
+	})
+})
 
+//往期揭晓
+mui('.past-ann')[0].addEventListener('tap',function(){
+	localStorage.pastAnnouncedId = this.getAttribute('goodsId');
+	mui.openWindow({
+		url:'view/send/past-announced.html'
+	})
+})
+// 计算方式
+mui('.detail-win').on('tap','.countway',function(){
+	var countwayId = this.getAttribute('countwayId');
+	localStorage.countwayId = countwayId ;
+	mui.openWindow({
+		url:'view/send/count-way.html'
+	})
 })
 
 })()
+
+
 //详情页立即购买接口
 
 function detailnowbuy(opt){
@@ -339,7 +424,7 @@ function detailnowbuy(opt){
 	function getDetaData(opt){
 		
 		var config = {
-			goodsSaleId:3,
+			goodsSaleId:'',
 			callback:function(res){
 				//console.log(res)
 			}
@@ -349,7 +434,7 @@ function detailnowbuy(opt){
 		}
 		jsajax({
 			method:'post',
-			url:"http://139.129.203.90/caibao/goods/item?goodsSaleId="+config.goodsSaleId,
+			url:HostPort+"/goods/item?goodsSaleId="+config.goodsSaleId,
 			success:function(res){
 				config.callback(res)
 				
@@ -371,12 +456,33 @@ function detailnowbuy(opt){
 		var Url ='?goodsSaleId='+config.goodsSaleId+'&page='+config.page;
 		jsajax({
 			method:'post',
-			url:"http://139.129.203.90/caibao/goods/itemBuyList"+Url,
+			url:HostPort+"/goods/itemBuyList"+Url,
 			success:function(res){
 				config.callback(res)
 			}
 		})
 	}
+//立即前往
+	function nowgoBtn(opt){
+		var config = {
+			goodsId:'',
+			callback:function(res){
+				//console.log(res)
+			}
+		}
+		for(var i in opt){
+			config[i] = opt[i]
+		}
+		var Url ='?goodsId='+config.goodsId
+		jsajax({
+			method:'post',
+			url:HostPort+"/goods/newItem"+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+	
 	//detail banner
 	function detaBanDom (res){
 		var arr = JSON.parse(res).images;
@@ -427,18 +533,23 @@ function detailnowbuy(opt){
 		var Obj = JSON.parse(res);
 		//console.log(Obj)
 		var itemStatus = Obj.itemStatus;
+		console.log('itemStatus:'+itemStatus)
 		var DetaTitle = document.querySelector('.detail-title');
 		var Obutton = document.createElement('button');
 		if(itemStatus == 1){
 			Obutton.innerText = '正在进行';
 			Obutton.className = 'mui-btn btn-ing';
+			footershow(itemStatus)
 		}else if(itemStatus == 2){
 			Obutton.innerText = '已揭晓';
 			Obutton.className = 'mui-btn btn-ed';
+			footershow(itemStatus)
 			//获奖者
-		}else if(itemStatus == 3){
+		}else if( itemStatus == 3){
+			console.log(3)
 			Obutton.innerText = '倒计时';
-			Obutton.className = 'mui-btn btn-shall';
+			Obutton.className = 'mui-btn btn-ed';
+			footershow(itemStatus)
 			//一会还有猫腻
 		}
 		var Ospan = document.createElement('span');
@@ -477,10 +588,127 @@ function detailnowbuy(opt){
 		mui('.mui-numbox').numbox().setOption('max',surplus);
 		//设置价格
 		mui('.mui-numbox')[0].setAttribute('price',Obj.price);
+		//设置 往期的 goodsId
+		mui('.past-ann')[0].setAttribute('goodsId',Obj.goodsId);
+		//设置 立即前往的 goodsId
+		mui('#NowGo')[0].setAttribute('goodsId',Obj.goodsId);
 	}
-	//detail win 
-	function detailWinDom(res){
-		var Obj = JSON.parse(res).prevSale;
+	// 倒计时显示处理
+	function coutDownDom(res){
+		//判读是否为倒计时状态 3
+		//countdown  计时器的显示
+		//计时器结束更新 获奖者 detail-win
+		var Obj = JSON.parse(res);
+		var itemStatus = Obj.itemStatus;
+		console.log(Obj)
+		
+		if(itemStatus != 3){
+			return false;
+		}
+		
+		//进入倒计时状态
+		var odiv2 = document.createElement('div');
+		odiv2.className = 'btn-warp'
+		var showSaleTime = Obj['goodsSale']['showSaleTime'];
+		
+		console.log('showSaleTime:'+showSaleTime)
+		var times = '00';
+		if( showSaleTime >9 ){
+			times = showSaleTime;
+		}else{
+			times = '0'+showSaleTime;
+		}
+		odiv2.innerHTML = `揭晓倒计时：<button class='mui-btn mui-btn-danger' style="margin-left:.1rem;">00</button>
+		<button class='mui-btn mui-btn-danger' style="margin-right:.05rem;">00</button>`
+		var dom = document.createElement('button');
+		dom.className = 'mui-btn mui-btn-danger';
+		dom.innerText = times;
+		odiv2.appendChild(dom);
+		mui('.countdown')[0].appendChild(odiv2);
+		//
+		downsetinterval(showSaleTime,dom,Obj.goodsSale)
+		
+	}
+	
+function downsetinterval(showSaleTime,dom,Obj){
+	if(showSaleTime == 0){
+		return false;
+	}
+	var times;
+	
+	var downsetInterval = setInterval(function(){
+		showSaleTime--;
+		//console.log(showSaleTime)
+		if( showSaleTime > 9 ){
+			times = showSaleTime;
+		}else{
+			times = '0'+showSaleTime;
+		}
+		if(times){
+			dom.innerText = times;
+		}
+		if(showSaleTime == 0) {
+			clearInterval(downsetInterval);
+			mui('.countdown')[0].innerHTML = '';
+			detailwinDom(Obj,0);
+		}
+		
+	},1000)
+	
+}
+	
+	
+	
+	//detail win
+	function detailwinDom(Obj,status){
+		//获奖者显示 detail-win  
+		//更新 footer 显示
+		// ic_current_announced.png  ic_last_announced.png
+		//status 自己传 标识 是否是 获奖者还是上期获奖者
+		if(Obj.awardNum){
+			var imgsrc;
+			if( status == 0 ){
+				imgsrc = "image/ic_current_announced.png"		
+			}else{
+				imgsrc = "image/ic_last_announced.png"
+			}
+			
+		var detailWin = mui('.detail-win')[0];
+		detailWin.innerHTML =`<div class="top clearfloat" tauserid=${Obj.userId} tausername = ${Obj.userName} tasrc =${Obj.photo}  >
+	        		<div class="left mui-pull-left">
+	        				<img src=${Obj.photo} />
+	        			<div class="absolute">
+	        				<img src=${imgsrc} class="userwin"/>	
+	        			</div>
+	        		</div>
+	        		<div class="right mui-pull-left">
+	        			<p>幸运获奖:<span>${Obj.userName}</span> </p>
+	        			<p>上期参与:${Obj.payPerson}</p>
+	        			<p>商品期号:${Obj.num}</p>
+	        			<p>揭晓时间:${Obj.showTime}</p>
+	        		</div>
+	        	</div>
+	        	<div class="bottom">
+	        		<div class="bot-warp mui-btn-danger">
+	        			<span>中奖号码:${Obj.awardNum} <i class="mui-pull-right countway" countwayId=${Obj.itemId} >计算方式</i></span>
+	        		</div>
+	        	</div>`	
+		}
+			
+	}
+	function footershow(itemStatus){
+		
+		if(itemStatus == 1){
+			if(mui('.now-btn')[0].classList.contains('hide')){
+				mui('.now-btn')[0].classList.remove('hide');
+			}
+			mui('.now-go')[0].classList.add('hide');
+		}else{
+			mui('.now-btn')[0].classList.add('hide');
+			if(mui('.now-go')[0].classList.contains('hide')){
+				mui('.now-go')[0].classList.remove('hide');
+			}
+		}
 		
 	}
 	//buy list
@@ -495,6 +723,9 @@ function detailnowbuy(opt){
 			var Oli = document.createElement('li');
 			Oli.className = '"mui-table-view-cell mui-media';
 			Oli.setAttribute('userId',arr[i].userId);
+			Oli.setAttribute('tauserId',arr[i].userId);
+			Oli.setAttribute('tauserName',arr[i].userName);
+			Oli.setAttribute('tasrc',arr[i].photo);
 			var Oimg = new Image();
 			Oimg.className = 'mui-media-object mui-pull-left';
 			Oimg.src = arr[i].photo;
@@ -550,10 +781,8 @@ function pagingEvent(goodsSaleId){
 		mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
 	})
 }
-// 倒计时显示处理
-function coutDown(){
-	
-}
+
+
 
 </script>
 </html>

@@ -54,7 +54,10 @@
 <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-mui.init({
+	
+	;(function(){
+		
+		mui.init({
 	pullRefresh :{
     container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
     down : {
@@ -92,6 +95,7 @@ var pageNum =1;
 	mui('#AnnList').on('tap','li',function(){
 		var itemId = this.getAttribute('itemId')
 		//console.log(itemId)
+		localStorage.itemId = itemId;
 		mui.openWindow({
 			url:'detail.html',
 			id:'detail',
@@ -101,6 +105,18 @@ var pageNum =1;
 			createNew:true
 		})
 	});
+getAnnound({
+	callback:function(res){
+		var arr = JSON.parse(res).goodsSales;		
+		 proAnnList(arr)
+	}
+})	
+		
+		
+		
+})()
+	
+
 
 	
 //即将揭晓
@@ -126,7 +142,10 @@ function getAnnound(opt){
 
 //anntlist
 function proAnnList(arr){
-	//console.log(arr)
+	console.log(arr[0])
+	if(arr.length == 0){
+		return false;
+	}
 	var AnnList = document.querySelector('#AnnList');
 	var Fragment = document.createDocumentFragment();
 	for (var i = 0 ; l=arr.length, i<l; i++) {
@@ -141,18 +160,44 @@ function proAnnList(arr){
 		var Op01 = document.createElement('p');
 		Op01.innerText = arr[i].title;
 		var Op02 = document.createElement('p');
-		Op02.innerText = '期号：'+arr[i].num;	
-		var Op03 = document.createElement('p');
-		Op03.innerHTML= '幸运获奖：<span>'+arr[i].userName+'</span>';		
-		var Op04 = document.createElement('p');
-		Op04.innerHTML = '本期参与：<i>'+arr[i].payPerson+'人次</i>';
-		var Op05 = document.createElement('p');
-		Op05.innerHTML = '揭晓时间：<i>'+arr[i].showTime+'</i>';
+		Op02.innerText = '期号：'+arr[i].num;		
 		Odiv.appendChild(Op01);
-		Odiv.appendChild(Op02);
-		Odiv.appendChild(Op03);
-		Odiv.appendChild(Op04);
-		Odiv.appendChild(Op05);
+		Odiv.appendChild(Op02);	
+		if(arr[i].showSaleTime == 0 ){ // 是否倒计时
+			//不进行倒计时
+			var Op03 = document.createElement('p');
+			Op03.innerHTML= '幸运获奖：<span>'+arr[i].userName+'</span>';		
+			var Op04 = document.createElement('p');
+			Op04.innerHTML = '本期参与：<i>'+arr[i].payPerson+'人次</i>';
+			var Op05 = document.createElement('p');
+			Op05.innerHTML = '揭晓时间：<i>'+arr[i].showTime+'</i>';
+			Odiv.appendChild(Op03);
+			Odiv.appendChild(Op04);
+			Odiv.appendChild(Op05);
+		}else{
+			//进行倒计时
+			var odiv2 = document.createElement('div');
+			var showSaleTime = arr[i].showSaleTime
+			var times = '00';
+			if( showSaleTime >9 ){
+				times = showSaleTime;
+			}else{
+				times = '0'+showSaleTime;
+			}
+			odiv2.innerHTML = `<button class='mui-btn mui-btn-danger' style="margin-left:.1rem;">00</button>
+			<button class='mui-btn mui-btn-danger' style="margin-right:.05rem;">00</button>`
+			var dom = document.createElement('button');
+			dom.className = 'mui-btn mui-btn-danger';
+			dom.innerText = times;
+			//调用计时器 即 倒计时
+			downsetinterval(showSaleTime,dom);
+			//即将揭晓的图表
+			var bgimg = document.createElement('div');
+			bgimg.className = 'bgimg'
+			Oli.appendChild(bgimg)
+			odiv2.appendChild(dom);
+			Odiv.appendChild(odiv2);	
+		}
 		Oli.appendChild(Oimg);
 		Oli.appendChild(Odiv);
 		Fragment.appendChild(Oli)
@@ -160,14 +205,33 @@ function proAnnList(arr){
 	AnnList.appendChild(Fragment);
 
 }
+//倒计时
 
-getAnnound({
-	callback:function(res){
-		var arr = JSON.parse(res).goodsSales;		
-		 proAnnList(arr)
+function downsetinterval(showSaleTime,dom){
+	if(showSaleTime == 0){
+		return false;
 	}
-})
-//跳转详情页
+	var times;
+	
+	var downsetInterval = setInterval(function(){
+		showSaleTime--;
+		//console.log(showSaleTime)
+		if( showSaleTime > 9 ){
+			times = showSaleTime;
+		}else{
+			times = '0'+showSaleTime;
+		}
+		if(times){
+			dom.innerText = times;
+		}
+		if(showSaleTime == 0) {
+			clearInterval(downsetInterval);
+			location.reload();
+		}
+		
+	},1000)
+	
+}
 	
 </script>
 

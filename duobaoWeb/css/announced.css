@@ -1,6 +1,15 @@
 .mui-table-view li{
+	position: relative;
 	border-bottom: 0.01rem solid #F3F3F3;
 	background: #f9f9f9;
+}
+/*即将揭晓*/
+.mui-table-view li .bgimg{
+	width: .5rem;
+	height: .4rem;
+	position: absolute;
+	background: url(../image/jijiangjiexiao.png) no-repeat;
+	background-size: cover;
 }
 
 .mui-table-view .mui-media-object{

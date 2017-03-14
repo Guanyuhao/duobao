@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>往期揭晓</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/view/indianarecode.css"/>
+		
+		<style type="text/css">
+			#scroll{
+				top: .44rem;
+			}
+		
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	    	<h1 class="mui-title">往期揭晓</h1>
+		</header>
+		 <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+	      <div class="mui-scroll" id="scroll">
+	        <!--数据列表-->	        
+	        
+	        <div id="pastAnnList">
+	        	
+	        </div>
+	        
+	      </div>
+	    </div> 
+	</body>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+
+
+;(function(){
+	
+	
+mui.init({
+  pullRefresh : {
+    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+    down : {
+      height:50,//可选,默认50.触发下拉刷新拖动距离,
+      auto: true,//可选,默认false.自动下拉刷新一次
+      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+      callback:function down(){
+      	
+      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    },
+    up : {
+      height:50,//可选.默认50.触发上拉加载拖动距离
+      auto:true,//可选,默认false.自动上拉加载一次
+      contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
+      contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
+      callback :function up(){
+      	
+      	var itemId = mui('#pastAnnList')[0].lastChild.getAttribute('itemId');
+      	console.log(itemId)
+      	
+      	pastAnnounced({
+      		type:0,
+      		goodsSaleId:itemId,
+			callback:function(res){
+				
+				var Obj = JSON.parse(res);
+				//goodsSales
+				var arr = Obj.goodsSales;
+				proitem1Dom(arr,'#pastAnnList')
+			}
+		})
+      	
+      	 this.endPullupToRefresh(false);
+      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+    }
+  }
+});
+
+pastAnnounced({
+	callback:function(res){
+		
+		var Obj = JSON.parse(res);
+		console.log(Obj)
+		//goodsSales
+		var arr = Obj.goodsSales;
+		proitem1Dom(arr,'#pastAnnList')
+		
+	}
+})
+
+presoncenEvent('#pastAnnList')
+
+function presoncenEvent(id){
+	var item = mui(id);
+	//按钮事件
+	
+	//跳转详情页
+	item.on('tap','.recode-list>.top',function(){
+		var itemId = this.parentNode.getAttribute('itemId');
+		localStorage.itemId =itemId;
+			mui.openWindow({
+				url:'../../detail.html',
+				id:'detail'
+			})
+	})
+	
+}
+
+})()
+	
+	//往期揭晓
+		function pastAnnounced(opt){
+			//type 是 0 的时候 goodsSaleId 传最小
+			if(localStorage.pastAnnouncedId){
+			
+				var config = {
+					type: 1, // type 0  3 中奖
+					goodsId:24,
+					goodsSaleId:'',
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?type='+config.type+'&goodsId='+config.goodsId+'&goodsSaleId='+config.goodsSaleId;
+				jsajax({
+					method:'post',
+					url:HostPort+'/goods/preList'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+		}	
+	function proitem1Dom(arr,id){
+		
+	if( arr.length == 0 ){				
+		return false;			
+	}		
+	var item1 = document.querySelector(id);
+	
+	var Fragment = document.createDocumentFragment();
+	for (var i = 0 ;l=arr.length,i<l;i++) {
+		var recodeList = document.createElement('div');
+		recodeList.className = 'recode-list';
+		recodeList.setAttribute('itemId',arr[i].itemId);
+		var Top = document.createElement('div');
+		Top.className = 'top';
+		var TopLeft = document.createElement('div');
+		var TopRight = document.createElement('div');
+		TopLeft.className = 'left';
+		var Oimg = new Image();
+		Oimg.src = arr[i].image
+		TopLeft.appendChild(Oimg);
+		TopRight.className = 'right';
+		var h4 = document.createElement('h4');
+		h4.innerHTML = arr[i].title;
+		TopRight.appendChild(h4);
+		var Op01 = document.createElement('p');
+		Op01.innerText = '商品期号：'+arr[i].num;
+		TopRight.appendChild(Op01);
+		//总需人数
+		var Op03 = document.createElement('p');
+		Op03.className = 'totalperson';
+		Op03.innerText = '总需人次：'+arr[i].totalPerson;
+		TopRight.appendChild(Op03); //3在灰框前面
+			//灰色框结构
+		var garyDiv = document.createElement('div');
+		garyDiv.className = 'garyDiv';
+		var garyp01 = document.createElement('p');
+		var garyp02 = document.createElement('p');
+		var garyp03 = document.createElement('p');
+		var garyp04 = document.createElement('p');
+		garyp01.innerHTML = '幸运获奖：<span>'+arr[i].userName+'</span>';
+		garyp02.innerText = '本期参与：'+arr[i].payNum+'人次';
+		garyp03.innerHTML = '幸运获奖：<span>'+arr[i].awardNum+'</span>';
+		garyp04.innerText = '揭晓时间：'+arr[i].showTime;
+		garyDiv.append(garyp01);
+		garyDiv.append(garyp02);
+		garyDiv.append(garyp03);
+		garyDiv.append(garyp04);
+		TopRight.appendChild(garyDiv);
+		//是否参与活动
+		Top.appendChild(TopLeft);
+		Top.appendChild(TopRight);
+
+		recodeList.appendChild(Top);
+		Fragment.appendChild(recodeList);
+	}
+	item1.appendChild(Fragment);
+}
+	
+		
+	</script>
+</html>
