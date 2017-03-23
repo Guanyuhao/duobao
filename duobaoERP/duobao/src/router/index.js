@@ -14,6 +14,7 @@ Vue.use(Router)
 //   ]
 // })
 import home from '../components/home.vue'
+import login from '../components/login.vue'
 // components rightpage
 // goodsmanage
 import sellgoods from '../components/goodsmanage/SellGoods.vue'
@@ -203,6 +204,9 @@ export default new Router({
         component: yesterdaycount
       }
     ]
+  },{
+    path: '/login',
+    component: login
   }
 
   ]

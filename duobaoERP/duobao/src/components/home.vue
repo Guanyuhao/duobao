@@ -4,12 +4,7 @@
 		
 		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
+                
                 <a class="navbar-brand" href="/">夺宝后台管理系统</a>
             </div>
             <!-- /.navbar-header -->
@@ -25,7 +20,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> 设置</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> 注销</a>
+                        <li><a href="#login"><i class="fa fa-sign-out fa-fw"></i> 注销</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
