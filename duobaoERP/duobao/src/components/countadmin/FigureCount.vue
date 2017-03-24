@@ -6,7 +6,9 @@
     
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <datepicker></datepicker>
+                        <datepicker language="zh" :value="state.date"></datepicker>
+                        <div class="btn btn-default">至</div> 
+                        <datepicker language="zh"></datepicker>
                     </div>
                     <!-- /.panel-heading -->
                     <div class="panel-body">
@@ -25,13 +27,12 @@
 
 <script>
 
-// 全局注册echarts
-
-
 export default {
     data () {
         return {
-            
+            state: {
+                date: new Date(2016, 9,  16)
+            }
         }
     },
     mounted () {
@@ -106,19 +107,19 @@ export default {
 </script>
 
 <style>
-.figurecount .heading-inline {
-
-    position: relative;
+.figurecount .panel-heading::after{
+    content:"";/*里面可以为空、内容的意思*/
+    visibility:hidden;/*隐藏*/
+        height:0;
+    display:block;
+    clear:both;
+    overflow:hidden;
 }
-
-.figurecount .heading-inline .input-group {
-    float: left;
-    margin: 0 5px;
-    width: 200px;
+.figurecount .panel-heading>.btn{
+    padding: 2px 10px;
+    border-radius: 0;
 }
-
-.figurecount .heading-inline .dropdown {
+.figurecount .panel-heading>div{
     float: left;
-    margin: 0 10px;
 }
 </style>

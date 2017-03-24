@@ -44,9 +44,7 @@
 		<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
 	      <div class="mui-scroll" id="scroll">
 	        <!--数据列表-->	        
-				<ul class="mui-table-view mui-table-view-chevron" id="newsList">
-	          	 	
-	        	</ul>
+				<ul class="mui-table-view mui-table-view-chevron" id="newsList"></ul>
 	      </div>
 	    </div> 
 	</body>
@@ -84,11 +82,18 @@ mui.init({
 			callback:function(res){
 				var Obj = JSON.parse(res);
 				var arr = Obj.messages;
-				if(arr.length == 0){
-					
-				}else{
+				if(Obj.code == 777){
+					mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+					 	if(e.index == 0){
+							mui.openWindow({
+								url: 'login.html',
+								id:'login.html'								
+							})
+					 	}
+					 },'div');
+				}else if(Obj.code == 0){
 					pronewDom(arr)
-				}			
+				}
 			}
 		})
 		this.endPullupToRefresh(false);
@@ -121,13 +126,20 @@ mui.init({
 		callback:function(res){
 			var Obj = JSON.parse(res);
 			var arr = Obj.messages;
-			
-			if(arr.length == 0){
-				var newsList = document.querySelector('#newsList');
-				newsList.innerHTML = '<li class="mui-table-view-cell">您好，最近没有您的消息。</li>'
-			}else{
-				pronewDom(arr)
+			if(Obj.code == 777 ){	
+				mui.confirm('您在其他地方登录了',' ',['确认','取消'],function(e){
+				 	if(e.index == 0){
+						mui.openWindow({
+							url: '../login.html'							
+						})
+				 	}
+				 },'div');
+				
+			}else if(Obj.code == 0){
+				
+					pronewDom(arr)
 			}
+			
 			
 		}
 	})
@@ -191,7 +203,19 @@ function delnewList(opt){
 function pronewDom(arr){
 	
 	var newsList = document.querySelector('#newsList');
-	if(newsList.innerText == '您好，最近没有您的消息。'){
+	
+	if( arr.length == 0){
+		if(!newsList.innerText){
+			
+			newsList.innerHTML =`<div id="kong" style="position: relative;min-height: 5.6rem;">
+			    		<img src="../image/ic_emptypage_redpackets.png" style="width: 1.5rem;height: 1.5rem; position: absolute; left: 50%;margin-left: -.75rem; top: 15%;"/>
+			    		<P style="position:absolute;left:33%;top:40%">没有您的消息哦</P>		
+			    	</div>`
+			
+		}
+		return false;
+	}
+	if( mui('#kong') ){
 		newsList.innerHTML = '';
 	}
 	var Fragment = document.createDocumentFragment();

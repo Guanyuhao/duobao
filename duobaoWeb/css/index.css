@@ -189,11 +189,15 @@
 	bottom: 0;
 	font-size: 0.14rem;
 	padding-left: 0.05rem;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	width: 100%;
 }
 .goodslist .top .goods-img{
 	position:absolute ;
 	width: 1rem;
-	height: .9rem;
+	height: .8rem;
 	right: 0.1rem;
 	top: 0.05rem;
 }
@@ -242,6 +246,12 @@
 /*吸顶*/
 #Mounting{
 	position: fixed;
-	top: .44rem;
+	top: .4rem;
 	z-index: 15;
+}
+.hide{
+	visibility: hidden;
+}
+.show{
+	visibility: visible;
 }

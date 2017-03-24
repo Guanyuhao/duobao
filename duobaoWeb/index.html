@@ -12,29 +12,37 @@
 <body>
 	
 	<header class="mui-bar mui-bar-nav">
-	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>
+	   
 	    <h1 class="mui-title">夺宝</h1>
 	    <span class="mui-icon mui-icon-chat"><a href="#"></a></span>
 	</header>
 	<!--吸顶结构-->
-	<div id="Mounting"></div>
+	<div id="Mounting" class="hide">
+		<div class="nav-list">        	
+    		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" id="transverse">
+				<div class="mui-scroll NavListTap" id="NavList">
+
+				</div>
+			</div>
+    	</div>
+	</div>
 	<footer>	
 		<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item  active" href="index.html">
+	    <a class="mui-tab-item  active" hrefs="index.html">
 	        <span class="mui-icon indiana"></span>
 	        <span class="mui-tab-label">夺宝</span>
 	    </a>
-	    <a class="mui-tab-item" href="announced.html">
+	    <a class="mui-tab-item" hrefs="announced.html">
 	        <span class="mui-icon announced"></span>
 	        <span class="mui-tab-label">揭晓</span>
 	    </a>
-	    <a class="mui-tab-item" href="bill.html" id="bill" off='1'>
+	    <a class="mui-tab-item" hrefs="bill.html" id="bill" off='1'>
 	        <span class="mui-icon bill">
 	        	<!--<img src="image/icon_home_page3.png"/>-->
 	        </span>
 	        <span class="mui-tab-label">清单</span>
 	    </a>
-	    <a class="mui-tab-item" href="myset.html" id="myset" off='1'>
+	    <a class="mui-tab-item" hrefs="myset.html" id="myset" off='1'>
 	        <span class="mui-icon my">
 	        	<!--<img src="image/icon_home_page4.png"/>-->
 	        </span>
@@ -53,7 +61,7 @@
 	            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
 	            <!--轮播位置-->
 	          </div>
-	          <div class="mui-slider-indicator">
+	          <div class="mui-slider-indicator sub">
 	            <!--轮播Sub-->
 	          </div>
 	        </div>
@@ -96,13 +104,13 @@
 	        <div id="nav-list-mounting">
 	        	<div class="nav-list">        	
 	        		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" id="transverse">
-						<div class="mui-scroll" id="NavList">
-							<button class="mui-btn active" itemid='0' sort='1' style="margin: 0;">全部商品<span class="mui-icon mui-icon-arrowthinup"></span></button>				
+						<div class="mui-scroll NavListTap" id="NavList">
+							<button class="mui-btn active" itemid='0' sort='4' style="margin: 0;">全部商品<span class="mui-icon mui-icon-arrowthindown"></span></button>				
 						</div>
 					</div>
 	        	</div>
 	        </div>
-	        <ul class="mui-table-view mui-table-view-chevron" id="GoodsList">
+	        <ul class="mui-table-view mui-table-view-chevron" id="GoodsList" style="padding-bottom: .58rem;">
 	          	
 	        </ul>
 	      </div>
@@ -110,20 +118,27 @@
 	</div>
 	
 </body>
-<script type="text/javascript">
-	var h5pullDown = true;
-</script>
+
 <script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/car.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 
+var indexPage = 1;
+
+;(function(){
+	
+	
+	
 // slide 的跳转
-mui('body').on('tap','a',function(){
+mui('#slider').on('tap','a',function(){
 	document.location.href = this.href;
 })
 // function 的跳转
+mui('.function').on('tap','a',function(){
+	document.location.href = this.href;
+})
 
 //跳转消息中心
 mui('.mui-icon-chat')[0].addEventListener('tap',function(){
@@ -180,21 +195,67 @@ mui.init({
       contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
       contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
       callback :function up(){
-      	 this.endPullupToRefresh(true|false);
+      //	console.log(indexPage) sss
+      	if( indexPage == 1){
+      		
+      		var btnAll = mui('.NavListTap button');
+      		
+      		var btnarr = Array.prototype.slice.call(btnAll)
+			var Realbtn,typeId,sort;
+			var scrollRe =  mui('#refreshContainer').scroll();
+			var y = scrollRe.y;
+			if(-y > 266){
+				Realbtn = btnarr.slice(0,btnarr.length/2)
+			}else if( -y<266 ){
+				Realbtn = btnarr.slice(btnarr.length/2)
+			}
+			
+	      	Realbtn.forEach(function(v,i){
+	      		if( v.classList.contains('active') ){
+	      			typeId = v.getAttribute('itemid');
+	      			sort  = v.getAttribute('sort')
+	      		}
+	      	})
+	      	getGoodsList({
+				typeId:typeId,
+				sort:sort,
+				type:0,
+				callback:function(res){
+					
+					productList(res)
+				}
+			})
+	      	
+	      	
+	      	indexPage = 0
+      	}
+      	
+      	
+		
+      		
+      	
+      	this.endPullupToRefresh(false);
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
   }
 });
+	
+
+
+	
+	
+})()
+
 //banner
 ;(function(){
 	jsajax({
-		method:'get',
+		method:'POST',
 		url:HostPort+'/index/banners',
 		success:function(res){
 			var arr = JSON.parse(res).banners;
 			//console.log(arr)
 			var Obanner = document.getElementById('banner');
-			var ObannerSub = document.querySelector('.mui-slider-indicator');
+			var ObannerSub = document.querySelector('.mui-slider-indicator.sub');
 			var Fragment = document.createDocumentFragment();
 			var FragmentSub= document.createDocumentFragment();
 			var Oindicator = document.createElement('div');
@@ -264,6 +325,7 @@ mui.init({
 			AniPush.appendChild(Fragment);
 		}
 	})
+	
 })()
 //分类列表
 ;(function(){
@@ -277,18 +339,36 @@ mui.init({
 		success:function(res){
 			var arr = JSON.parse(res).cbData;
 			//console.log(arr)
-			var Fragment = document.createDocumentFragment();
-			for (var i = 0; i<arr.length;i++) {
-				var Obtn = document.createElement('button');
-				Obtn.className = 'mui-btn';
-				Obtn.innerHTML = arr[i].title;
-				Obtn.setAttribute('itemid',arr[i].itemid);
-				Obtn.setAttribute('sort','1');
-				Fragment.appendChild(Obtn);
-			}
-			NavList.appendChild(Fragment);		
+			 goodsclassBtnDom(arr)
 		}
 	});
+	
+//商品分类按钮dom
+function goodsclassBtnDom(arr){
+	if(arr.length == 0){
+		 return false;
+	}
+	
+	var NavList = document.querySelectorAll('.NavListTap');
+	var Fragment = document.createDocumentFragment();
+
+	for (var i = 0; i<arr.length;i++) {
+		var Obtn = document.createElement('button');
+		Obtn.className = 'mui-btn';
+		Obtn.innerHTML = arr[i].title;
+		Obtn.setAttribute('itemid',arr[i].itemid);
+		
+		Obtn.setAttribute('sort',3);
+		Fragment.appendChild(Obtn);
+		
+	}
+	
+	NavList[1].appendChild(Fragment);
+	
+	navlistevent(NavList[0])
+	navlistevent(NavList[1])
+}
+	
 	//事件委托
 	
 function allSbiling(elm) {
@@ -299,43 +379,46 @@ function allSbiling(elm) {
 	}
 	return a;
 }
-navlistevent()
-function  navlistevent(){
+
+function  navlistevent(NavList){
 	
-	var NavList = document.querySelector('#NavList');
+	
 	mui(NavList).on('tap','button',function(ev){
+		var scroll1 =mui('.mui-scroll-wrapper')[1]
+		mui(scroll1).scroll().scrollTo(0,0,100)
+		indexPage = 1;
+		//点击初始化 indexpage
+		//初始化滚动
 		
 		var ev = ev||window.event;
 		var target = ev.target || ev.srcElement;
-		if(target.nodeName.toLowerCase() == "button"){//之前js原生委托事件的处理不用馆
+		if(target.nodeName.toLowerCase() == "button"){//之前js原生委托事件的处理
 			var typeId = target.getAttribute('itemid');
 			var arr = allSbiling(target); //获取目标元素的所有兄弟节点切转为真数组
 			//删除所有
 			arr.forEach(function(v,j){
 				v.classList.remove('active');
-				if(v.children.length>0){
+				
+				if(v.children.length>0){ //删除的是span 既箭头
 					v.removeChild(v.children[0])
 				}
 			})
 			//全部删除之后给自己加
 			target.classList.add('active');		
 			if(target.classList.contains("active")){
-				var sort = 3;
+				var sort = Number(target.getAttribute('sort'));
+			
 				var Ospan = document.createElement('span');
-				//console.log(target.getAttribute('sort'))
-				if(Number(target.getAttribute('sort'))){
+				if( sort == 4 ){ //
 					sort = 3;
-					target.setAttribute('sort','0')
-				}else{
-					sort = 4;
-					target.setAttribute('sort','1')
-				}
-				//判断排序方式  箭头显示方向
-				if(sort == 4){
-					Ospan.className = 'mui-icon mui-icon-arrowthindown';
-				}else if(sort==3){
+					target.setAttribute('sort',sort);
 					Ospan.className = 'mui-icon mui-icon-arrowthinup';	
+				}else if( sort == 3 ){
+					sort = 4;
+					target.setAttribute('sort',sort);
+					Ospan.className = 'mui-icon mui-icon-arrowthindown';
 				}
+				
 				//如有span 点击不继续添加
 				//var realArr = Array.prototype.slice.call(target.children);
 				//console.log(target.children.length>0)
@@ -349,6 +432,7 @@ function  navlistevent(){
 					
 					target.appendChild(Ospan);
 				}
+				
 				getGoodsList({
 					typeId:typeId,
 					sort:sort,
@@ -356,6 +440,8 @@ function  navlistevent(){
 						//清除dom
 						GoodsList.innerHTML = '';
 						productList(res)
+						//
+						
 					}
 				})
 				
@@ -399,30 +485,36 @@ function  navlistevent(){
 	
 	
 //分类吸顶  吸顶之后事件失效 
-//	var scroll = mui('#refreshContainer').scroll();
-//	
-//	var navEl = document.querySelector('#nav-list-mounting');
-//	var navMoun = document.querySelector('#Mounting');
-//	//var navT = navEl.offsetTop;
-//	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll',function (e) {
-//	　　console.log(-scroll.y);
-//	var scrollT = -scroll.y;
-//		if (scrollT > 266) {
-//      	if(navMoun.innerHTML == ''){
-//      		navMoun.innerHTML = navEl.innerHTML;
-//      		navEl.innerHTML = '';
-//      		navlistevent()
-//      	}
-//	    }
-//	    else {
-//	        if(navEl.innerHTML == ''){
-//	        	navEl.innerHTML = navMoun.innerHTML;
-//	        	navMoun.innerHTML = '';
-//      		navlistevent()
-//	        }
-//	    }
-//	    
-//	})
+	var scroll = mui('#refreshContainer').scroll();
+	
+	var navEl = document.querySelector('#nav-list-mounting');
+	var navMoun = document.querySelector('#Mounting');
+	var navlistTap = document.querySelectorAll('.NavListTap');
+	var scroll0 = mui('.mui-scroll-wrapper')[0];
+	var scroll2 =mui('.mui-scroll-wrapper')[2];
+	//var navT = navEl.offsetTop;
+	mui('.mui-scroll-wrapper')[1].addEventListener('scroll',function (e) {
+	　　//console.log(-scroll.y);
+	var scrollT = -scroll.y;
+		if (scrollT > 266) {
+        	if(navMoun.classList.contains('hide')){
+        		
+        		navlistTap[0].innerHTML = navlistTap[1].innerHTML;
+        		navEl.classList.add('hide');
+        		navMoun.classList.remove('hide');
+  				
+        	}
+	    }
+	    else {
+	        if( navEl.classList.contains('hide') ){
+	        	navlistTap[1].innerHTML = navlistTap[0].innerHTML;
+	        	navMoun.classList.add('hide');
+        		navEl.classList.remove('hide');
+        		
+	        }
+	    }
+	    
+	})
 
 })()
 

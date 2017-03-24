@@ -6,7 +6,13 @@ import router from './router'
 import echarts from 'echarts'
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
-Vue.component('Datepicker',Datepicker);
+import VueUEditor from 'vue-ueditor'
+//组件注册
+Vue.component('Datepicker',Datepicker)
+Vue.component('VueUEditor',VueUEditor)
+Vue.use(Datepicker)
+Vue.use(VueUEditor)
+//插件全局
 window.echarts = echarts
 window.axios = axios
 Vue.config.productionTip = false

@@ -11,7 +11,7 @@
 	<body>
 		
 		<header class="mui-bar mui-bar-nav">
-	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
+	   		<span class=" mui-icon mui-icon-left-nav mui-pull-left mui-action-back"><a href=""></a></span>			
 	    	<h1 class="mui-title">夺宝记录</h1>
 		</header>
 		
@@ -103,6 +103,13 @@ mui.init({
     }
   }
 });	
+mui('header').on('tap','.mui-icon-left-nav',function(){
+	mui.openWindow({
+		url:'../myset.html'
+	})
+})
+
+
 // 全部
 mui('#nav-slide').on('tap','li',function(){
 	var item = this.getAttribute('type');
@@ -325,9 +332,25 @@ function sureReceived(opt){
 //创建 itemDom	
 function proitem1Dom(arr,id){
 	var item1 = document.querySelector(id);
-	if( arr.length == 0 ){				
-		return false			
+	if( arr.length == 0 ){
+		
+		if(!item1.innerText){ //dom wei kong 
+			item1.innerHTML =`<div id="kong" style="position: relative;min-height: 4rem;">
+			    		<img src="../image/ic_emptypage_address.png" style="width: 1.5rem;height: 1.5rem; position: absolute; left: 50%;margin-left: -.75rem; top: 25%;"/>
+			    		<button class="mui-btn mui-btn-danger" style="min-width: 2rem;position: absolute; left: 50%;margin-left: -1rem;top: 60%;">前去夺宝</button>
+			    	</div>`
+			mui('#kong').on('tap','button',function(){
+				document.location.href = '../index.html';
+			})
+		}
+		
+		return false;			
 	}
+	
+	if( mui('#kong') ){
+		item1.innerHTML = '';
+	}
+	
 	var Fragment = document.createDocumentFragment();
 	for (var i = 0 ;l=arr.length,i<l;i++) {
 		var recodeList = document.createElement('div');

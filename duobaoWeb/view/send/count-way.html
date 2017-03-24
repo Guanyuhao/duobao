@@ -19,6 +19,41 @@
 				font-size: .12rem;
 				padding: .1rem;
 			}
+			.countway-bottom>li{
+				font-size: .12rem;
+			}
+			.countway-bottom>li>h4{
+				font-weight: normal;
+				font-size: .14rem;
+			}
+			.countway-bottom>li>span{
+				font-size: .1rem;
+				color: #8F8F94;
+			}
+			.countway-bottom>li>span>i{
+				font-style: normal;
+				color: red;
+			}
+			#cbdataList>p{
+				font-size: .08rem;
+				padding: 0 .05rem;
+			}
+			#cbdataList>p:first-child{
+				font-size: .14rem;
+				color: #333;
+			}
+			#cbdataList>p>span{
+				display: inline-block;
+			}
+			#cbdataList>p>span>i{
+				color: red;
+			}
+			#cbdataList>p>span:first-child{
+				width: 70%;
+			}
+			#cbdataList>p>span:last-child{
+				width: 30%;
+			}
 		</style>
 	</head>
 	<body>
@@ -38,22 +73,24 @@
 	        			<div style="text-align: center;">(数值A/数值B)取余数+10000001</div>
 	        		</div>
 	        	</div>
-	        	<ul class="mui-table-view">
+	        	<ul class="mui-table-view countway-bottom">
 	        		<li class="mui-table-view-cell mui-collapse">
 	        			<h4>数值A</h4>
-	        			<span>=截止该奖品开奖时间点前本站全部奖品的最后50参与时间所呆逼数值之和</span><br />
-	        			<span>=	<i>1841541</i></span>
+	        			<span>=截止该奖品开奖时间点前本站全部奖品的最后50参与时间所代表数值之和</span><br />
+	        			<span>=	<i id="zongnum"></i></span>
 	        			<a class="mui-navigate-right" href="#">查看数据</a>
-	        			<div class="mui-collapse-content">
-			                <p>面板1子内容</p>
+	        			<div class="mui-collapse-content " id="cbdataList">
+			                <p><span>夺宝时间</span><span>用户账户</span></p>
 			            </div>
 	        		</li>
 	        		<li class="mui-table-view-cell">
 	        			<h4>数值B</h4>
+	        			<span>=奖品所需人次</span><br />
+	        			<span>=<i id="totalPerson"></i></span>
 	        		</li>
 	        		<li class="mui-table-view-cell">
 	        			<h4>数值A</h4>
-	        			<span>幸运号码：<i>21</i></span>
+	        			<span>幸运号码：<i id="luckNo"></i></span>
 	        		</li>
 	        	</ul>
 	      </div>
@@ -71,8 +108,15 @@
 				callback:function(res){
 					var Obj = JSON.parse(res);
 					console.log(Obj)
+					mui('#zongnum')[0].innerText = Obj.sum;
+					mui('#totalPerson')[0].innerText = Obj.totalPerson;
+					mui('#luckNo')[0].innerText = Obj.luckNo;
+					var arr = Obj.cbdata;
+					cbdataListDom(arr)
 				}
 			})
+			
+			
 			mui.init({
 			  pullRefresh : {
 			    container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
@@ -88,11 +132,13 @@
 			      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
 			    }
 			  }
-			});	
+			});
+			
 			
 		})()
 		
 	function countWayData(opt){
+		
 		if(localStorage.countwayId){
 			
 			var goodsSaleId = localStorage.countwayId;		
@@ -116,7 +162,24 @@
 		}
 			
 	}
+	
+	function cbdataListDom(arr){
 		
+		var cbdataList = mui('#cbdataList')[0];
+		if( arr.length == 0){
+			cbdataList.innerHTML = '<p></p>'
+			return false;
+		}
+		var Fragment = document.createDocumentFragment()
+		arr.forEach(function(v,i){
+			
+			var op = document.createElement('p');
+			op.innerHTML = '<span>'+v.number+'-><i>'+v.addTime+'</i></span><span>'+v.userName+'</span>'
+			Fragment.appendChild(op);
+		})
+		cbdataList.appendChild(Fragment);
+	}
+	
 		
 	</script>
 </html>

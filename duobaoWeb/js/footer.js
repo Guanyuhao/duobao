@@ -1,10 +1,13 @@
 
 mui('footer').on('tap','a',function(){
 	var _this =  this;
-	if(this.getAttribute('off')){
+	var hrefs = this.getAttribute('hrefs')
+	var Drag = Number(this.getAttribute('off'))
+	
+	if(Drag){
 		
 		//需要登录权限
-		if(localStorage.getItem('user')){
+		if( localStorage.user ){
 			//还得确认一次是否被顶了
 			var userInfo =  JSON.parse(localStorage.getItem('user')).userInfo;
 			var Url = '?userId='+userInfo.userId+'&token='+userInfo.caibaoToken;
@@ -15,8 +18,8 @@ mui('footer').on('tap','a',function(){
 					var User = JSON.parse(res);
 					if(User.code == 0){
 						mui.openWindow({
-							url: _this.href,
-							id:_this.href
+							url: hrefs,
+							id:hrefs
 						})
 					}else if(User.code == 777){
 						localStorage.user = '';
@@ -55,8 +58,8 @@ mui('footer').on('tap','a',function(){
 	}else{
 		
 		mui.openWindow({
-			url: _this.href,
-			id:_this.href
+			url: hrefs,
+			id:hrefs
 		})			
 	}
 

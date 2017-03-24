@@ -15,21 +15,21 @@
 	</header>
 	<footer>	
 		<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item" href="index.html">
+	    <a class="mui-tab-item" hrefs="index.html">
 	        <span class="mui-icon indiana"></span>
 	        <span class="mui-tab-label">夺宝</span>
 	    </a>
-	    <a class="mui-tab-item" href="announced.html">
+	    <a class="mui-tab-item" hrefs="announced.html">
 	        <span class="mui-icon announced"></span>
 	        <span class="mui-tab-label">揭晓</span>
 	    </a>
-	     <a class="mui-tab-item active" href="bill.html" id="bill" off='1'>
+	     <a class="mui-tab-item active" hrefs="bill.html" id="bill" off='1'>
 	        <span class="mui-icon bill">
 	        	<!--<img src="image/icon_home_page3.png"/>-->
 	        </span>
 	        <span class="mui-tab-label">清单</span>
 	    </a>
-	    <a class="mui-tab-item" href="myset.html" id="myset" off='1'>
+	    <a class="mui-tab-item" hrefs="myset.html" id="myset" off='1'>
 	        <span class="mui-icon my">
 	        	<!--<img src="image/icon_home_page4.png"/>-->
 	        </span>
@@ -226,22 +226,31 @@ var id = el.target.parentNode.parentNode.parentNode.getAttribute('itemId')
 	})
 })
 	// 数量更改逻辑
-mui('#billList').on('tap','button',function(el){
+	numupdataEvent('#billList')
+	numupdataEvent('#careditlist')
+function numupdataEvent(id){
+	mui(id).on('tap','button',function(el){
 	var target = el.target;
 	var itemId = this.getAttribute('itemId')
 	var iden = Number(this.getAttribute('iden'));
+	
 	if( iden == 1){
 		var Max = Number(this.getAttribute('max'));
 		var PreNode = target.previousSibling;
 		var preinput = PreNode.children[0];
-		
+		var prospan = PreNode.children[1];
+		var totalPre = PreNode.children[1].getAttribute('total');
 		if(preinput.value >= Max){
-			preinput.value = Max
+			preinput.value = Max	
 			mui.toast('商品已达上限',{ duration:1000, type:'div' })
 			return false;
 		}else{
 			preinput.value = Number(preinput.value)+1;
+			
 		}
+		
+		winpro(prospan,preinput.value,totalPre)
+		
 		numupdate({
 			num:preinput.value,
 			itemId:itemId,
@@ -253,12 +262,17 @@ mui('#billList').on('tap','button',function(el){
 		var Min = 1;
 		var NexNode = target.nextSibling;
 		var nexinput = NexNode.children[0];
+		var nexspan = NexNode.children[1];
+		var totalNex = NexNode.children[1].getAttribute('total');
 		if(nexinput.value<=1){
 			nexinput.value = Min;
 			return false;
 		}else{
 			nexinput.value = Number(nexinput.value)-1;
 		}
+		
+		winpro(nexspan,nexinput.value,totalNex)
+		
 		numupdate({
 			num:nexinput.value,
 			itemId:itemId,
@@ -270,6 +284,23 @@ mui('#billList').on('tap','button',function(el){
 	sumnum ()
 	sumprice()
 })
+	
+
+}
+
+//中奖概率计算
+function winpro(dom,num,total){
+	
+	var winpro = (Number(num)/Number(total))*100;
+	var winpros = Math.floor(winpro);
+	if( winpros<1 ){
+		winpros = 1;
+	}
+	dom.innerHTML = '(中奖率'+winpros+'%)';
+	
+}
+
+
 // 总价 总数计算
 
 function sumnum (){
@@ -474,7 +505,14 @@ function proBillListDom(arr){
 			Oinput.readOnly="true";
 			Oinput.className = 'bill-input'
 			var Ospan = document.createElement('span');
-			Ospan.innerHTML = '(中奖率'+10+'%)'
+			Ospan.className = 'winpro';
+			var winpro = (Number(arr[i].num)/Number(arr[i].totalPerson))*100;
+			var winpros = Math.floor(winpro);
+			if( winpros<1 ){
+				winpros = 1;
+			}
+			Ospan.innerHTML = '(中奖率'+winpros+'%)';
+			Ospan.setAttribute('total',arr[i].totalPerson);
 			Ocen.appendChild(Oinput);
 			Ocen.appendChild(Ospan);
 			var Odel = document.createElement('i');
@@ -545,7 +583,14 @@ function proeditListDom(arr){
 			Oinput.readOnly="true";
 			Oinput.className = 'bill-input'
 			var Ospan = document.createElement('span');
-			Ospan.innerHTML = '(中奖率'+10+'%)'
+			Ospan.className = 'winpro';
+			var winpro = (Number(arr[i].num)/Number(arr[i].totalPerson))*100;
+			var winpros = Math.floor(winpro);
+			if( winpros<1 ){
+				winpros = 1;
+			}
+			Ospan.setAttribute('total',arr[i].totalPerson);
+			Ospan.innerHTML = '(中奖率'+winpros+'%)';
 			Ocen.appendChild(Oinput);
 			Ocen.appendChild(Ospan);
 			Op03.appendChild(Obtn01);

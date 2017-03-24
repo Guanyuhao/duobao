@@ -19,16 +19,18 @@ header.mui-bar-nav .dian{
 #DetaBan .mui-slider-item {
 	width: 100%;
 	height:2rem;
-	overflow: hidden;
 	background: #fff;
 	overflow: hidden;
 }
-#DetaBan .mui-slider-item img{
-	box-sizing: border-box;
-	width: 80%;
-	height: 80%;
-	margin: 10%;
-	
+#DetaBan .mui-slider-item>a{
+	width: 100%;
+	height: 100%;
+	display: block;
+	padding: 5% 5%;
+}
+#DetaBan .mui-slider-item>a>img{
+	width: 100%;
+	height: 100%;
 }
 .mui-slider-indicator .mui-indicator{
 	background: #FAFAFA;

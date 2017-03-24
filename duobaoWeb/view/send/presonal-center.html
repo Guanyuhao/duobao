@@ -261,6 +261,15 @@ function presoncenEvent(id){
 						config.callback(res)
 					}
 				})
+			}else{
+				mui.confirm('您好，请你先登录',' ',['确认','取消'],function(e){
+				 	//console.log(e.index)
+				 	if(e.index == 0){
+							mui.openWindow({
+								url: '../../login.html'
+							})
+				 	}
+				},'div');	
 			}
 		}	
 	function proitem1Dom(arr,id,type){

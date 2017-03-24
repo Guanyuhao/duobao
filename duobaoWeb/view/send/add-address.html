@@ -159,7 +159,11 @@ mui('footer').on('tap',".save",function(){
 		county:county,
 		address:address,
 		callback:function(res){
-			console.log(res)
+			var Obj = JSON.parse(res);
+			if(Obj.code == 0){
+				mui.toast('保存成功')
+				window.history.back();
+			}
 		}
 	})
 	

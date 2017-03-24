@@ -9,7 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="css/detail.css"/>
 <body>
 	<header class="mui-bar mui-bar-nav">
-	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></span>    
+	    <span class="mui-icon mui-icon-left-nav mui-pull-left"></span>    
 	    <h1 class="mui-title">详情</h1>
 	    <span class="mui-icon icon-car"></span>
 	    <a href="#menu" id="openPopover" class="mui-pull-right dian">●●●</a>
@@ -121,14 +121,12 @@
 </div>
 	
 </body>
-<script type="text/javascript">
-	var h5pullDown = true;
-</script>
+
 <script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
 <script src="js/car.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	//
+	
 	//初始化上拉刷新 下拉加载
 	var buypage = 1;
 	mui.init({
@@ -166,6 +164,14 @@
 	    }
 	  }
 	})
+	
+	mui('header').on('tap','.mui-icon-left-nav',function(){
+		mui.openWindow({
+			url:'index.html'
+		})
+	})
+	
+	
 	//跳转bill页面
 	mui('.icon-car')[0].addEventListener('tap',function(){
 		if(localStorage.user){
@@ -276,6 +282,14 @@ getBuyListData({
 })
 
 }
+//banner tiaozhuan 
+mui('#DetaBan').on('tap','a',function(){
+	localStorage.goodsContentUrl = this.getAttribute('hrefs');
+	mui.openWindow({
+		url:'view/send/detail-infor.html'
+	})
+	//document.location.href = this.getAttribute('hrefs');
+})
 
 //立即购买
 mui('#NowBuy')[0].addEventListener('tap',function(){
@@ -386,6 +400,9 @@ mui('.detail-win').on('tap','.countway',function(){
 	})
 })
 
+
+
+
 })()
 
 
@@ -486,46 +503,68 @@ function detailnowbuy(opt){
 	//detail banner
 	function detaBanDom (res){
 		var arr = JSON.parse(res).images;
-			//console.log(arr)
+		var Obj = JSON.parse(res);
+		if(arr.length == 0){
+			return false;
+		}
+			
 		var DetaBan = document.getElementById('DetaBan');
 		var DetaBanSub = document.querySelector('.mui-slider-indicator');
 		var Fragment = document.createDocumentFragment();
-		var FragmentSub= document.createDocumentFragment();
-		var Oindicator = document.createElement('div');
-		Oindicator.className = 'mui-slider-indicator';
-		for (var i = 0; i<arr.length; i++) {
-			var Odiv = document.createElement('div');
-			Odiv.className = 'mui-slider-item';
-			var Oa = document.createElement('a');
-			Oa.href = 'javascript:;';
-			var Oimg = new Image();
-			Oimg.src = arr[i];
-			Oa.appendChild(Oimg);
-			Odiv.appendChild(Oa);
-			Fragment.appendChild(Odiv);			
-			var OdivSub = document.createElement('div');			
-			if(i == 0){
-				OdivSub.className = 'mui-indicator mui-active';
-			}else{
-				OdivSub.className = 'mui-indicator';
-			}
-			FragmentSub.appendChild(OdivSub);
-		}		
-		DetaBan.appendChild(Fragment);
-		DetaBanSub.appendChild(FragmentSub);
-		var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
-		var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
-		var clone01 = Odiv01.cloneNode(true);
-		//循环播放所需
-		var clone02 = Odiv02.cloneNode(true);
-		clone01.className = 'mui-slider-item mui-slider-item-duplicate';
-		clone02.className = 'mui-slider-item mui-slider-item-duplicate';
-		Odiv01.parentNode.insertBefore(clone02,Odiv01)
-		DetaBan.appendChild(clone01);
-		var gallery = mui('.mui-slider');
-		gallery.slider({
-		  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
-		});
+		if(arr.length == 1){
+			
+				var Odiv = document.createElement('div');
+				DetaBan.style = '-webkit-transform: translate(0,0);transform: translate(0,0)'
+				Odiv.className = 'mui-slider-item';
+				var Oa = document.createElement('a');
+				Oa.setAttribute('hrefs',Obj.goodsContent);
+				var Oimg = new Image();
+				Oimg.src = arr[0];
+				Oa.appendChild(Oimg);
+				Odiv.appendChild(Oa);
+				Fragment.appendChild(Odiv);
+				DetaBan.appendChild(Fragment);
+			
+		}else{
+			var FragmentSub= document.createDocumentFragment();
+			var Oindicator = document.createElement('div');
+			Oindicator.className = 'mui-slider-indicator';
+			for (var i = 0; i<arr.length; i++) {
+				var Odiv = document.createElement('div');
+				Odiv.className = 'mui-slider-item';
+				var Oa = document.createElement('a');
+				Oa.setAttribute('hrefs',Obj.goodsContent);
+				var Oimg = new Image();
+				Oimg.src = arr[i];
+				Oa.appendChild(Oimg);
+				Odiv.appendChild(Oa);
+				Fragment.appendChild(Odiv);			
+				var OdivSub = document.createElement('div');			
+				if(i == 0){
+					OdivSub.className = 'mui-indicator mui-active';
+				}else{
+					OdivSub.className = 'mui-indicator';
+				}
+				FragmentSub.appendChild(OdivSub);
+			}		
+			DetaBan.appendChild(Fragment);
+			DetaBanSub.appendChild(FragmentSub);
+			var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
+			var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
+			var clone01 = Odiv01.cloneNode(true);
+			//循环播放所需
+			var clone02 = Odiv02.cloneNode(true);
+			clone01.className = 'mui-slider-item mui-slider-item-duplicate';
+			clone02.className = 'mui-slider-item mui-slider-item-duplicate';
+			Odiv01.parentNode.insertBefore(clone02,Odiv01)
+			DetaBan.appendChild(clone01);
+			var gallery = mui('.mui-slider');
+			gallery.slider({
+			  interval:0//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+		}
+		
+		
 		
 	}
 	//detail title

@@ -17,6 +17,7 @@
 				padding-left: .1rem;
 				background: #efeff4;
 				color: #333;
+				margin: 0;
 			}
 			.optmoney>button {
 				width: 20%;
@@ -110,7 +111,7 @@
 		    		支付宝支付
 		    		<div class="mui-input-row mui-checkbox mui-pull-right">
 						<label></label>
-						<input name="radio2" type="checkbox">
+						<input name="radio2" type="checkbox" id="alipay">
 					</div>
 		    	</li>		    	
 		    	<li class="mui-table-view-cell">
@@ -120,7 +121,7 @@
 		    		银联支付
 		    		<div class="mui-input-row mui-checkbox mui-pull-right">
 						<label></label>
-						<input name="radio2" type="checkbox">
+						<input name="radio2" type="checkbox" id="payeco">
 					</div>
 		    	</li>
 				
@@ -188,8 +189,23 @@
 		if(money){ //确保选择
 			console.log('money：'+money)
 			
-			if(arr2.some(function(v,i){return v.checked})){
+			if( arr2.some(function(v,i){return v.checked}) ){
 				//判读支付方式
+				if( mui('#alipay')[0].checked ){
+					//支付宝支付
+				}else if ( mui('#payeco')[0].checked ){
+					//银联支付
+					paycbBuy({
+						channel:'payeco',
+						amount:money,
+						callback:function(res){
+							var Obj = JSON.parse(res);
+							document.location.href = Obj['result']['data'];
+						}
+					})
+				}
+				
+				
 			}else{
 				mui.alert('请选择支付方式'," ")
 			}
@@ -197,6 +213,88 @@
 			mui.alert('请选择充值金额'," ")
 		}
 	})
+	
 		})()
+		
+		
+
+		function alipay(opt){
+			
+			var config = {
+				charset:'utf-8',
+				body:'三方订单',
+				notify_url:'http://trade.icaipiao123.com/api/v3/trade/alipayfeedback',
+				out_trade_no:'2023384_5',
+				partner:'2088512799404524',
+				payment_type:'1',
+				seller_id:'zhangkongshidai@163.com',
+				service:'mobile.securitypay.pay',
+				subject:'三方订单',
+				total_fee:'1.00',
+				sign:'TnkzCgzQf/Zc7HOYfIUVaofNBY80nyjWvEu8MJ9WremGLujl39pZRMMpeH65crufGl3H7jb1J1Xs/4dLJ90iu6XLW2qKt8k8/KeBGxeaFvW4%2Bt0lwUIx1iWSTIIGL77vDpdJ9bchlsg8pQgFfj%2BoCMuIlyBu37Pl%2BE/HLtlTic0%3D',
+				sign_type:'RSA',
+				callback:function(res){
+					
+				}
+			}
+			jsajax({
+				method:'post',
+				url:'https://openapi.alipay.com/gateway.do',
+				data:{
+					charset:'utf-8',
+					body:'三方订单',
+					notify_url:'http://trade.icaipiao123.com/api/v3/trade/alipayfeedback',
+					out_trade_no:'2023384_5',
+					partner:'2088512799404524',
+					payment_type:'1',
+					seller_id:'zhangkongshidai@163.com',
+					service:'mobile.securitypay.pay',
+					subject:'三方订单',
+					total_fee:'1.00',
+					sign:'TnkzCgzQf/Zc7HOYfIUVaofNBY80nyjWvEu8MJ9WremGLujl39pZRMMpeH65crufGl3H7jb1J1Xs/4dLJ90iu6XLW2qKt8k8/KeBGxeaFvW4%2Bt0lwUIx1iWSTIIGL77vDpdJ9bchlsg8pQgFfj%2BoCMuIlyBu37Pl%2BE/HLtlTic0%3D',
+					sign_type:'RSA'	
+				},
+				success:function(res){
+					config.callback(res)
+				}
+			})
+			
+		}
+		//银联
+		function payeco(opt){
+			
+		}
+		
+		function paycbBuy(opt){
+			
+			if(localStorage.user){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var config = {
+					userId:UserInfo.userId,
+					channel:'payeco',
+					amount:'1',
+					token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&amount='+config.amount;
+				jsajax({
+					method:'post',
+					url:HostPort+'/pay/cbBuy'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+			
+		}
+		
+		
+		
 	</script>
 </html>

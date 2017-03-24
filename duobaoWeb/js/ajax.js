@@ -1,4 +1,4 @@
-var HostPort = 'http://139.129.203.90/caibao';
+var HostPort = 'http://59.110.20.209/caibao';
 function jsajax(opt) {
         opt = opt || {};
          opt.method = opt.method.toUpperCase() || 'POST';
@@ -19,7 +19,7 @@ function jsajax(opt) {
         var postData = params.join('&');
          if (opt.method.toUpperCase() === 'POST') {
              xmlHttp.open(opt.method, opt.url, opt.async);
-             xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8');
+             xmlHttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=utf-8;application/json;');
              xmlHttp.send(postData);
          }
          else if (opt.method.toUpperCase() === 'GET') {

@@ -105,7 +105,7 @@
 		    		支付宝支付
 		    		<div class="mui-input-row mui-checkbox mui-pull-right">
 						<label></label>
-						<input name="radio1" type="checkbox">
+						<input name="radio1" type="checkbox" id="alipay">
 					</div>
 		    	</li>		    	
 		    	<li class="mui-table-view-cell">
@@ -115,7 +115,7 @@
 		    		银联支付
 		    		<div class="mui-input-row mui-checkbox mui-pull-right">
 						<label></label>
-						<input name="radio1" type="checkbox">
+						<input name="radio1" type="checkbox" id="payeco">
 					</div>
 		    	</li>
 		    	<li class="mui-table-view-cell">
@@ -134,10 +134,9 @@
 <script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
 <script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>	
 	<script type="text/javascript">
-		document.querySelector('.mui-action-back').addEventListener('touchend',function(){	
-			window.history.back();
+		
+		;(function(){
 			
-		})
 		if(localStorage.account){
 
 			var account = JSON.parse(localStorage.account);
@@ -146,11 +145,18 @@
 			//console.log(balance)
 			document.querySelector('#accountnum').innerText = account.goodsCount;
 			document.querySelector('#accountprice').innerText = account.payMoney;
-			if(account.bagId){
-				document.querySelector('#bagId').innerText = '-￥1';
-				document.querySelector('.reducemoney').innerText = '-￥'+account.payMoney - 1;
+			if(account.bagId){//有红包
+				
 				var answermoney = account.payMoney -1;
-			}else{
+				document.querySelector('#bagId').innerText = '-￥1';
+				if(account.payMoney <= 1){
+					document.querySelector('.reducemoney').innerText = '0'
+				}else{
+					document.querySelector('.reducemoney').innerText = '-￥'+answermoney;
+				}
+				
+				
+			}else{//无红包
 				document.querySelector('#bagId').innerText = '无可用';
 				document.querySelector('.reducemoney').innerText ='-￥'+ account.payMoney;
 				var answermoney = account.payMoney;
@@ -160,9 +166,9 @@
 			//账户钱 大于 应付欠
 			
 			if( Number(balance) >= Number(answermoney) ){
-				document.querySelector('#realpay').innerText = '0'
+				document.querySelector('#realpay').innerText = 0;
 			}else{
-				document.querySelector('#realpay').innerText = Number(balance)-Number(answermoney);
+				document.querySelector('#realpay').innerText = Number(answermoney)-Number(balance);
 			}
 			
 		}
@@ -207,7 +213,7 @@
    						if( Number(balance) >= Number(answermoney) ){
 							document.querySelector('#realpay').innerText = '0'
 						}else{
-							document.querySelector('#realpay').innerText = Number(balance)-Number(answermoney);
+							document.querySelector('#realpay').innerText = Number(answermoney)-Number(balance);
 						}
    					}
    				
@@ -231,7 +237,7 @@
 					document.location.href = 'Recharge.html';
 					
 				}else{
-					//这里处理支付宝 支付 或者 银联支付
+					//这里处理支付宝 支付 或者 银联支付		
 					if(realpay == 0){ //判读是否需要加钱
 					
 						paybuyAccount({
@@ -239,7 +245,24 @@
 								document.location.href = 'paysuccess.html';
 							}
 						})
-					
+					}else{
+						
+						if( mui('#alipay')[0].checked ){
+							//支付宝支付
+						}else if ( mui('#payeco')[0].checked ){
+							//银联支付
+							paycbBuy({
+								channel:'payeco',
+								amount:realpay,
+								callback:function(res){
+									var Obj = JSON.parse(res);
+									document.location.href = Obj['result']['data'];
+								}
+							})
+						}else{
+							mui.alert('您的余额不足',' ')
+						}
+						
 					}
 					
 				}
@@ -252,6 +275,12 @@
 			
 			
 		})
+			
+			
+		})()
+		
+		
+		
 		
 		function paybuyAccount(opt){
 			var User = JSON.parse(localStorage.user);
@@ -280,5 +309,36 @@
 				}
 			})
 		}
+		//获取支付订单 以及支付方式
+		function paycbBuy(opt){
+			
+			if(localStorage.user){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var config = {
+					userId:UserInfo.userId,
+					channel:'payeco',
+					amount:'1',
+					token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&amount='+config.amount;
+				jsajax({
+					method:'post',
+					url:HostPort+'/pay/cbBuy'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+			
+		}
+		
+		
 	</script>
 </html>

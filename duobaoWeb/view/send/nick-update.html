@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>修改昵称</title>
+   		<link href="../../css/mui.min.css" rel="stylesheet"/>
+		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+		<style type="text/css">
+			
+		</style>
+	</head>
+	<body>
+		
+		<header class="mui-bar mui-bar-nav">
+	   		<span class="mui-icon mui-icon-left-nav mui-pull-left mui-action-back"><a href=""></a></span>			
+	    	<h1 class="mui-title">修改昵称</h1>
+	    	<span class="mui-pull-right upnick" style="line-height: .44rem; font-size:.14rem;" >确定</span>
+		</header>
+		
+	    <div class="mui-content">
+	        
+	       <div class="mui-input-group" style="margin-top: .2rem;">
+	       	 <div class="mui-input-row">
+				<label>修改昵称</label>
+				<input id='nick' type="text" class="mui-input-clear mui-input" placeholder="请输入新的昵称">
+			</div>
+			
+	       </div>
+	        
+	    </div>
+		
+	</body>
+	<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+;(function(){
+		
+	var RegName = /^[0-9a-zA-Z\u4e00-\u9fa5_]{2,10}$/;
+	
+	mui('.upnick')[0].addEventListener('tap',function(){
+		var nick = mui('#nick')[0].value;
+		if( RegName.test(nick) ){
+			
+			 upnick({
+			 	userName:nick,
+			 	callback:function(res){
+			 		var Obj = JSON.parse(res);
+			 		if(Obj.result == 1){
+			 			var user = JSON.parse(localStorage.user);
+						user['userInfo']['name'] = this.userName;
+						localStorage.user = JSON.stringify(user)
+			 			mui.toast('修改成功',{ duration:1000, type:'div' })
+			 		}
+			 	}
+			 })
+			
+		}else{
+			mui.toast('昵称非法',{ duration:1000, type:'div' })
+		}
+	})
+		
+		
+})();
+//用户修改昵称		
+function upnick(opt){
+	if(localStorage.user){
+		var User = JSON.parse(localStorage.user);
+		var UserInfo = User.userInfo;
+		var config = {
+			userName:'',
+			userId:UserInfo.userId,
+			token:UserInfo.caibaoToken,
+			callback:function(res){
+			
+			}
+	}
+	for( var i in opt ){
+		config[i] = opt[i]
+	}
+	var Url = '?userId='+config.userId+'&token='+config.token+'&userName='+config.userName;
+		jsajax({
+			method:'post',
+			url:HostPort+'/user/update'+Url,
+			success:function(res){
+				config.callback(res)
+			}
+		})
+	}
+}
+
+	</script>
+</html>

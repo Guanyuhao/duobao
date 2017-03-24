@@ -5,8 +5,19 @@
     	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title>个人资料</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
+   		<link rel="stylesheet" type="text/css" href="../css/libs/mui.picker.all.css"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
 		<style type="text/css">
+			.fixe-bottom{
+				width: 100%;
+				position: fixed;
+				bottom: 0;
+				z-index: 10;
+			}
+			.fixe-bottom>button{
+				width: 90%;
+				margin: 5%;
+			}
 			.presondata>li{
 				font-size: .12rem;
 			}
@@ -47,6 +58,9 @@
 	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
 	    	<h1 class="mui-title">个人资料</h1>
 		</header>
+		<footer class="fixe-bottom mui-nav-tab">
+			<button class="mui-btn mui-btn-danger exit">退出登录</button>
+		</footer>
 		<div class="mui-content">
 		    <ul class="mui-table-view presondata">
 			    <li class="mui-table-view-cell touxiang">
@@ -56,10 +70,10 @@
 			    <li class="mui-table-view-cell">ID 
 			        <span class="mui-pull-right"><b class="presonId"></b></span>
 			    </li>
-			    <li class="mui-table-view-cell">性别 
-			        <span class="mui-pull-right">男<i class="mui-navigate-right"></i></span>
+			    <li class="mui-table-view-cell sexBox">性别 
+			        <span class="mui-pull-right sex">男<i class="mui-navigate-right"></i></span>
 			    </li>
-			    <li class="mui-table-view-cell">昵称
+			    <li class="mui-table-view-cell nickname">昵称
 			        <span class="mui-pull-right"><b class="presonname"></b><i class="mui-navigate-right"></i></span>
 			    </li>
 			    <li class="mui-table-view-cell">手机号 
@@ -71,24 +85,111 @@
 			</ul>
 		</div>
 	</body>
-	
+	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
 	
 	<script type="text/javascript">
 
-		document.querySelector('.mui-action-back').addEventListener('touchend',function(){
+		;(function(){
 			
-			window.history.back();
-		})
+			mui.init()
+			mui('.exit')[0].addEventListener('tap',function(){
+				mui.confirm('您确定要退出吗？',' ',['确认','取消'],function(e){
+				 	if(e.index == 0){
+				 		localStorage.user = '';
+						mui.openWindow({
+							url: '../login.html'							
+						})
+				 	}
+				 },'div');
+			})
+			var picker = new mui.PopPicker({
+			    layer: 1
+			});
+			picker.setData([{value: "first",text: "男"}, {value: "second",text: "女"}])
+			mui('.sexBox')[0].addEventListener('tap',function(){
+				var sexDom = mui('.sex')[0];
+				picker.show(function(SelectedItem) {					
+					sexDom.innerHTML = SelectedItem[0].text+'<i class="mui-navigate-right"></i>';
+					var sex;
+					if( SelectedItem[0].text == '男' ){
+						sex = 1
+					}else if( SelectedItem[0].text == '女' ){
+						sex = 2
+					}
+					modifyuserInfor({
+						sex:2,
+						callback:function(res){
+							var Obj = JSON.parse(res);
+							if( Obj.result == 1){
+								//更新缓存
+								var user = JSON.parse(localStorage.user);
+								user['userInfo']['gender'] = this.sex;
+								localStorage.user = JSON.stringify(user)
+							}
+						}
+					})
+					
+				})
+			})
+			mui('.nickname')[0].addEventListener('tap',function(){
+				document.location.href = 'send/nick-update.html'
+			})
+			
+			
+			
+			if(localStorage.user){
+				var user = JSON.parse(localStorage.user).userInfo;
+				document.querySelector('.photo').src = user.photo;
+				document.querySelector('.presonId').innerText = user.userId;
+				document.querySelector('.presonname').innerText = user.name;
+				document.querySelector('.presonnum').innerText = user.phone;
+				var sex;
+				if(user.gender == 1){
+					sex ='男'
+				}else if( user.gender == 2){
+					sex = '女'
+				}
+				mui('.sex')[0].innerHTML = sex+'<i class="mui-navigate-right"></i>'
+			}
 		
-		if(localStorage.user){
-			var user = JSON.parse(localStorage.user).userInfo;
-			document.querySelector('.photo').src = user.photo;
-			document.querySelector('.presonId').innerText = user.userId;
-			document.querySelector('.presonname').innerText = user.name;
-			document.querySelector('.presonnum').innerText = user.phone;
-		}
+		
+		
+		
+			
+		})()
 		function addAdmin(){
 			document.location = 'send/add-admin.html'
 		}
+		
+		function modifyuserInfor(opt){
+			
+			if( localStorage.user ){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var config = {
+					sex:'',
+					userId:UserInfo.userId,
+					token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?userId='+config.userId+'&token='+config.token+'&sex='+config.sex;
+					jsajax({
+						method:'post',
+						url:HostPort+'/user/update'+Url,
+						success:function(res){
+							config.callback(res)
+						}
+					})
+			}		
+			
+		}
+		
 	</script>
 </html>

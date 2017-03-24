@@ -12,9 +12,7 @@
 	        <br /><br />
 	        实体商品:<input type="text" value="" name="title" style="width:500px">
 	        <br /><br />
-	        详细介绍:<textarea name="content" id="content" cols="120" rows="30"></textarea>
-	        <br />
-	        
+			详细说明: <VueUEditor style="width: 600px"></VueUEditor>
 	        <input type="submit" name="submit" value="提交">
 	    </form>
 	</div>
@@ -32,7 +30,10 @@
 				a:'1111'
 			}
 		},
-		created () {
+		mounted () {
+			
+		},
+		method: {
 			
 		}
 	}
