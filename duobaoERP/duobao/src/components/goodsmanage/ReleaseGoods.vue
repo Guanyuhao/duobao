@@ -12,7 +12,9 @@
 	        <br /><br />
 	        实体商品:<input type="text" value="" name="title" style="width:500px">
 	        <br /><br />
-			详细说明: <VueUEditor style="width: 600px"></VueUEditor>
+			详细说明: <div style="width:100%;">
+				<VueUEditor style="width: 100%;"></VueUEditor>
+			</div>
 	        <input type="submit" name="submit" value="提交">
 	    </form>
 	</div>
