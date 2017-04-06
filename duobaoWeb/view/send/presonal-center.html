@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui"> 
+	<script src="../../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>TA的个人中心</title>
    		<link href="../../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
@@ -15,13 +31,13 @@
 			}
 			.presonalTop>.presonal-user{
 				overflow: hidden;
-				height: 1rem;
+				height: 3.125rem;
 				width: 100%;
 				background: #F54A12;
 			}
 			.presonal-user .left{
 				width: 80%;
-				padding: .1rem;
+				padding: .3125rem;
 				height: 100%;
 				position: relative;
 				
@@ -30,19 +46,19 @@
 				width: 30%;
 				margin-right: 10%;
 				border-radius: 50%;
-				height: .7rem;
+				height: 2.1875rem;
 			}
 			.presonal-user .left span {
-				font-size: .14rem;
+				font-size: .4375rem;
 				color: yellow;
 			}
 			.presonal-user .left b{
 				position: absolute;
 				color: #fff;
-				font-size: .14rem;
+				font-size: .4375rem;
 			}
 			#scroll{
-				top: 1.8rem;
+				top: 5.8rem;
 			}
 			#nav-slide li{
 				width: 50%;
@@ -81,11 +97,11 @@
 		 <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
 	      <div class="mui-scroll" id="scroll">
 	        <!--数据列表-->	        
-	        <div class="mui-slider">
+	        <div class="mui-slider" style="margin-bottom: 2.8rem ;">
 			  <div class="mui-slider-group" id="presonalSlide">
 			    <!--第一个内容区容器-->
-			    <div class="mui-slider-item" id="item1"></div>
-			    <div class="mui-slider-item" id="item2"></div>
+			    <div class="mui-slider-item mui-active" id="item1" type='0'></div>
+			    <div class="mui-slider-item" id="item2" type='3'></div>
 			    
 			  </div>
 			</div>
@@ -106,13 +122,14 @@
 	if(localStorage.tadeuser){
 		
 		var tadeuser = JSON.parse(localStorage.tadeuser);
+		
 		mui('#userphoto')[0].src = tadeuser.img;
 		mui('#userid')[0].innerText = "用户ID："+tadeuser.tadeuserId;
 		mui('#username')[0].innerText = tadeuser.tadeuserName;
 	}
 	
 	
-	
+var percenpage = 1;	
 	
 mui.init({
   pullRefresh : {
@@ -134,7 +151,42 @@ mui.init({
       contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
       contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
       callback :function up(){
-      	 this.endPullupToRefresh(true|false);
+      	percenpage++
+      	var arr = Array.from(mui('.mui-slider-item'))
+      	
+      	var type,id
+      	arr.forEach(function(v,i){
+      			
+      		
+      		if(v.classList.contains('mui-active')){
+
+      			type = v.getAttribute('type')
+      			if(type == 3){
+      				id = '#item2'
+      			}else if(type == 0){
+      				id  = '#item1'
+      			}
+      		}
+      	})
+      	
+      	if(type&&id){
+      		inrecode({
+		      	page:percenpage,
+				type:type,
+					callback:function(res){
+						var Obj  = JSON.parse(res);
+						
+						var arr = Obj.orderList;
+						if(arr.length == 0){
+							 return false;
+						}
+						proitem1Dom(arr,id,type);
+						presoncenEvent(id);
+					}
+			})
+      	}
+      	
+      	 this.endPullupToRefresh(false);
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
   }
@@ -237,14 +289,17 @@ function presoncenEvent(id){
 	
 	//夺宝记录
 		function inrecode(opt){
-			if(localStorage.user){
+			if(localStorage.user && localStorage.tadeuser ){
+				
+				
+				var tadeuser = JSON.parse(localStorage.tadeuser);
 				var User = JSON.parse(localStorage.user);
 				var UserInfo = User.userInfo;
 				var config = {
 					type: 0, // type 0  3 中奖
 					page: 1,
-					userId:15533,
-					otherUserId:15530,
+					userId:UserInfo.userId,
+					otherUserId:tadeuser.tadeuserId,
 					//token:UserInfo.caibaoToken,
 					callback:function(res){
 						

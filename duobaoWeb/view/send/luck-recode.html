@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui"> 
+	<script src="../../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>幸运记录</title>
    		<link href="../../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
@@ -10,53 +26,53 @@
 			
 			.goodsstatus,.goodsInfor,.address,.transferName{
 				
-				margin-bottom: .1rem;
+				margin-bottom: .3125rem;
 				background: #fff;
 			}
 			.goodsstatus>h4,.goodsInfor>h4,.address>h4,.transferName>h4{
-				padding: .1rem 0.05rem;
+				padding: .3125rem 0.15625rem;
 				font-weight: normal;
-				font-size: .14rem;
+				font-size: .4375rem;
 				margin: 0;	
 			}
 			.goodsstatus>.expressInfos{
-				border-top: .01rem solid #FAFAFA;
+				border-top: .03125rem solid #FAFAFA;
 				padding: 0;
 				margin: 0;
 			}
 			.goodsstatus>.expressInfos>li{
 				position: relative;
-				padding: 0 .1rem;
-				line-height: .3rem;
+				padding: 0 .3125rem;
+				line-height: 1rem;
 			}
 			.goodsstatus>.expressInfos>li>span{
 				color: #8f8f94;
-				font-size: .12rem;
+				font-size: .4375rem;
 			}
 			.expressInfos>.shareorder{
 				color: #8F8F94;
-				font-size: .12rem;
+				font-size: .375rem;
 				position: relative;
-				padding-left:.1rem;
-				line-height: .4rem;
+				padding-left:.3125rem;
+				line-height: 1.25rem;
 			}
 			.expressInfos>.shareorder>.shareBtn{
-				top: .05rem;
-				font-size: .12rem;
+				top: .15625rem;
+				font-size: .375rem;
 				position: absolute;
-				right: .1rem;
+				right: .3125rem;
 			}
 			
 			/**/
 			.address>p{
-				padding: 0 .1rem;
+				padding: 0 .3125rem;
 				margin: 0;
 				font-size: .10rem;
 			}
 			
 			/**/
 			.goodsdetail{
-				padding: .1rem 0;
+				padding: .3125rem 0;
 			}
 			.goodsdetail>.left{
 				width: 40%;
@@ -74,11 +90,11 @@
 			.goodsdetail>.right>h4{
 				font-weight: normal;
 				margin: 0;
-				font-size: .14rem;
+				font-size: .4375rem;
 			}
 			.goodsdetail>.right>p{
 				margin: 0;
-				font-size: .10rem;
+				font-size: .3125rem;
 			}
 			.goodsdetail>.right>p>span{
 				color: red;

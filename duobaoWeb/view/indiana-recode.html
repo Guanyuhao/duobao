@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>夺宝记录</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
@@ -11,7 +27,7 @@
 	<body>
 		
 		<header class="mui-bar mui-bar-nav">
-	   		<span class=" mui-icon mui-icon-left-nav mui-pull-left mui-action-back"><a href=""></a></span>			
+	   		<span class=" mui-icon mui-icon-left-nav mui-pull-left "><a href=""></a></span>			
 	    	<h1 class="mui-title">夺宝记录</h1>
 		</header>
 		
@@ -32,10 +48,10 @@
 	        <div class="mui-slider">
 			  <div class="mui-slider-group" id="reSlide">
 			    <!--第一个内容区容器-->
-			    <div class="mui-slider-item" id="item1" type='0'></div>
-			    <div class="mui-slider-item" id="item2" type='1'></div>
-			    <div class="mui-slider-item" id="item3" type='2'></div>
-			    <div class="mui-slider-item" id="item4" type='3'></div>
+			    <div class="mui-slider-item" id="item1" type='0' style="min-height: 18.75rem;"></div>
+			    <div class="mui-slider-item" id="item2" type='1' style="min-height: 18.75rem;"></div>
+			    <div class="mui-slider-item" id="item3" type='2' style="min-height: 18.75rem;"></div>
+			    <div class="mui-slider-item" id="item4" type='3' style="min-height: 18.75rem;"></div>
 			  </div>
 			</div>
 	        
@@ -49,10 +65,11 @@
 	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
 	<script src="//cdn.bootcss.com/move.js/0.5.0/move.min.js" type="text/javascript" charset="utf-8"></script>
-	
 	<script type="text/javascript">
 ;(function(){		
-	
+	mui('.mui-icon-left-nav')[0].addEventListener('tap',function(){
+				document.location.href = '../myset.html'
+	})
 	//显示 缓存的样式
 if(localStorage.type){
 	var item = localStorage.type;
@@ -84,21 +101,33 @@ mui.init({
       callback :function up(){
       	
       	if(localStorage.type){
+      		var type = localStorage.type
       		repage++;
+      		//滑动 会改变type
+      		var id;
+      		if(type == 0){
+      			id = '#item1'
+      		}else if( type == 1){
+      			id = '#item2'
+      		}else if( type == 2){
+      			id = '#item3'
+      		}else if( type == 3){
+      			id = '#item4'
+      		}
       		inrecode({
       			page:repage,
 				type:localStorage.type,
 				callback:function(res){
 					var Obj  = JSON.parse(res);
-					console.log(Obj)
+					
 					var arr = Obj.orderList;
-					proitem1Dom(arr,'#item1');
-					inrecodeEvent('#item1')
+					proitem1Dom(arr,id);
+					inrecodeEvent(id)
 				}
 			})
       		
       	}
-		this.endPullupToRefresh(false||true);
+		this.endPullupToRefresh(false);
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
   }
@@ -138,12 +167,12 @@ document.querySelector('.mui-slider').addEventListener('slide', function(event) 
   repage = 1; //初始化分页
   
  navmove(num)
- 
+ mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100)
 });
 
 
 function navmove(num){
-mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100)
+
 var l = mui('#nav-slide li').length;
 for (var i = 0 ; i<l;i++) {
 		mui('#nav-slide li')[i].classList.remove('active');
@@ -161,7 +190,7 @@ inrecode({
 	type:0,
 	callback:function(res){
 		var Obj  = JSON.parse(res);
-		console.log(Obj)
+		
 		var arr = Obj.orderList;
 		proitem1Dom(arr,'#item1');
 		inrecodeEvent('#item1')
@@ -335,9 +364,9 @@ function proitem1Dom(arr,id){
 	if( arr.length == 0 ){
 		
 		if(!item1.innerText){ //dom wei kong 
-			item1.innerHTML =`<div id="kong" style="position: relative;min-height: 4rem;">
-			    		<img src="../image/ic_emptypage_address.png" style="width: 1.5rem;height: 1.5rem; position: absolute; left: 50%;margin-left: -.75rem; top: 25%;"/>
-			    		<button class="mui-btn mui-btn-danger" style="min-width: 2rem;position: absolute; left: 50%;margin-left: -1rem;top: 60%;">前去夺宝</button>
+			item1.innerHTML =`<div id="kong" style="position: relative;min-height: 18.75rem;">
+			    		<img src="../image/ic_emptypage_address.png" style="width: 4.6875rem;height: 4.6875rem; position: absolute; left: 50%;margin-left: -2.34375rem; top: 25%;"/>
+			    		<button class="mui-btn mui-btn-danger" style="width:6.25rem;position: absolute; left: 50%;margin-left: -3.125rem;top: 55%;">前去夺宝</button>
 			    	</div>`
 			mui('#kong').on('tap','button',function(){
 				document.location.href = '../index.html';
@@ -347,7 +376,8 @@ function proitem1Dom(arr,id){
 		return false;			
 	}
 	
-	if( mui('#kong') ){
+	if( mui('#kong')[0] ){
+		
 		item1.innerHTML = '';
 	}
 	

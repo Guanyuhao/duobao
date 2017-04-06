@@ -6,12 +6,17 @@ import router from './router'
 import echarts from 'echarts'
 import axios from 'axios'
 import Datepicker from 'vuejs-datepicker'
-import VueUEditor from 'vue-ueditor'
+// import VueUEditor from 'vue-ueditor'
+import VueKindEditor from 'vue-kindeditor'
+import 'kindeditor/kindeditor-all-min.js'
+import 'kindeditor/themes/default/default.css'
 //组件注册
 Vue.component('Datepicker',Datepicker)
-Vue.component('VueUEditor',VueUEditor)
+// Vue.component('VueUEditor',VueUEditor)
+Vue.component('VueKindEditor',VueKindEditor)
 Vue.use(Datepicker)
-Vue.use(VueUEditor)
+// Vue.use(VueUEditor)
+Vue.use(VueKindEditor)
 //插件全局
 window.echarts = echarts
 window.axios = axios

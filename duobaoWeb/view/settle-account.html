@@ -1,26 +1,42 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>订单</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
 		<style type="text/css">
 			.infor-show{
-				font-size: .14rem;
-				margin: .1rem 0;
+				font-size: .4375rem;
+				margin: .3125rem 0;
 			}
 			.infor-show span{
 				color: red;
 			}
 			.pay-infor{
-				font-size: .14rem;
+				font-size: .4375rem;
 			}
 			.pay-infor li .img{
-				width: .2rem;
-				height: .2rem;
-				margin-right: .05rem;
+				width: .625rem;
+				height: .625rem;
+				margin-right: .15625rem;
 			}
 			.pay-infor li .img img{
 				width: 100%;
@@ -38,15 +54,14 @@
 			}
 			
 			.mui-checkbox input[type=checkbox]:before,.mui-radio input[type=radio]:before{
-				font-size: .20rem;
+				font-size: .625rem;
 			}
 			.mui-radio label, .mui-checkbox label{
-				padding: 0;
-				padding-right: 20px;
+				padding: .3125rem .3125rem;
 			}
 			.mui-checkbox input[type=checkbox], .mui-radio input[type=radio]{
-				width: .2rem;
-				height: .2rem;
+				width: .625rem;
+				height: .625rem;
 				right: 0;
 				top: 0;
 			}
@@ -56,7 +71,7 @@
 			}
 			.red-pack-send p{
 			
-				margin: .05rem 0;
+				margin: .15625rem 0;
 			}
 			.red-pack-send p>span{
 				color: red;
@@ -64,6 +79,9 @@
 			#surepay{
 				width: 90%;
 				margin: 0 5%;
+			}
+			.mui-scroll-wrapper{
+				top: 44px;
 			}
 		</style>
 	</head>
@@ -74,74 +92,95 @@
 	    	<h1 class="mui-title">订单</h1>
 		</header>
 		<div class="mui-content">
-		    <div class="infor-show mui-table-view">
-		    	<div class="mui-table-view-cell">商品数量：<span id="accountnum"></span>件</div>
-		    	<div class="mui-table-view-cell">应付金额：<span id="accountprice"></span>元</div>
-		    </div>
-		    <ul class="pay-infor mui-table-view">
-		    	<li class="mui-table-view-cell">红包抵扣 <span class="mui-pull-right" id="bagId"></span></li>
-		    	<li class="mui-table-view-cell">
-		    		余额抵扣(账户余额<i id="balance"></i>彩宝币)	    		
-		    		<div class="mui-input-row mui-checkbox mui-pull-right">
+			
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">	
+					<div class="infor-show mui-table-view">
+						<div class="mui-table-view-cell">商品数量：<span id="accountnum"></span>件</div>
+						<div class="mui-table-view-cell">应付金额：<span id="accountprice"></span>元</div>
+					</div>
+					<ul class="pay-infor mui-table-view">
+					<li class="mui-table-view-cell">红包抵扣 <span class="mui-pull-right" id="bagId"></span></li>
+					<li class="mui-table-view-cell">
+					余额抵扣(账户余额<i id="balance"></i>彩宝币)	    		
+					<div class="mui-input-row mui-checkbox mui-pull-right">
 					  <label></label>
 					  <input name="checkbox123" type="checkbox" checked id="caibaobi">
 					</div>
 					<i class="mui-pull-right reducemoney"></i>
-		    	</li>
-		    	<li class="mui-table-view-cell">
-		    		<div class="mui-pull-left img">
-		    			<img src="../image/ic_pay_chongzhi.png"/>
-		    		</div>
-		    		充值
-		    		<div class="mui-input-row mui-checkbox mui-pull-right">
-						<label></label>
-						<input name="radio1" type="checkbox" id="Recharge">
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-pull-left img">
+							<img src="../image/ic_pay_chongzhi.png"/>
+						</div>
+						充值
+						<div class="mui-input-row mui-checkbox mui-pull-right">
+							<label></label>
+							<input name="radio1" type="checkbox" id="Recharge">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-pull-left img">
+							<img src="../image/ic_pay_ali.png"/>
+						</div>
+						支付宝支付
+						<div class="mui-input-row mui-checkbox mui-pull-right">
+							<label></label>
+							<input name="radio1" type="checkbox" id="alipay" checked="true">
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-pull-left img">
+							<img src="../image/wechat.png"/>
+						</div>
+						微信支付
+						<div class="mui-input-row mui-checkbox mui-pull-right">
+							<label></label>
+							<input name="radio1" type="checkbox" id="wechat" >
+						</div>
+					</li>
+					<li class="mui-table-view-cell">
+						<div class="mui-pull-left img">
+							<img src="../image/ic_pay_union.png"/>
+						</div>
+						银联支付
+						<div class="mui-input-row mui-checkbox mui-pull-right">
+							<label></label>
+							<input name="radio1" type="checkbox" id="payeco" >
+						</div>
+					</li>
+					
+					<li class="mui-table-view-cell">
+					<div class="mui-pull-right">还需要支付：<i id="realpay"></i>元</div>
+					</li>
+					</ul>
+					<div class="red-pack-send">
+					<p>充值随机赠送红包</p>
+					<p>充值<span>20</span>元，随机赠送红包<span>1~3</span>个</p>
+					<p>充值<span>50</span>元，随机赠送红包<span>1~8</span>个</p>
+					<p>充值<span>100</span>元，随机赠送红包<span>1~15</span>个</p>
+					<button class="mui-btn mui-btn-danger" id="surepay">确认支付</button>
 					</div>
-		    	</li>
-		    	<li class="mui-table-view-cell">
-		    		<div class="mui-pull-left img">
-		    			<img src="../image/ic_pay_ali.png"/>
-		    		</div>
-		    		支付宝支付
-		    		<div class="mui-input-row mui-checkbox mui-pull-right">
-						<label></label>
-						<input name="radio1" type="checkbox" id="alipay">
-					</div>
-		    	</li>		    	
-		    	<li class="mui-table-view-cell">
-		    		<div class="mui-pull-left img">
-		    			<img src="../image/ic_pay_union.png"/>
-		    		</div>
-		    		银联支付
-		    		<div class="mui-input-row mui-checkbox mui-pull-right">
-						<label></label>
-						<input name="radio1" type="checkbox" id="payeco">
-					</div>
-		    	</li>
-		    	<li class="mui-table-view-cell">
-		    		<div class="mui-pull-right">还需要支付：<i id="realpay"></i>元</div>
-		    	</li>
-		    </ul>
-		    <div class="red-pack-send">
-		    	<p>充值随机赠送红包</p>
-		    	<p>充值<span>20</span>元，随机赠送红包<span>1~3</span>个</p>
-		    	<p>充值<span>50</span>元，随机赠送红包<span>1~8</span>个</p>
-		    	<p>充值<span>100</span>元，随机赠送红包<span>1~15</span>个</p>
-		    	<button class="mui-btn mui-btn-danger" id="surepay">确认支付</button>
-		    </div>
+					
+				</div>
+			</div>  
 		</div>
 	</body>
 <script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
-<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>	
+<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="../js/pay.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 		
 		;(function(){
-			
+			mui('.mui-scroll-wrapper').scroll({
+				deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+			});
 		if(localStorage.account){
 
 			var account = JSON.parse(localStorage.account);
 			var balance = account.account;	
 			console.log(account)
+			//localStorage.orderId = account.orderId;
 			//console.log(balance)
 			document.querySelector('#accountnum').innerText = account.goodsCount;
 			document.querySelector('#accountprice').innerText = account.payMoney;
@@ -239,28 +278,182 @@
 				}else{
 					//这里处理支付宝 支付 或者 银联支付		
 					if(realpay == 0){ //判读是否需要加钱
-					
+					//不需要价钱
 						paybuyAccount({
 							callback:function(res){
-								document.location.href = 'paysuccess.html';
+								var obj = JSON.parse(res);
+								if(obj.code == 0){
+									if( obj.orderStatus == 1){
+										localStorage.orderStatus = obj.orderStatus
+										document.location.href = 'paysuccess.html'
+									}else if( obj.orderStatus == 1000 ){
+										mui.alert('余额不足')
+									}else if(obj.orderStatus == 2000){
+										mui.alert('购买失败')
+									}
+								}else if(obj.code == 777){
+									mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+									 	if(e.index == 0){
+											mui.openWindow({
+												url: '../login.html'							
+											})
+									 	}
+									},'div');
+								}
 							}
 						})
 					}else{
 						
-						if( mui('#alipay')[0].checked ){
-							//支付宝支付
-						}else if ( mui('#payeco')[0].checked ){
-							//银联支付
-							paycbBuy({
-								channel:'payeco',
-								amount:realpay,
-								callback:function(res){
-									var Obj = JSON.parse(res);
-									document.location.href = Obj['result']['data'];
-								}
-							})
+						//是否混合支付
+						if(mui('#caibaobi')[0].checked){
+							//混合支付
+							if( mui('#alipay')[0].checked ){
+							//支付宝支付+余额支付
+								wftbuyacc({
+									channel:'alipayH',
+									type:2,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										console.log(Obj)
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.orderId = Obj['result'].orders_id;
+											document.location.href = Obj['result']['data'];
+										}
+										
+									}
+								})
+								
+								
+							}else if ( mui('#payeco')[0].checked ){
+							//银联支付+余额支付
+								paycbBuy({
+									channel:'payeco',
+									amount:realpay,
+									type:2,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.isgopay = 1;
+											localStorage.orderId = Obj['result'].orders_id;
+											//更改状态 等返回页面的时候进行 查询
+											document.location.href = Obj['result']['data'];
+										}
+									}
+								})
+							}else if(mui('#wechat')[0].checked){
+								//微信混合支付
+								wftbuyacc({
+									channel:'weChatH',
+									type:2,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										console.log(Obj)
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.orderId = Obj['result'].orders_id;
+											document.location.href = Obj['result']['data'];
+										}
+										
+									}
+								})
+							}
+							
 						}else{
-							mui.alert('您的余额不足',' ')
+							
+							
+							if( mui('#alipay')[0].checked ){
+							//支付宝支付
+								wftbuyacc({
+									channel:'alipayH',
+									type:1,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										console.log(Obj)
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.orderId = Obj['result'].orders_id;
+											document.location.href = Obj['result']['data'];
+										}
+										
+									}
+								})
+							}else if ( mui('#payeco')[0].checked ){
+							//银联支付
+								paycbBuy({
+									channel:'payeco',
+									amount:realpay,
+									type:1,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.isgopay = 1;
+											localStorage.orderId = Obj['result'].orders_id;
+											//更改状态 等返回页面的时候进行 查询
+											document.location.href = Obj['result']['data'];
+										}
+									}
+								})
+							}else if(mui('#wechat')[0].checked){
+								wftbuyacc({
+									channel:'weChatH',
+									type:1,
+									callback:function(res){
+										var Obj = JSON.parse(res);
+										console.log(Obj)
+										if(Obj.code == 777){
+											mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+											 	if(e.index == 0){
+													mui.openWindow({
+														url: '../login.html'							
+													})
+											 	}
+											 },'div');	
+										}else if( Obj.code == 0 ){
+											localStorage.orderId = Obj['result'].orders_id;
+											document.location.href = Obj['result']['data'];
+										}
+										
+									}
+								})
+							}
 						}
 						
 					}
@@ -275,70 +468,166 @@
 			
 			
 		})
+
+	//代表用户去过支付页面了
+	if(localStorage.orderId && localStorage.isgopay){
+		mui.confirm('订单查询',' ',['完成支付','未支付'],function(e){
+		 	if(e.index == 0){
+		 		
+				//点击确定开始轮循
+				isstopfor(localStorage.isgopay,localStorage.orderId);
+		 		var muipopu = '<div class="mui-popup-backdrop mui-active" style="display: block;"></div>';
+		 		var muipobtn = '<div class="mui-popup mui-popup-in" style="display: block;"><div class="mui-popup-inner"><div class="mui-popup-title">正在查询订单</div><div class="mui-popup-text"><button type="button" class="mui-btn mui-disabled" disabled="" style="background:#fff;border:none;opacity:.3;"><span class="mui-spinner"></span>&nbsp;<span>Loading...</span></button></div></div>';
+		 		append(document.body, muipopu)
+		 		append(document.body, muipobtn)
+		 		var timeout30 = setTimeout(function(){
+		 			if(window.payTime){
+		 				clearInterval(payTime)
+		 				mui.toast('充值遇到了问题</br >请您联系客服',{ duration:3000, type:'div' })
+		 				var timeout02 = setTimeout(function(){
+		 					
+			 				localStorage.removeItem('isgopay')
+							localStorage.removeItem('orderId')
+		 					location.reload()
+		 				},3000)
+
+						
+		 			}
+		 		},30000)
+		 		
+		 	}else if( e.index == 1 ){
+		 		localStorage.removeItem('isgopay')
+				localStorage.removeItem('orderId')
+		 	}
+		},'div');
+		
+	}
+//类 jquery 的append
+function append(parent, text) {
+    if (typeof text === 'string') {
+      var temp = document.createElement('div');
+      temp.innerHTML = text;
+      // 防止元素太多 进行提速
+      var frag = document.createDocumentFragment();
+      while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+      }
+      parent.appendChild(frag);
+    }
+    else {
+      parent.appendChild(text);
+    }
+}
+//轮循 num标识是否轮循环 orderId银联支付返回数据
+function isstopfor(num,orderId){
+	var drag = Number(num);
+	
+	if(num){
+		window.payTime = setInterval(forcbpay,1000)
+	}else{
+		clearInterval(payTime)
+	}
+	//轮询查循
+
+	function forcbpay(){
+		javacb({
+			orderId:orderId,
+			callback:function(res){
+				var Obj = JSON.parse(res);
+				console.log(Obj)
+				if(Obj.code == 0){
+					if(Obj.result == 1){
+					//关闭窗口
+					mui.closePopups()
+					mui('.mui-popup-backdrop')[0].style.display = 'none';
+					mui('.mui-popup-in')[0].style.display = 'none';
+					//弹出友好提示
+					mui.toast('充值成功',{ duration:2000, type:'div' })
+					//跳转 参加成功页面
+						var setTime01 = setTimeout(function(){
+							mui.openWindow({
+								url:'paysuccess.html'
+							})
+						},1000)
+						
+					}
+				}
+				
+			}
+		})
+	}
+	
+}
+
+		
+	
 			
-			
-		})()
+})()
 		
 		
 		
 		
 		function paybuyAccount(opt){
-			var User = JSON.parse(localStorage.user);
-			var UserInfo = User.userInfo;
-			var account = JSON.parse(localStorage.account);
-			var config = {
-				type:0, //0余额支付 1 充钱支付
-				orderId:account.orderId,
-				channel:'', //支付方式 alipay nowpay_qq payeco
-				userBagsId:account.bagId,
-				userId:UserInfo.userId,
-				token:UserInfo.caibaoToken,
-				callback:function(res){
-				
-				}
-			}
-			for( var i in opt ){
-				config[i] = opt[i]
-			}
-			var Url ='?type='+config.type+'&orderId='+config.orderId+'&userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&userBagsId='+config.userBagsId;
-			jsajax({
-				method:'post',
-				url:HostPort+'/pay/buyAccount'+Url,
-				success:function(res){
-					config.callback(res)
-				}
-			})
-		}
-		//获取支付订单 以及支付方式
-		function paycbBuy(opt){
-			
-			if(localStorage.user){
+			if(localStorage.user&&localStorage.account){
 				var User = JSON.parse(localStorage.user);
 				var UserInfo = User.userInfo;
+				var account = JSON.parse(localStorage.account);
 				var config = {
+					type:0, //0余额支付 1 充钱支付
+					orderId:account.orderId,
+					channel:'', //支付方式weChatH nowpay_qq payeco alipayH
+					userBagsId:account.bagId,
 					userId:UserInfo.userId,
-					channel:'payeco',
-					amount:'1',
 					token:UserInfo.caibaoToken,
+					qita:'h5',
 					callback:function(res){
-						
+					
 					}
 				}
 				for( var i in opt ){
 					config[i] = opt[i]
 				}
-				var Url = '?userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&amount='+config.amount;
+				var Url ='?type='+config.type+'&orderId='+config.orderId+'&userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&userBagsId='+config.userBagsId+'&qita='+config.qita;
 				jsajax({
 					method:'post',
-					url:HostPort+'/pay/cbBuy'+Url,
+					url:HostPort+'/pay/buyAccount'+Url,
 					success:function(res){
 						config.callback(res)
 					}
 				})
 			}
-			
 		}
-		
-		
+		//订单页面的混合支付 即 购买支付
+		function wftbuyacc(opt){
+			if(localStorage.user&&localStorage.account){
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				var account = JSON.parse(localStorage.account);
+				var config = {
+					type:2, //type充值 0 第三方支付1 混合支付2
+					orderId:account.orderId,
+					channel:'', //支付方式weChatH nowpay_qq payeco alipayH
+					userBagsId:account.bagId,
+					userId:UserInfo.userId,
+					token:UserInfo.caibaoToken,
+					qita:'h5',
+					callback:function(res){
+					
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url ='?type='+config.type+'&orderId='+config.orderId+'&userId='+config.userId+'&token='+config.token+'&channel='+config.channel+'&userBagsId='+config.userBagsId+'&qita='+config.qita;
+				jsajax({
+					method:'post',
+					url:HostPort+'/pay/wft/buyAccount'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+		}
+
 	</script>
 </html>

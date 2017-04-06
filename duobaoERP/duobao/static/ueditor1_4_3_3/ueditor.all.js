@@ -8089,10 +8089,14 @@ UE.Editor.defaultOptions = function(editor){
                     'method': 'GET',
                     'dataType': isJsonp ? 'jsonp':'',
                     'onsuccess':function(r){
+                        console.log(r)
                         try {
                             var config = isJsonp ? r:eval("("+r.responseText+")");
+                            
                             utils.extend(me.options, config);
+                          
                             me.fireEvent('serverConfigLoaded');
+                            
                             me._serverConfigLoaded = true;
                         } catch (e) {
                             showErrorMsg(me.getLang('loadconfigFormatError'));

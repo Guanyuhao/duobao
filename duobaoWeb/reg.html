@@ -5,18 +5,50 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
-		<link href="css/mui.css" rel="stylesheet" />
-		
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/com.css"/>
 		<style>
-			.area {
-				margin: 20px auto 0px auto;
+			.mui-content{
+				width: 100%;
+				height: 100%;
+				background: rgba(255,255,255,1);
+			}
+			
+			header.mui-bar-nav{
+				background: #f54a12;	
+			}
+			header.mui-bar-nav>.mui-title{
+				color: #fff;
+			}
+			header.mui-bar-nav>a{
+				color: #fff;
+			}
+			.mui-input-group{
+				padding: 0 20px;
 			}
 			.mui-input-group:first-child {
-				margin-top: 20px;
+				margin-top: 40px;
 			}
-			.mui-input-group label {
-				width: 26%;
+			.mui-input-group:before {
+				height: 0;
 			}
+			.mui-input-group>span{
+				font-size: 14px;
+				
+				color: #555;
+			}
+			
+			.mui-input-group>.mui-input-row>input{
+				padding: 0;
+				font-size: 18px;
+			}
+			.mui-input-group .mui-input-row:after{
+				left: 0;
+			}
+			.mui-input-group:after {
+				height: 0;
+			}
+			
 			.mui-input-row label~input,
 			.mui-input-row label~select,
 			.mui-input-row label~textarea {
@@ -27,13 +59,42 @@
 				top: 6px;
 			}
 			.mui-content-padded {
-				margin-top: 25px;
+				margin-top: 100px;
 			}
 			.mui-btn {
 				padding: 10px;
 			}
-			.gray{
-				background: gray;
+			#code{
+				width: 30%;
+				position: absolute;
+				right: 0;
+				padding-right: 5px;
+				border: none;
+				font-size: 14px;
+				height:40px;
+				line-height: 40px;
+				text-align:center;
+				color: #F54A12;
+			}
+			#code.gray{
+				color: #D7D8D8;
+			}
+			#code>i{
+				width: 1px;
+				height: 24px;
+				background: #d7d8d8;
+				position: absolute;
+				top: 8px;
+				left: 0;
+			}
+			#reg{
+				background: #d7d8d8;
+				color: #fff;
+				border-color:#D7D8D8;
+				border-radius: 0;
+			}
+			#reg.active{
+				background: #F54A12;
 			}
 		</style>
 	</head>
@@ -45,31 +106,20 @@
 		</header>
 		<div class="mui-content">
 			<form class="mui-input-group">
-				<div class="mui-input-row">
-					<label>手机号</label>
+				<span>手机号</span>
+				<div class="mui-input-row" style="margin-bottom: 20px;">				
 					<input id='account' type="number" class="mui-input-clear mui-input" placeholder="请输入手机号">
 				</div>
-				<div class="mui-input-row">
-					<label>昵称</label>
-					<input id='username' type="text" class="mui-input-clear mui-input" placeholder="请输入昵称">
-				</div>
-				<div class="mui-input-row">
-					<label>密码</label>
-					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
-				</div>
-				<div class="mui-input-row">
-					<label>确认</label>
-					<input id='password_confirm' type="password" class="mui-input-clear mui-input" placeholder="请确认密码">
-				</div>
-				<div class="mui-input-row">
-					<label>验证码</label>
-					<input id='password2' type="text" class="mui-input-clear mui-input" placeholder="请输入验证码">
+				<span>验证码</span>
+				<div class="mui-input-row" style="position: relative;">	
+					<input id='password2' type="text" class=" mui-input" placeholder="请输入验证码" style="width: 70%;position: absolute;left: 0;">
+					<span id='code' isclick="1"><i></i>获取验证码</span>
 				</div>
 				
 			</form>
 			<div class="mui-content-padded">			
-				<button id='code' class="mui-btn mui-btn-block" isclick="1">获取验证码</button>
-				<button id='reg' class="mui-btn mui-btn-block mui-btn-primary">注册</button>
+				
+				<button id='reg' class="mui-btn mui-btn-block">下一步</button>
 			</div>
 			
 		</div>
@@ -81,18 +131,15 @@
 				$.init();
 					var regButton = doc.getElementById('reg');
 					var accountBox = doc.getElementById('account');
-					var passwordBox = doc.getElementById('password');
-					var passwordConfirmBox = doc.getElementById('password_confirm');
-					var usernameBox = doc.getElementById('username');
 					var password2Box = doc.getElementById('password2');
 					var Code = document.querySelector('#code');
 					//手机号码验证
 					var RegPhone = /^1(3|4|5|7|8)\d{9}$/;
-					// 6-18位，以字母、数字开头 字符能包含字符、数字和下划线
-					var RegPass =  /^[a-zA-Z0-9]\w{5,17}$/;
-					//长度：2-10位
-					//可以为汉字、数字、字母（大小写）、下划线
-					var RegName = /^[0-9a-zA-Z\u4e00-\u9fa5_]{2,10}$/;
+					
+					if(localStorage.phone){
+						accountBox.value = localStorage.phone
+					}
+					
 					//验证手机号码是否可用 
 					Code.addEventListener('tap',function(){
 						var isclick =   this.getAttribute('isclick');			
@@ -120,6 +167,7 @@
 													if( Objs.status == 0){
 														localStorage.sms_id = Objs.sms_id;														
 														_this.setAttribute('isclick',0);
+														mui('#reg')[0].classList.add('active')
 														seconddown(60,_this);
 													}else if( Objs.status == 20003 ){
 														mui.toast('发送有点频繁哦～，稍后重试',{ duration:1000, type:'div' })
@@ -145,84 +193,43 @@
 					//注册按钮
 					regButton.addEventListener('tap', function(event) {
 						
-						var regInfo = {
-							account: accountBox.value,
-							password: passwordBox.value,
-							username: usernameBox.value,
-							code:password2Box.value
-						};
+						if(this.classList.contains('active')){ //确保成功获取到验证码
+							var regInfo = {
+								account: accountBox.value,
+								code:password2Box.value
+							};
 										
-						if( RegPhone.test( regInfo.account )){
-							//md5 算法的处理
-							//var userphone = 'NISHOTjds!$2fd'+accountBox.value;
-							//var auth = md5(userphone).toUpperCase();
-							//console.log(auth)						
-							// 昵称格式验证
-							if( RegName.test( regInfo.username )){					
-							//调个 昵称是否重名的接口
-								namecanuse({
-									name:regInfo.username,
+							if( RegPhone.test( regInfo.account )){
+								
+								checkCode({
+									phone:regInfo.account,
+									sms_id:localStorage.sms_id,
+									code:regInfo.code,
 									callback:function(res){
-										var Obj = JSON.parse(res);
 										console.log(res)
-										if( Obj['status'] == 0 ){
-											if( Obj.can_use == 1){										
-												//密码格式验证
-												if( RegPass.test(regInfo.password)){
-													// 确认密码验证
-													var passwordConfirm = passwordConfirmBox.value;
-													if (passwordConfirm != regInfo.password) {										
-														$.alert('密码两次输入不一致',' ');
-														return false;
-													}
-													//验证码验证
-													
-													regApi({
-														name:regInfo.username,
-														phone:regInfo.account,
-														passwd:regInfo.password,
-														sms_id:localStorage.sms_id,
-														code:regInfo.code,
-														callback:function(ress){
-															
-															var Objs = JSON.parse(ress)
-															if( Objs['status'] == 0){
-																
-																localStorage.phone = regInfo.account;
-																localStorage.sid = Objs.sid;
-																document.location.href = 'login.html'
-																
-															}else{
-																
-																$.alert(Objs['msg'],' ')
-															}
-														}
-													})
-													
-													
-												}else{
-													mui.alert('密码格式不正确',' ')
-												}
-												
-												
-											}else{
-												mui.toast(Obj.reason,{ duration:1000, type:'div' })
-											}
+										var Obj = JSON.parse(res);
+										if(Obj.status == 0){
+											localStorage.code = this.code
+											$.openWindow({
+												url:'set_password.html'
+											})
+										}else{
+											$.toast(Obj['msg'],{ duration:1000, type:'div' })
 										}
 									}
-								});
+								})
 								
-							}else{
-								mui.alert('昵称格式有误，请更换',' ')
-							}	
+							}
+							else{
+								$.alert('手机号码有误，请慎重',' ');
+							}
+						}else{
+							$.toast('请您获取验证码',{ duration:1000, type:'div' })
 						}
-						else{
-							mui.alert('手机号码有误，请慎重',' ');
-						}						
+						
+			
+												
 					});
-					
-					
-				
 			}(mui, document));
 			
 			//手机号是否注册过
@@ -271,83 +278,58 @@
 				})
 				
 			}
-			//检查昵称是否可用
-			function namecanuse(opt){
-				var config = {
-					name:'',
-					callback:function(res){
-						
-					}
-				}
-				for(var i in opt) {
-					config[i] = opt[i]
-				}			
-				var Url = '?name='+config.name;
-				jsajax({
-					method:'post',
-					url:HostPort+'/cp/nicknamecanuse'+Url,
-					success:function(res){
-						config.callback(res)
-					}
-				})
-			}
-			//注册接口
-			function regApi(opt){
-				
-				var config = {
-					name:'',
-					phone:'',
-					passwd:'',
-					sms_id:'',
-					code:'',
-					channel:'vivo',
-					callback:function(res){
-						
-					}
-				}
-				for(var i in opt) {
-					config[i] = opt[i]
-				}			
-				//var Url = '?name='+config.name+'&phone='+config.phone+'&passwd='+config.passwd+'&sms_id='+config.sms_id+'&code='+config.code+'&channel='+config.channel;
-				jsajax({
-					method:'post',
-					url:HostPort+'/cp/reg',
-					data:{
-						name:config.name,
-						phone:config.phone,
-						passwd:config.passwd,
-						sms_id:config.sms_id,
-						code:config.code,
-						channel:'vivo'
-					},
-					success:function(res){
-						config.callback(res)
-					}
-				})
-			}
 			
-			
+
 			function seconddown(num,dom){
 					
 				var num = Number(num);
 				dom.classList.add('gray')
-				dom.innerText = '剩余'+num+'秒可再次发送短信'
+				dom.innerHTML = '<i></i>'+num+'秒后重发'
 				var secondInterval = setInterval(function(){
 						
 						num--;
-						dom.innerText = '剩余'+num+'秒可再次发送短信'
+						dom.innerHTML = '<i></i>'+num+'秒后重发'
 						
 						if( num == 0){
 							clearInterval(secondInterval)
-							dom.innerText = '获取验证码'
+							dom.innerHTML = '<i></i>'+'获取验证码'
 							dom.setAttribute('isclick',1)
 							dom.classList.remove('gray')
+							
 						}
 						
 				},1000)
 				
 			}
-			
+			//校验验证码
+			function checkCode(opt){
+				
+				var config = {
+					phone:'',
+					sms_id:'',
+					code:'',
+					callback:function(res){
+						
+					}
+				}
+				for(var i in opt) {
+					config[i] = opt[i]
+				}			
+				
+				jsajax({
+					method:'POST',
+					url:HostPort+'/cp/checkcode',
+					data:{
+						phone:config.phone,
+						sms_id:config.sms_id,
+						code:config.code
+					},
+					success:function(res){
+						config.callback(res)
+					}
+				})
+				
+			}
 		</script>
 	</body>
 

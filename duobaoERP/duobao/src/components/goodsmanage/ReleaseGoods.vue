@@ -13,9 +13,14 @@
 	        实体商品:<input type="text" value="" name="title" style="width:500px">
 	        <br /><br />
 			详细说明: <div style="width:100%;">
-				<VueUEditor style="width: 100%;"></VueUEditor>
+				<!--<VueUEditor style="width: 100%;" @ready = 'editorReady' ></VueUEditor>-->
+				<editor id="editor_id" height="500px" width="700px" :content="editorText"
+					:afterChange="afterChange()"
+					pluginsPath="/static/kindeditor/plugins/"
+					:loadStyleMode="false"
+					@on-content-change="onContentChange"></editor>
 			</div>
-	        <input type="submit" name="submit" value="提交">
+	        
 	    </form>
 	</div>
 	
@@ -29,14 +34,24 @@
 	export default {
 		data(){
 			return{
-				a:'1111'
+				editorText: '请使用多图模式上传图片'
 			}
 		},
 		mounted () {
 			
 		},
-		method: {
-			
+		methods: {
+			// editorReady (editorInstance) {
+            //     editorInstance.setContent('Hello world!<br>你可以在这里初始化编辑器的初始内容。');
+            //     editorInstance.addListener('contentChange', () => {
+            //         console.log('编辑器内容发生了变化：', editorInstance.getContent());
+            //     });
+            // }
+			onContentChange (val) {
+				this.editorText = val
+			},
+			afterChange () {
+			}
 		}
 	}
 </script>

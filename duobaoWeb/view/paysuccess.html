@@ -1,67 +1,133 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>参加成功</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
 		<style type="text/css">
 			.succ-show{
 				position: relative;
-				height: 2rem;
+				height: 6.25rem;
 				width: 100%;
 				text-align: center;
-				padding-top: .3rem;
+				padding-top: 1rem;
 			}
 			.succ-show>h4{
-				margin: .1rem 0;
+				margin: .3125rem 0;
 				color: limegreen;
 				font-weight: normal;
 			}
 			.succ-show>a{
-				width: 1.3rem;
-				margin-right: .1rem;
+				width: 4.1rem;
+				margin-right: .3125rem;
 			}
 			.succ-show>button{
-				width: 1.3rem;				
+				width: 4.1rem;				
+			}
+			.hide{
+				display: none;
+			}
+			.fail-show{
+				position: relative;
+				height: 6.25rem;
+				width: 100%;
+				text-align: center;
+				padding-top: 1rem;
+			}
+			.fail-show>h4{
+				margin: .3125rem 0;
+				color: #333;
+				font-weight: normal;
 			}
 		</style>
 	</head>
 	<body>
 		
 		<header class="mui-bar mui-bar-nav">
-	   		<span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>			
-	    	<h1 class="mui-title">参加成功</h1>
+	   		<span class=" mui-icon mui-icon-left-nav mui-pull-left"></span>			
+	    	<h1 class="mui-title">支付</h1>
 		</header>
 		<div class="mui-content">
-		   	<div class="succ-show">
+		   	<div class="succ-show hide">
 		   		<h4>恭喜您，参与成功！</h4>
 		   		<p>请等待系统为您揭晓！</p>
 		   		<a class="mui-btn mui-btn-danger" href="../index.html">继续夺宝</a>
 		   		<button class="mui-btn mui-btn-default duobaojilu">查看夺宝记录</button>
 		   	</div>
+		   	<div class="fail-show hide">
+		   		<h4>支付失败</h4><br />
+		   		<a class="mui-btn mui-btn-danger" href="../index.html">继续夺宝</a>
+		   	</div>
 		</div>
 	</body>
 	
 	<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript">
 
-		document.querySelector('.mui-action-back').addEventListener('click',function(){
-			
-			document.location.href = '../detail.html'
-			
-		})
-		//支付成功更新用户信息
-		upuserinfor({
-			callback:function(res){
-				localStorage.user = res;
+		;(function($,doc){
+
+			//支付成功更新用户信息
+			$('.mui-icon-left-nav')[0].addEventListener('tap',function(){
+				doc.location.href = '../index.html'
+			})
+			doc.querySelector('.duobaojilu').onclick = function(){
+				localStorage.type = 0; //记录页 初始显示全部
+				doc.location.href = 'indiana-recode.html';
 			}
-		})
-		document.querySelector('.duobaojilu').ontouchend = function(){
-			localStorage.type = 0; //记录页 初始显示全部
-			document.location.href = 'indiana-recode.html';
-		}
+			
+			//是否是单独余额支付
+			if(localStorage.orderStatus == 1){
+				
+				$('.succ-show')[0].classList.remove('hide')
+				upuserinfor({
+					callback:function(res){
+						localStorage.user = res;
+						localStorage.removeItem('orderStatus')
+					}
+				})
+			}else{
+				//微信支付 成功检测			
+				succstatus({
+					callback:function(res){
+						var Obj = JSON.parse(res);
+						if(Obj['result'] == 1){
+							$('.succ-show')[0].classList.remove('hide')
+							upuserinfor({
+								callback:function(res){
+									localStorage.user = res;
+								}
+							})
+						}else{
+							$('.fail-show')[0].classList.remove('hide')
+						}
+						localStorage.removeItem('orderId')
+					}
+				})
+				
+			}
+			
+			
+			
+		})(mui,document)
 		
 		function upuserinfor(opt){
 			if(localStorage.user){
@@ -81,6 +147,34 @@
 				jsajax({
 					method:'post',
 					url:HostPort+'/user/info'+Url,
+					success:function(res){
+						config.callback(res)
+					}
+				})
+			}
+		}
+		
+		function succstatus(opt){
+			if(localStorage.user&&localStorage.orderId){
+				
+				var User = JSON.parse(localStorage.user);
+				var UserInfo = User.userInfo;
+				
+				var config = {
+					userId:UserInfo.userId,
+					orderId:localStorage.orderId,
+					token:UserInfo.caibaoToken,
+					callback:function(res){
+						
+					}
+				}
+				for( var i in opt ){
+					config[i] = opt[i]
+				}
+				var Url = '?userId='+config.userId+'&token='+config.token+'&orderId='+config.orderId;
+				jsajax({
+					method:'post',
+					url:HostPort+'/pay/wft/cbStatus'+Url,
 					success:function(res){
 						config.callback(res)
 					}

@@ -1,4 +1,4 @@
-var HostPort = 'http://59.110.20.209/caibao';
+var HostPort = 'http://139.129.203.90/caibao';
 function jsajax(opt) {
         opt = opt || {};
          opt.method = opt.method.toUpperCase() || 'POST';

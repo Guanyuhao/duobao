@@ -1,14 +1,13 @@
 header.mui-bar-nav .icon-car{
  	position: absolute;
- 	right: 0.5rem;
- 	top: 0.1rem;
+ 	right: 1.2625rem;
+ 	top: 0.3125rem;
  	background: url(../image/icon_home_page3.png) no-repeat;
  	background-size: 100% 100%;
 }
 header.mui-bar-nav .dian{
   	position: relative;
-  	line-height: .44rem;
-  	font-size: .1rem;
+  	
   	color: #333;
 }
 .hide{
@@ -18,7 +17,7 @@ header.mui-bar-nav .dian{
  /*detailcon*/
 #DetaBan .mui-slider-item {
 	width: 100%;
-	height:2rem;
+	height:6.25rem;
 	background: #fff;
 	overflow: hidden;
 }
@@ -40,17 +39,17 @@ header.mui-bar-nav .dian{
 }
 .detail-title{
 	background: #dec0c2;
-	height: .35rem;
-	line-height: .35rem;
-	font-size: .14rem;
+	height: 1.1rem;
+	line-height: 1.1rem;
+	font-size: .4375rem;
 	overflow: hidden;
 }
 .detail-title .mui-btn{
 	color: #fff;
-	height: 0.25rem;
-	margin-top: 0.05rem;
-	padding: 0.03rem 0.1rem;
-	margin-left: 0.05rem;
+	height: 0.78125rem;
+	margin-top: 0.15625rem;
+	padding: 0.09375rem 0.3125rem;
+	margin-left: 0.15625rem;
 }
 .detail-title .btn-ing{
 	background: #F54A12;	
@@ -61,19 +60,19 @@ header.mui-bar-nav .dian{
 	border-color: lightgreen;
 }
 .detail-title span{
-	margin-left: 0.05rem;
+	margin-left: 0.15625rem;
 }
 .detail-infor{
 	padding: 0 5%;
 	background: #FAFAFA;
 	overflow: hidden;
-	margin-bottom: .1rem;
+	margin-bottom: .3125rem;
 }
 .detail-infor p{
 	margin: 0;
-	line-height: .16rem;
-	font-size: .10rem;
-	margin: .05rem 0;
+	line-height: .5rem;
+	font-size: .3125rem;
+	margin: .15625rem 0;
 }
 .detail-infor p:nth-child(1) span{
 	color: #F54A12;
@@ -82,8 +81,8 @@ header.mui-bar-nav .dian{
 .detail-infor p:nth-child(3){
 	width: 100%;
 	background: #C0C0C0;
-	height: .06rem;
-	border-radius: .04rem;
+	height: .18875rem;
+	border-radius: .125rem;
 	position: relative;
 }
 .detail-infor p:nth-child(3) span{
@@ -91,7 +90,7 @@ header.mui-bar-nav .dian{
 	background: darkorange;
 	display: block;
 	height: 100%;
-	border-radius: .04rem;	
+	border-radius: .125rem;	
 }
 .detail-infor p:nth-child(4) span{
 	float: right;
@@ -101,18 +100,18 @@ header.mui-bar-nav .dian{
 	font-style: normal;
 }
 .past-ann {
-	font-size: .14rem;
+	font-size: .4375rem;
 }
 .part-recode{
-	font-size: .14rem;
+	font-size: .4375rem;
 	
 }
 
 /*buylist*/
 #BuyList .mui-media-body p{
-	margin: 0.05rem;
-	font-size: .10rem;
-	line-height: .16rem;
+	margin: 0.15625rem;
+	font-size: .3125rem;
+	line-height: .5rem;
 }
 #BuyList .mui-media-body p:nth-child(1) span{
 	color: cornflowerblue;
@@ -121,31 +120,32 @@ header.mui-bar-nav .dian{
 	color: orangered;
 }
 #BuyList li{
-	padding:.1rem;
-	border-bottom: .01rem solid #F7F7F7;
+	padding:.3.125rem;
+	border-bottom: .03125rem solid #F7F7F7;
 }
 #BuyList li img{
 	border-radius: 50%;
 }
 .detail-range{
 	background: #fff;
-	margin-bottom: .5rem;
+	margin-bottom: 1.5625rem;
 }
 .mui-input-row.mui-input-range{
-	padding: 0 .1rem;
+	padding: 0 .3125rem;
 }
 /*detail-footer*/
 
 .detail .mui-bar-tab{
 	background: rgba(100,100,100,1);
-	padding: 0 .1rem;
+	padding: 0 .3125rem;
 }
 .detail .mui-bar-tab .mui-btn{
 	width: 45%;
-	border-radius:.2rem;
-	font-size: .12rem;
-	margin-top: .05rem;
+	border-radius:.625rem;
+	font-size: .375rem;
+	margin-top: .15625rem;
 }
+/*22222222*/
 .detail .mui-bar-tab .mui-btn:nth-child(1){
 	float: left;
 	color: #F54A12;
@@ -159,37 +159,37 @@ header.mui-bar-nav .dian{
 }
 .detail .mui-btn .icon-car{
 	vertical-align: text-top;
-	margin-right: 0.05rem;
+	margin-right: 0.15625rem;
 	display: inline-block;
-	width: .12rem;
-	height: .12rem;
+	width: .375rem;
+	height: .375rem;
  	background: url(../image/icon_home_page3.png) no-repeat;
  	background-size: 100% 100%;
 }
 /*detail-win*/
 .detail-win{
 	background: #fff;
-	margin-bottom: .1rem;
+	margin-bottom: .3125rem;
 	
 }
 .detail-win>.top>.left{
 	position: relative;
 	width: 30%;
-	height: .8rem;
+	height: 2.5rem;
 }
 .detail-win>.top>.left>img{
-	width: .5rem;
-	height: .5rem;
+	width: 1.5625rem;
+	height: 1.5625rem;
 	border-radius: 50%;
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	margin-left: -0.25rem;
-	margin-top: -0.25rem;
+	margin-left: -0.78125rem;
+	margin-top: -0.78125rem;
 }
 .detail-win>.top>.left>.absolute{
 	position: absolute;
-	width: .5rem;
+	width: 1.5625rem;
 	
 }
 .detail-win>.top>.left>.absolute>img{
@@ -198,12 +198,12 @@ header.mui-bar-nav .dian{
 }
 .detail-win>.top>.right{
 	width: 70%;
-	height: .8rem;
-	padding-top: .025rem;
+	height: 2.5rem;
+	padding-top: .007825rem;
 }
 .detail-win>.top>.right>p{
 	margin: 0;
-	font-size: .12rem;
+	font-size: .375rem;
 }
 .detail-win>.top>.right>p:first-child{
 	color: #333;
@@ -213,15 +213,15 @@ header.mui-bar-nav .dian{
 }
 .detail-win>.bottom{
 	width: 100%;
-	height: .35rem;
-	padding: .05rem .1rem;
+	height: 1.1rem;
+	padding: .15625rem .3125rem;
 }
 .detail-win>.bottom>.bot-warp{
-	padding: 0 .05rem;
-	height: .25rem;
-	line-height: .25rem;
+	padding: 0 .15625rem;
+	height: .78125rem;
+	line-height: .78125rem;
 	width: 100%;
-	font-size: .12rem;
+	font-size: .375rem;
 }
 .detail-win>.bottom>.bot-warp>span>i{
 	text-decoration: underline;
@@ -232,9 +232,9 @@ header.mui-bar-nav .dian{
 	background: #fff;
 }
 .countdown>.btn-warp{
-	padding: .05rem;
-	margin-bottom: .1rem;
-	line-height: .3rem;
-	font-size: .14rem;
+	padding: .15625rem;
+	margin-bottom: .3125rem;
+	line-height: .9375rem;
+	font-size: .4375rem;
 	color:lightgreen;
 }

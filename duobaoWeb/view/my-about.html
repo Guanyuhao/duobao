@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,telephone=no"/>
-		<meta content="telephone=no" name="format-detection">
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>常见问题</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
 		<style type="text/css">
 			#my-about .logo{
-				height: 1.8rem;
+				height: 5.625rem;
 				position: relative;
 			}
 			#my-about .logo img {
 				position: absolute;
 				left: 50%;
 				top: 50%;
-				width: 1rem;
-				height: 1rem;
-				margin-left: -0.5rem;
-				margin-top: -0.5rem;
+				width: 3.125rem;
+				height: 3.125rem;
+				margin-left: -1.5625rem;
+				margin-top: -1.5625rem;
 			}
 			#my-about .logo span{
 				position: absolute;
 				left: 42%;
 				bottom: 9%;
-				font-size: .14rem;
+				font-size: .4375rem;
 				color: red;
 			}
 			#my-about .bottom li{
-				font-size: .14rem;
+				font-size: .4375rem;
 			}
 			#my-about .bottom li span{
 				float: right;
@@ -37,7 +52,7 @@
 			}
 			#my-about .bottom li i{
 				float: right;
-				font-size: .12rem;
+				font-size: .375rem;
 				color: #C0C0C0;
 				font-style: normal;
 			}
@@ -54,11 +69,11 @@
 		</header>
 		<div class="mui-content" id="my-about">
 		   <div class="logo">
-		   		<img src="../image/activity_main.png" alt="" />
+		   		<img src="../image/ic_logo.png" alt="" />
 		   		<span>彩宝v1.0</span>
 		   </div>
 		   <div class="bottom  mui-table-view">
-		   		<li class="mui-table-view-cell"><a href="send/user-feedback.html">意见反馈</a></li>
+		   		<li class="mui-table-view-cell"><a href="send/user-feedback.html" class="mui-navigate-right">意见反馈</a></li>
 		   		<li class="mui-table-view-cell">官方客服QQ<span>14700991084</span></li>
 		   		<li class="mui-table-view-cell">官方客服微信号<span>14700991084</span><i>(推荐)&ensp;</i></li>
 		   </div>

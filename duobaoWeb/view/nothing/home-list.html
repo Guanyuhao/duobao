@@ -1,313 +1,263 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title></title>
-    
-    <link href="../css/mui.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="../css/com.css"/>
-    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
-    
+	<meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+	<title></title>
+	<script src="../../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="../../css/mui.min.css"/>
+	<link rel="stylesheet" type="text/css" href="../../css/com.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/index.css"/>
+    <style type="text/css">
+    	#scroll{
+    		top: 0;
+    	}
+    </style>
 </head>
 <body>
 	
-	<header class="mui-bar mui-bar-nav">
-	    <span class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"><a href=""></a></span>
-	    <h1 class="mui-title">夺宝</h1>
-	    <span class="mui-icon mui-icon-chat"><a href="#"></a></span>
-	</header>
-	<!--吸顶结构-->
-	<div id="Mounting"></div>
-	<footer>	
-		<nav class="mui-bar mui-bar-tab">
-	    <a class="mui-tab-item  active" href="index.html">
-	        <span class="mui-icon indiana"></span>
-	        <span class="mui-tab-label">夺宝</span>
-	    </a>
-	    <a class="mui-tab-item" href="announced.html">
-	        <span class="mui-icon announced"></span>
-	        <span class="mui-tab-label">揭晓</span>
-	    </a>
-	    <a class="mui-tab-item" href="bill.html" id="bill" off='1'>
-	        <span class="mui-icon bill">
-	        	<!--<img src="image/icon_home_page3.png"/>-->
-	        </span>
-	        <span class="mui-tab-label">清单</span>
-	    </a>
-	    <a class="mui-tab-item" href="myset.html" id="myset" off='1'>
-	        <span class="mui-icon my">
-	        	<!--<img src="image/icon_home_page4.png"/>-->
-	        </span>
-	        <span class="mui-tab-label">我的</span>
-	    </a>
-		</nav>		
-	</footer>
 	
-	<div class="mui-content">
-	    <!--下拉刷新容器-->
-	    <div id="refreshContainer" class="mui-content mui-scroll-wrapper">
-	      <div class="mui-scroll" id="scroll">
-	        <!--数据列表-->
-	        <div id="slider" class="mui-slider" >
-	          <div class="mui-slider-group mui-slider-loop" id="banner">
-	            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-	            <!--轮播位置-->
-	          </div>
-	          <div class="mui-slider-indicator">
-	            <!--轮播Sub-->
-	          </div>
-	        </div>
-    		<!--消息推送-->
-	        <div class="message-push">
-	        	<div class="left-mess">
-	        		
-	        	</div>
-	        	<div class="ani-push">
-	        		
-	        	</div>
-	        </div>
-	        <div class="function">
-	        	<a href="#">
-	        		<dl>
-		        		<dt><img src="../image/activity_main.png"/></dt>
-		        		<dd>优惠活动</dd>
-	        		</dl>
-	        	</a>	        	
-	        	<a href="#">
-	        		<dl>
-		        		<dt><img src="../image/showorder_camara.png"/></dt>
-		        		<dd>晒单分享</dd>
-	        		</dl>
-	        	</a>
-	        	<a href="#">
-	        		<dl>
-		        		<dt><img src="../image/quesion.png"/></dt>
-		        		<dd>常见问题</dd>
-	        		</dl>
-	        	</a>
-	        	<a href="#">
-	        		<dl>
-		        		<dt><img src="../image/contactservice.png"/></dt>
-		        		<dd>联系客服</dd>
-	        		</dl>
-	        	</a>
-	        </div>
-	        <!--navList-->
-	        <div class="nav-list">
-	        	<div id="nav-list-mounting">
-	        		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-						<div class="mui-scroll" id="NavList">
-							<button class="mui-btn active" itemid='0' sort='1' style="margin: 0;">全部商品<span class="mui-icon mui-icon-arrowthinup"></span></button>				
+	<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll" id="scroll">
+      	<!--navList-->
+	        <div id="nav-list-mounting">
+	        	<div class="nav-list">        	
+	        		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" id="transverse">
+						<div class="mui-scroll NavListTap" id="NavList">
+							<button class="mui-btn active" itemid='0' sort='4' style="margin: 0;">全部商品<span class="mui-icon mui-icon-arrowthindown"></span></button>				
 						</div>
 					</div>
 	        	</div>
 	        </div>
-	        <ul class="mui-table-view mui-table-view-chevron" id="GoodsList">
+	        <ul class="mui-table-view mui-table-view-chevron" id="GoodsList" style="padding-bottom: .5rem; ">
 	          	
 	        </ul>
-	      </div>
-	    </div>  
+      </div>
 	</div>
 	
-</body>
-<script type="text/javascript">
-	var h5pullDown = true;
-</script>
-<script src="../js/mui.js" type="text/javascript" charset="utf-8"></script>
-<script src="../js/ajax.js" type="text/javascript" charset="utf-8"></script>
-
-<script type="text/javascript">
-mui('body').on('tap','a',function(){document.location.href=this.href;})
-
-//跳转详情页
-mui('#GoodsList').on('tap','.top',function(){
-	var itemId = this.getAttribute('itemId')
 	
-	mui.openWindow({
-		url:'../detail.html',
-		id:'detail',
-		extras:{
-			itemId:itemId
-		},
-		createNew:true
-	})
-})
+</body>
+</html>
+<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/cookie.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/car.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
 
-mui('.ani-push').on('tap','p',function(){
-	var itemId = this.getAttribute('itemId')
-	mui.openWindow({
-		url:'../detail.html',
-		id:'detail',
-		extras:{
-			itemId:itemId
-		},
-		createNew:true
-	})
-})
-
+;(function(){
+window.scroll1 = mui('.mui-scroll-wrapper')[1]
+var indexpage = 1;
+var Drag = true;
+var indexDrag = true;
+var Maxy;
+var navHeight = mui('#nav-list-mounting')[0].offsetHeight;
+var top = mui("#nav-list-mounting")[0].offsetTop;
 mui.init({
   pullRefresh : {
     container:"#refreshContainer",//下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
-    down : {
-      height:50,//可选,默认50.触发下拉刷新拖动距离,
-      auto: true,//可选,默认false.自动下拉刷新一次
-      contentdown : "下拉可以刷新",//可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
-      contentover : "释放立即刷新",//可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
-      contentrefresh : "正在刷新...",//可选，正在刷新状态时，下拉刷新控件上显示的标题内容
-      callback:function down(){
-      	
-      	 mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
-      } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
-    },
     up : {
       height:50,//可选.默认50.触发上拉加载拖动距离
       auto:true,//可选,默认false.自动上拉加载一次
       contentrefresh : "正在加载...",//可选，正在加载状态时，上拉加载控件上显示的标题内容
       contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
       callback :function up(){
-      	 this.endPullupToRefresh(true|false);
+      	
+     if(indexDrag){
+     	indexpage ++;
+     }
+      		//var itemId = mui('#GoodsList')[0].lastChild.querySelector('.top').getAttribute('itemId')
+   		  		
+      		var btnAll = mui('.NavListTap button');
+      		var transform = mui('.mui-scrollbar-indicator')[0].style.transform;
+			var y = transform.match(/translate3d\(\d+px,\s*(\d+)px,\s*(\d+)px\)/i)[1];
+      		var btnarr = Array.prototype.slice.call(btnAll)
+			var Realbtn,typeId,sort;
+			if(y　>　top　&& y != Maxy){
+				Realbtn = btnarr.slice(0,btnarr.length/2)
+			}else if(y　<　top　&& y != Maxy){
+				Realbtn = btnarr.slice(btnarr.length/2)
+			}
+			
+	      	if(Realbtn){
+	      		Realbtn.forEach(function(v,i){
+		      		if( v.classList.contains('active') ){
+		      			typeId = v.getAttribute('itemid');
+		      			sort  = v.getAttribute('sort')
+		      		}
+	      		})
+	      	}
+	      	if(indexDrag){
+		      	getGoodsList({
+		      		page:indexpage,
+					typeId:typeId,
+					callback:function(res){
+						var arrs = JSON.parse(res).cbData;
+						if(arrs.length == 0){
+							indexDrag = false;
+							return false;
+						}
+						productList(res)
+					}
+				})
+	      	}
+	      	
+      	this.endPullupToRefresh(false);
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
   }
 });
-//banner
-;(function(){
-	jsajax({
-		method:'get',
-		url:HostPort+'/index/banners',
-		success:function(res){
-			var arr = JSON.parse(res).banners;
-			//console.log(arr)
-			var Obanner = document.getElementById('banner');
-			var ObannerSub = document.querySelector('.mui-slider-indicator');
-			var Fragment = document.createDocumentFragment();
-			var FragmentSub= document.createDocumentFragment();
-			var Oindicator = document.createElement('div');
-			Oindicator.className = 'mui-slider-indicator';
-			for (var i = 0; i<arr.length; i++) {
-				var Odiv = document.createElement('div');
-				Odiv.className = 'mui-slider-item';
-				var Oa = document.createElement('a');
-				Oa.href = arr[i].url;
-				var Oimg = new Image();
-				Oimg.src = arr[i].image;
-				Oa.appendChild(Oimg);
-				Odiv.appendChild(Oa);
-				Fragment.appendChild(Odiv);			
-				var OdivSub = document.createElement('div');			
-				if(i == 0){
-					OdivSub.className = 'mui-indicator mui-active';
-				}else{
-					OdivSub.className = 'mui-indicator';
-				}
-				FragmentSub.appendChild(OdivSub);
-			}		
-			Obanner.appendChild(Fragment);
-			ObannerSub.appendChild(FragmentSub);
-			var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
-			var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
-			var clone01 = Odiv01.cloneNode(true);
-			//循环播放所需
-			var clone02 = Odiv02.cloneNode(true);
-			clone01.className = 'mui-slider-item mui-slider-item-duplicate';
-			clone02.className = 'mui-slider-item mui-slider-item-duplicate';
-			Odiv01.parentNode.insertBefore(clone02,Odiv01)
-			Obanner.appendChild(clone01);
-			var gallery = mui('.mui-slider');
-			gallery.slider({
-			  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
-			});
-		}
-		
-	})
-})()
-//信息推送
-;(function(){
-	jsajax({
-		method:'get',
-		url:HostPort+'/message/announce',
-		success:function(res){
-			var arr = JSON.parse(res).messages;
-			//console.log(arr)
-			var AniPush = document.querySelector('.ani-push');
-			var Fragment = document.createDocumentFragment();
-			for (var i =0 ; i<arr.length; i++) {
-				var Op = document.createElement('p');
-				Op.setAttribute('itemId',arr[i].itemId)
-				var Oa = document.createElement('a');
-				var NewArr = arr[i].content.split(',');
-				var str = '';
-				NewArr.forEach(function(v,j){
-					if(j>0){
-						str +=v;
-					}
-				});
-				Oa.href = 'javascript:;';
-				Oa.innerHTML ='恭喜<span>'+arr[i].userName+'</span>'+str;
-				Op.appendChild(Oa);
-				Fragment.appendChild(Op);
-			}
-			AniPush.appendChild(Fragment);
-		}
-	})
-})()
-//分类列表
-;(function(){
+
+//分类吸顶  吸顶之后事件失效 
 	
-	var NavList = document.querySelector('#NavList');
+	var navEl = document.querySelector('#nav-list-mounting');
+	var navMoun = document.querySelector('#Mounting');
+	var navlistTap = document.querySelectorAll('.NavListTap');
+	window.addEventListener('scroll',function(e){
+		//console.log(e.target)
+		if(e.target.id == 'scroll'){
+			var transform = mui('.mui-scrollbar-indicator')[0].style.transform;
+			var y = transform.match(/translate3d\(\d+px,\s*(\d+)px,\s*(\d+)px\)/i)[1];
+			if( Drag ){
+				Maxy = y
+				Drag = false;
+			}
+			
+			
+		}
+	})
+
+
+//跳转详情页
+mui('#GoodsList').on('tap','.top',function(){
+	var itemId = this.getAttribute('itemId')
+	localStorage.itemId = itemId;
+	mui.openWindow({
+		url:'detail.html',
+		id:'detail',
+		extras:{
+			itemId:itemId
+		},
+		createNew:true
+	})
+})
+
+//分类列表
+	//分类导航
+	//商品分类
 	var GoodsList = document.querySelector('#GoodsList');
 	jsajax({
-		method:'get',
+		method:'POST',
 		url:HostPort+'/goods/typeList',
 		success:function(res){
 			var arr = JSON.parse(res).cbData;
 			//console.log(arr)
-			var Fragment = document.createDocumentFragment();
-			for (var i = 0; i<arr.length;i++) {
-				var Obtn = document.createElement('button');
-				Obtn.className = 'mui-btn';
-				Obtn.innerHTML = arr[i].title;
-				Obtn.setAttribute('itemid',arr[i].itemid);
-				Obtn.setAttribute('sort','1');
-				Fragment.appendChild(Obtn);
-			}
-			NavList.appendChild(Fragment);		
+			 goodsclassBtnDom(arr)
 		}
 	});
+	
+//商品分类按钮dom
+function goodsclassBtnDom(arr){
+	if(arr.length == 0){
+		 return false;
+	}
+	
+	var NavList = document.querySelectorAll('.NavListTap');
+	var Fragment = document.createDocumentFragment();
+
+	for (var i = 0; i<arr.length;i++) {
+		var Obtn = document.createElement('button');
+		Obtn.className = 'mui-btn';
+		function trims(str){  
+		  return str.replace(/\s+/g,""); //去除字符算中的空格  
+		}
+		Obtn.innerHTML = trims(arr[i].title);
+		Obtn.setAttribute('itemid',arr[i].itemid);
+		
+		Obtn.setAttribute('sort',3);
+		Fragment.appendChild(Obtn);
+		
+	}
+	
+	NavList[0].appendChild(Fragment);
+	
+	navlistevent(NavList[0])
+	
+}
+	
 	//事件委托
+	
+function allSbiling(elm) {
+	var a = [];
+	var p = elm.parentNode.children;
+	for(var i =0,pl= p.length;i<pl;i++) {
+		a.push(p[i]);
+	}
+	return a;
+}
+
+function  navlistevent(NavList){
+	
+	
 	mui(NavList).on('tap','button',function(ev){
+		
+		//mui('.mui-scrollbar-indicator')[0].style.transform = 'translate3d(0px, 50px, 0px)'
+//		mui(window.scroll1).scroll().scrollTo(0,-200,100);
+//		if( navEl.classList.contains('hide') ){
+//      	navlistTap[1].innerHTML = navlistTap[0].innerHTML;
+//      	navMoun.classList.add('hide');
+//  		navEl.classList.remove('hide');
+//  	}
+		indexDrag = true;
+		indexpage = 1;
+		//点击初始化 indexpage
+		//初始化滚动
+		
 		var ev = ev||window.event;
 		var target = ev.target || ev.srcElement;
-		if(target.nodeName.toLowerCase() == "button"){//之前原生委托事件的处理不用馆
+		if(target.nodeName.toLowerCase() == "button"){//之前js原生委托事件的处理
 			var typeId = target.getAttribute('itemid');
-			var arr = allSbiling(target);
+			var arr = allSbiling(target); //获取目标元素的所有兄弟节点切转为真数组
 			//删除所有
 			arr.forEach(function(v,j){
 				v.classList.remove('active');
-				if(v.children.length>0){
+				
+				if(v.children.length>0){ //删除的是span 既箭头
 					v.removeChild(v.children[0])
 				}
 			})
 			//全部删除之后给自己加
 			target.classList.add('active');		
 			if(target.classList.contains("active")){
-				var sort = 3;
+				var sort = Number(target.getAttribute('sort'));
+			
 				var Ospan = document.createElement('span');
-				//console.log(target.getAttribute('sort'))
-				if(Number(target.getAttribute('sort'))){
+				if( sort == 4 ){ //
 					sort = 3;
-					target.setAttribute('sort','0')
-				}else{
-					sort = 4;
-					target.setAttribute('sort','1')
-				}
-				//判断排序方式  箭头显示方向
-				if(sort == 4){
-					Ospan.className = 'mui-icon mui-icon-arrowthindown';
-				}else if(sort==3){
+					target.setAttribute('sort',sort);
 					Ospan.className = 'mui-icon mui-icon-arrowthinup';	
+				}else if( sort == 3 ){
+					sort = 4;
+					target.setAttribute('sort',sort);
+					Ospan.className = 'mui-icon mui-icon-arrowthindown';
 				}
+				
 				//如有span 点击不继续添加
 				//var realArr = Array.prototype.slice.call(target.children);
 				//console.log(target.children.length>0)
@@ -321,13 +271,16 @@ mui.init({
 					
 					target.appendChild(Ospan);
 				}
+				
 				getGoodsList({
 					typeId:typeId,
 					sort:sort,
 					callback:function(res){
-						//清楚dom
+						//清除dom
 						GoodsList.innerHTML = '';
 						productList(res)
+						//
+						
 					}
 				})
 				
@@ -335,46 +288,120 @@ mui.init({
 			
 		}//目标对象
 	})
-//分类吸顶
-//	var scroll = mui('#refreshContainer').scroll();
-//	
-//	var navEl = document.querySelector('#nav-list-mounting');
-//	var navMoun = document.querySelector('#Mounting');
-//	//var navT = navEl.offsetTop;
-//	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll',function (e) {
-//	　　console.log(-scroll.y);
-//	var scrollT = -scroll.y;
-//		if (scrollT > 473) {
-//      	if(navMoun.innerHTML == ''){
-//      		navMoun.innerHTML = navEl.innerHTML;
-//      		navEl.innerHTML = '';
-//      	}
-//	    }
-//	    else {
-//	        if(navEl.innerHTML == ''){
-//	        	navEl.innerHTML = navMoun.innerHTML;
-//	        	navMoun.innerHTML = '';
-//	        }
-//	    }
-//	})
+	
+}	
+	
+	mui(GoodsList).on('tap','button',function(){
+		var goodsSaleId = this.getAttribute('itemId');		
+		addcar({
+			goodsSaleId:goodsSaleId,
+			callback:function(res){
+				//成功 返回 result 1
+				//console.log(res)
+				var Obj = JSON.parse(res);
+				if(Obj.code == 0){
+					mui.toast('已经添加到您的清单',{ duration:1000, type:'div' }) 
+				}else if(Obj.code == 1){
+					mui.toast('商品数量已达上限',{ duration:1000, type:'div' })
+				}else if(Obj.code == 777){
+					//被人顶了
+					localStorage.user = '';
+						mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+						 	if(e.index == 0){
+								mui.openWindow({
+									url: 'login.html',
+									id:'login.html'
+								})
+						 	}
+						 },'div');
+				}
+				else{
+					mui.alert('服务器正在修复')
+				}
+			}
+		})
+	})
+	
+//默认调用 显示全部商品
+getGoodsList({
+	callback:function(res){
+		productList(res)
+	}
+})
+
+//弹窗管理 用户首次近  first 弹框 / 限制次数后台控制   可一寸 // 时间是活的 
+
+function append(parent, text) {
+    if (typeof text === 'string') {
+      var temp = document.createElement('div');
+      temp.innerHTML = text;
+      // 防止元素太多 进行提速
+      var frag = document.createDocumentFragment();
+      while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+      }
+      parent.appendChild(frag);
+    }
+    else {
+      parent.appendChild(text);
+    }
+}
+function removeElement(_element){
+ var _parentElement = _element.parentNode;
+ if(_parentElement){
+  _parentElement.removeChild(_element); 
+ }
+}
+var ck=new Cookie("HasLoaded"); //每个页面的new Cookie名HasLoaded不能相同
+if(ck.Read()==null){//未加载过，Cookie内容为空
+	var muipopu = '<div class="mui-popup-backdrop mui-active" style="display: block;"></div>';
+	var muipobtn = `<div class="mui-popup mui-popup-in" style="display: block; width: auto;">
+		<div class="aci-back" style="background: url(../../image/aci01/redpack_aci.png) no-repeat;background-size: cover; width: 300px;height: 350px;">
+			<img src="../../image/aci01/close.png" width="30px" height="30px" style="position: absolute; right: 0; top: 10%;" id="closeRec"/>
+			<img src="../../image/aci01/nowRecive.png" width="100px" height="30px" style="position: absolute; bottom: 7%;left: 37%;" id="nowRecive"/>
+		</div>
+	</div>`;
+	append(document.body, muipopu)
+	append(document.body, muipobtn)
+	mui('#nowRecive')[0].addEventListener("tap",function(){
+		mui.openWindow({
+			url:'view/view-aci/nowRecive.html'
+		})
+	})
+	mui('#closeRec')[0].addEventListener('tap',function(){
+		location.reload()
+	})
+	//设置保存时间
+	var dd = new Date();
+
+	dd = new Date(dd.getYear() + 1900, dd.getMonth(), dd.getDate());
+	
+	dd.setDate(dd.getDate() + 1);
+	
+	ck.setExpiresTime(dd);
+	
+	ck.Write("true"); //设置Cookie。只要IE不关闭，Cookie就一直存在
+	
+	}
+	else{//Cookie存在	
+		if(mui('.mui-popup-backdrop')[0]){	
+			removeElement(mui('.mui-popup-backdrop')[0]);
+			removeElement(mui('.mui-popup')[0]);
+		}
+	}
+
+
+
 
 })()
 
-function allSbiling(elm) {
-	var a = [];
-	var p = elm.parentNode.children;
-	for(var i =0,pl= p.length;i<pl;i++) {
-		a.push(p[i]);
-	}
-	return a;
-}
+
 //商品列表 参数 分类goodsSaleId
 function getGoodsList(opt){
 	
 	var config ={
 		typeId:0,//分类的ID 也就是 button 的itemid
-		type:1,
-		itemId:0,
+		page:1,
 		sort:4, //上 3 下 4 
 		callback:function(res){
 			
@@ -383,7 +410,7 @@ function getGoodsList(opt){
 	for (var i in opt){
 		config[i] = opt[i];
 	}
-	var Url = '?typeId='+config.typeId+'&type='+config.type+'&itemId='+config.itemId+'&sort='+config.sort;
+	var Url = '?typeId='+config.typeId+'&page='+config.page+'&sort='+config.sort;
 	jsajax({
 		method:'post',
 		url:HostPort+'/goods/typeGoodsList'+Url,
@@ -393,14 +420,12 @@ function getGoodsList(opt){
 		}
 	})
 }
-//默认调用 显示全部商品
-getGoodsList({
-	callback:function(res){
-		productList(res)
-	}
-})
+
 function productList (res){
 	var arr = JSON.parse(res).cbData;
+	if(arr.length == 0){
+		return false;
+	}
 	//console.log(arr)
 	var Fragment = document.createDocumentFragment();
 	for(var i = 0 ;i<arr.length;i++){		
@@ -423,36 +448,37 @@ function productList (res){
 		Odiv02.appendChild(Oimg);
 		var Ospan = document.createElement('span');
 		Ospan.className = 'top-title';
-		Ospan.innerText = arr[i].title;
+		Ospan.innerText = arr[i]['title']
 		Odiv02.appendChild(Ospan);
 		//bottom
 		var Odiv04 = document.createElement('div');
 		Odiv04.className = 'bottom';
 		var Obtn = document.createElement('button');
+		Obtn.setAttribute('itemId',arr[i].itemId);//留着购物车需要
 		Odiv04.appendChild(Obtn);
 		if(arr[i].price == 1){
 			
-			OimgMoney.src = '../image/ic_cover_money1.png';
+			OimgMoney.src = '../../image/ic_cover_money1.png';
 			TopDivText.innerHTML = '1元<br />商品';
 			Obtn.innerText = '一元抢购';
 			
 		}else if(arr[i].price == 10){
 			
-			OimgMoney.src = '../image/ic_cover_money10.png';
+			OimgMoney.src = '../../image/ic_cover_money10.png';
 			TopDivText.innerHTML = '10元<br />商品';
 			Obtn.innerText = '十元抢购';
 			
 			
 		}else if(arr[i].price == 50){
 			
-			OimgMoney.src = '../image/ic_cover_money50.png';
+			OimgMoney.src = '../../image/ic_cover_money50.png';
 			TopDivText.innerHTML = '50元<br />商品';
 			Obtn.innerText = '五十元抢购';
 			
 			
 		}else if(arr[i].price == 100){
 			
-			OimgMoney.src = '../image/ic_cover_money100.png';
+			OimgMoney.src = '../../image/ic_cover_money100.png';
 			TopDivText.innerHTML = '100元<br />商品';
 			Obtn.innerText = '一百元抢购';
 			
@@ -485,54 +511,4 @@ function productList (res){
 	}
 	GoodsList.appendChild(Fragment);
 }
-
-
-
-mui('body').on('tap','a',function(){
-	
-	if(this.getAttribute('off')){
-		//需要登录权限
-		if(localStorage.getItem('username')){
-			
-			document.location.href=this.href;			
-			
-		}else{
-			//没有登录
-			
-//			 mui.confirm('您好，请你先登录',' ',['确认','取消'],function(e){
-//			 	//console.log(e.index)
-//			 	if(e.index == 0){
-//					document.location.href='login.html';	
-//			 	}
-//			 },'div');		
-			plus.nativeUI.confirm( "您好,请您先登录", function(e){
-				if(e.index == 0){
-						document.location.href='login.html';	
-				 	}
-			}, "提示", ["确认","取消"]);
-		}
-	}else{
-		
-		document.location.href=this.href;			
-	}
-
-});
-//窗口操作
-function plusReady(){
-// 获取所有Webview窗口
-	var wvs=plus.webview.all();
-	for(var i=1;i<wvs.length;i++){
-		//console.log(wvs[i].id)
-		if(wvs[i].id != 'homeList'){			
-			wvs[i].close();
-		}
-	}
-}
-if(window.plus){
-	plusReady();
-}else{
-	document.addEventListener("plusready",plusReady,false);
-}
-
 </script>
-</html>

@@ -1,6 +1,4 @@
- html{
- 	font-size: 100px;
- }
+
  html,body{
  	width: 100%;
  	height: 100%;
@@ -18,41 +16,41 @@
 	visibility: hidden;
 }
 #scroll{
-	top: .44rem;	
+	top: 44px;	
 }
 /*footer*/
 footer .mui-bar-tab .mui-tab-item .mui-icon{
-	width: 0.18rem;
-	height: 0.16rem;
+	width: 0.7rem;
+	height: 0.7rem;
 }
 footer .mui-bar-tab .mui-tab-item .mui-icon.indiana {
-	background: url(../image/icon_home_page1.png) no-repeat center center;
+	background: url(../image/indexopt/Indiana.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item.active .mui-icon.indiana{
-	background: url(../image/icon_home_page1_selected.png) no-repeat center center;
+	background: url(../image/indexopt/Indiana_act.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item .mui-icon.announced {
-	background: url(../image/icon_home_page2.png) no-repeat center center;
+	background: url(../image/indexopt/Announced.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item.active .mui-icon.announced{
-	background: url(../image/icon_home_page2_selected.png) no-repeat center center;
+	background: url(../image/indexopt/Announced_act.png) no-repeat center center;
 	background-size: 100% 100%;
 }footer .mui-bar-tab .mui-tab-item .mui-icon.bill {
-	background: url(../image/icon_home_page3.png) no-repeat center center;
+	background: url(../image/indexopt/bill.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item.active .mui-icon.bill{
-	background: url(../image/icon_home_page3_selected.png) no-repeat center center;
+	background: url(../image/indexopt/bill_act.png) no-repeat center center;
 	background-size: 100% 100%;
 }footer .mui-bar-tab .mui-tab-item .mui-icon.my {
-	background: url(../image/icon_home_page4.png) no-repeat center center;
+	background: url(../image/indexopt/my.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item.active .mui-icon.my{
-	background: url(../image/icon_home_page4_selected.png) no-repeat center center;
+	background: url(../image/indexopt/my_act.png) no-repeat center center;
 	background-size: 100% 100%;
 }
 footer .mui-bar-tab .mui-tab-item{
@@ -79,10 +77,10 @@ ul,li,ol{list-style: none;}
 	color: #333;
 }
 .now-buy {
-	height: 2.5rem;
+	height: 7.8125rem;
 }
 .now-buy>.top{
-	padding-top: .1rem;
+	padding-top: .3125rem;
 	height: 35%;
 	background: #F2F2F2;
 }
@@ -94,11 +92,11 @@ ul,li,ol{list-style: none;}
 .now-buy>.top>h5>a{
 	color: #ccc;
 	position: absolute;
-	right: .1rem;
-	top: -.1rem;
+	right: .3125rem;
+	top: -.3125rem;
 }
 .now-buy>.top>span{
-	font-size: .12rem;
+	font-size: .375rem;
 	color: #C0C0C0;
 }
 .now-buy>.top>span>i{
@@ -109,23 +107,23 @@ ul,li,ol{list-style: none;}
 	height: 65%;
 }
 .now-buy>.bottom>.mui-numbox{
-	width: 2rem;
-	margin: .1rem 0;
+	width: 6.25rem;
+	margin: .3125rem 0;
 }
 .now-buy>.bottom>.people button{
-	margin-right: .05rem;
-	height: .3rem;
+	margin-right: .15625rem;
+	height: 1rem;
 	
 }
 .now-buy>.bottom>.btn-buy>span{
-	font-size: .12rem;
+	font-size: .375rem;
 }
 .now-buy>.bottom>.btn-buy>span>i{
 	font-style: normal;
 	color: red;
 }
 .now-buy>.bottom>.btn-buy>a{
-	width: 2.5rem;
+	width: 7.8125rem;
 }
 /*radio*/
 .mui-radio input[type='radio']:checked:before {

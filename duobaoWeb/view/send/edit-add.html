@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui"> 
+	<script src="../../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>编辑地址</title>
    		<link href="../../css/mui.min.css" rel="stylesheet"/>
    		<link rel="stylesheet" type="text/css" href="../../css/libs/mui.picker.all.css"/>
@@ -19,31 +35,31 @@
 				margin: 5%;
 			}
 			.editAddBom,.editAddTop{
-				margin: .15rem 0;
+				margin: .5rem 0;
 				background: #fff;
 			}
 			.editAddTop>div,.editAddBom>div{
 				width: 100%;
 				
-				padding: .05rem;
-				border-bottom: .01rem solid #FAFAFA;
+				padding: .15625rem;
+				border-bottom: .03125rem solid #FAFAFA;
 			}
 			.editAddTop>div>span,.editAddBom>div>span{
-				line-height: .4rem;
+				line-height: 1.25rem;
 				width: 25%;
-				font-size: .14rem;
+				font-size: .4375rem;
 				float: left;
 			}
 			.editAddTop>div>input,.editAddBom>div>input{
 				width: 75%;
 				border: none;
 				margin: 0;
-				font-size: .14rem;
+				font-size: .4375rem;
 				
 			}
 			.editAddBom>div>.switch{
 				float: right;
-				padding-top:.07rem ;
+				padding-top:.21875rem ;
 			}
 		</style>
 	</head>
@@ -168,7 +184,7 @@ mui('footer').on('tap',".save",function(){
 	}else{
 		issh = 0;
 	}
-	console.log(issh)
+	
 	var realname = mui('input[name=recive]')[0].value;
 	var mobile = mui('input[name=contactWay]')[0].value ;
 	var str2 = mui('input[name=wherearea]')[0].value;

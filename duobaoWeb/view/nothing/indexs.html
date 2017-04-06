@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+    <title>彩宝</title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="css/com.css"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <script src="js/fiexible.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	
+	<header class="mui-bar mui-bar-nav"> 
+	    <h1 class="mui-title">彩宝</h1>
+	    <span class="mui-icon mui-icon-chat"><a href="#"></a></span>
+	</header>
+	
+	<footer>	
+		<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item  active" hrefs="index.html">
+	        <span class="mui-icon indiana"></span>
+	        <span class="mui-tab-label">夺宝</span>
+	    </a>
+	    <a class="mui-tab-item" hrefs="announced.html">
+	        <span class="mui-icon announced"></span>
+	        <span class="mui-tab-label">揭晓</span>
+	    </a>
+	    <a class="mui-tab-item" hrefs="bill.html" id="bill" off='1'>
+	        <span class="mui-icon bill">
+	        	<!--<img src="image/icon_home_page3.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">清单</span>
+	    </a>
+	    <a class="mui-tab-item" hrefs="myset.html" id="myset" off='1'>
+	        <span class="mui-icon my">
+	        	<!--<img src="image/icon_home_page4.png"/>-->
+	        </span>
+	        <span class="mui-tab-label">我的</span>
+	    </a>
+		</nav>		
+	</footer>	      	
+	<!--吸顶结构-->
+	<div id="Mounting" class="hide">
+		<div class="nav-list">        	
+    		<div class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted" id="transverse">
+				<div class="mui-scroll NavListTap" id="NavList">
+
+				</div>
+			</div>
+    	</div>
+	</div>
+	<!--banner-->
+	        <div id="slider" class="mui-slider" >
+	          <div class="mui-slider-group mui-slider-loop" id="banner">
+	            <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+	            <!--轮播位置-->
+	          </div>
+	          <div class="mui-slider-indicator sub">
+	            <!--轮播Sub-->
+	          </div>
+	        </div>
+    		<!--消息推送-->
+	        <div class="message-push">
+	        	<div class="left-mess">
+	        		
+	        	</div>
+	        	<div class="ani-push">
+	        		
+	        	</div>
+	        </div>
+	        <div class="function">
+	        	<a href="view/discount-aci.html">
+	        		<dl>
+		        		<dt><img src="image/activity_main.png"/></dt>
+		        		<dd>优惠活动</dd>
+	        		</dl>
+	        	</a>	        	
+	        	<a href="view/sun-share.html">
+	        		<dl>
+		        		<dt><img src="image/showorder_camara.png"/></dt>
+		        		<dd>晒单分享</dd>
+	        		</dl>
+	        	</a>
+	        	<a href="view/com-ques.html">
+	        		<dl>
+		        		<dt><img src="image/quesion.png"/></dt>
+		        		<dd>常见问题</dd>
+	        		</dl>
+	        	</a>
+	        	<a href="view/my-about.html">
+	        		<dl>
+		        		<dt><img src="image/contactservice.png"/></dt>
+		        		<dd>联系客服</dd>
+	        		</dl>
+	        	</a>
+	        </div>
+	<!--<div class="mui-popup-backdrop mui-active" style="display: block;"></div>
+	<div class="mui-popup mui-popup-in" style="display: block; width: auto;">
+		<div class="aci-back" style="background: url(image/aci01/redpack_aci.png) no-repeat;background-size: cover; width: 300px;height: 350px;">
+			<img src="image/aci01/close.png" width="30px" height="30px" style="position: absolute; right: 0; top: 10%;"/>
+			<img src="image/aci01/nowRecive.png" width="100px" height="30px" style="position: absolute; bottom: 7%;left: 37%;" id="nowRecive"/>
+		</div>
+	</div>-->
+</body>
+<script src="js/cookie.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/ajax.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/car.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/footer.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+;(function(){
+
+mui.init({
+	subpages:[{
+	  url:'view/nothing/home-list.html',//子页面HTML地址，支持本地地址和网络地址
+	  id:'homeList',//子页面标志
+	  styles:{
+	    top: '300px',//子页面顶部位置
+	    bottom:'50px',//子页面底部位置
+	  },
+	  extras:{}//额外扩展参数
+	}]
+});
+// slide 的跳转
+mui('#slider').on('tap','a',function(){
+	document.location.href = this.href;
+})
+// function 的跳转
+mui('.function').on('tap','a',function(){
+	document.location.href = this.href;
+})
+
+//跳转消息中心
+mui('.mui-icon-chat')[0].addEventListener('tap',function(){
+	mui.openWindow({
+		url:'view/news-core.html',
+		id:'news-core'
+	})
+})
+
+//跳转详情页
+mui('#GoodsList').on('tap','.top',function(){
+	var itemId = this.getAttribute('itemId')
+	localStorage.itemId = itemId;
+	mui.openWindow({
+		url:'detail.html',
+		id:'detail',
+		extras:{
+			itemId:itemId
+		},
+		createNew:true
+	})
+})
+
+mui('.ani-push').on('tap','p',function(){
+	var itemId = this.getAttribute('itemId')
+	localStorage.itemId = itemId;
+	mui.openWindow({
+		url:'detail.html',
+		id:'detail',
+		extras:{
+			itemId:itemId
+		},
+		createNew:true
+	})
+})
+//banner
+	jsajax({
+		method:'POST',
+		url:HostPort+'/index/banners',
+		success:function(res){
+			var arr = JSON.parse(res).banners;
+			//console.log(arr)
+			var Obanner = document.getElementById('banner');
+			var ObannerSub = document.querySelector('.mui-slider-indicator.sub');
+			var Fragment = document.createDocumentFragment();
+			var FragmentSub= document.createDocumentFragment();
+			var Oindicator = document.createElement('div');
+			Oindicator.className = 'mui-slider-indicator';
+			for (var i = 0; i<arr.length; i++) {
+				var Odiv = document.createElement('div');
+				Odiv.className = 'mui-slider-item';
+				var Oa = document.createElement('a');
+				Oa.href = arr[i].url;
+				var Oimg = new Image();
+				Oimg.src = arr[i].image;
+				Oa.appendChild(Oimg);
+				Odiv.appendChild(Oa);
+				Fragment.appendChild(Odiv);			
+				var OdivSub = document.createElement('div');			
+				if(i == 0){
+					OdivSub.className = 'mui-indicator mui-active';
+				}else{
+					OdivSub.className = 'mui-indicator';
+				}
+				FragmentSub.appendChild(OdivSub);
+			}		
+			Obanner.appendChild(Fragment);
+			ObannerSub.appendChild(FragmentSub);
+			var Odiv01 = document.querySelectorAll('.mui-slider-item')[0];
+			var Odiv02 = document.querySelectorAll('.mui-slider-item')[arr.length-1];
+			var clone01 = Odiv01.cloneNode(true);
+			//循环播放所需
+			var clone02 = Odiv02.cloneNode(true);
+			clone01.className = 'mui-slider-item mui-slider-item-duplicate';
+			clone02.className = 'mui-slider-item mui-slider-item-duplicate';
+			Odiv01.parentNode.insertBefore(clone02,Odiv01)
+			Obanner.appendChild(clone01);
+			var gallery = mui('.mui-slider');
+			gallery.slider({
+			  interval:5000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+		}
+		
+	})
+	
+//信息推送
+	jsajax({
+		method:'POST',
+		url:HostPort+'/message/announce',
+		success:function(res){
+			var arr = JSON.parse(res).messages;
+			//console.log(arr)
+			var AniPush = document.querySelector('.ani-push');
+			var Fragment = document.createDocumentFragment();
+			for (var i =0 ; i<arr.length; i++) {
+				var Op = document.createElement('p');
+				Op.setAttribute('itemId',arr[i].itemId)
+				
+				var NewArr = arr[i].content.split(',');
+				var str = '';
+				NewArr.forEach(function(v,j){
+					if(j>0){
+						str +=v;
+					}
+				});
+				
+				Op.innerHTML ='恭喜<span>'+arr[i].userName+'</span>'+str;			
+				Fragment.appendChild(Op);
+			}
+			AniPush.appendChild(Fragment);
+		}
+	})
+
+
+//弹窗管理 用户首次近  first 弹框 / 限制次数后台控制   可一寸 // 时间是活的 
+
+function append(parent, text) {
+    if (typeof text === 'string') {
+      var temp = document.createElement('div');
+      temp.innerHTML = text;
+      // 防止元素太多 进行提速
+      var frag = document.createDocumentFragment();
+      while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+      }
+      parent.appendChild(frag);
+    }
+    else {
+      parent.appendChild(text);
+    }
+}
+function removeElement(_element){
+ var _parentElement = _element.parentNode;
+ if(_parentElement){
+  _parentElement.removeChild(_element); 
+ }
+}
+var ck=new Cookie("HasLoaded"); //每个页面的new Cookie名HasLoaded不能相同
+if(ck.Read()==null){//未加载过，Cookie内容为空
+	var muipopu = '<div class="mui-popup-backdrop mui-active" style="display: block;"></div>';
+	var muipobtn = `<div class="mui-popup mui-popup-in" style="display: block; width: auto;">
+		<div class="aci-back" style="background: url(image/aci01/redpack_aci.png) no-repeat;background-size: cover; width: 300px;height: 350px;">
+			<img src="image/aci01/close.png" width="30px" height="30px" style="position: absolute; right: 0; top: 10%;" id="closeRec"/>
+			<img src="image/aci01/nowRecive.png" width="100px" height="30px" style="position: absolute; bottom: 7%;left: 37%;" id="nowRecive"/>
+		</div>
+	</div>`;
+	append(document.body, muipopu)
+	append(document.body, muipobtn)
+	mui('#nowRecive')[0].addEventListener("tap",function(){
+		mui.openWindow({
+			url:'view/view-aci/nowRecive.html'
+		})
+	})
+	mui('#closeRec')[0].addEventListener('tap',function(){
+		location.reload()
+	})
+	//设置保存时间
+	var dd = new Date();
+
+	dd = new Date(dd.getYear() + 1900, dd.getMonth(), dd.getDate());
+	
+	dd.setDate(dd.getDate() + 1);
+	
+	ck.setExpiresTime(dd);
+	
+	ck.Write("true"); //设置Cookie。只要IE不关闭，Cookie就一直存在
+	
+	}
+	else{//Cookie存在	
+		if(mui('.mui-popup-backdrop')[0]){	
+			removeElement(mui('.mui-popup-backdrop')[0]);
+			removeElement(mui('.mui-popup')[0]);
+		}
+	}
+
+
+
+
+})()
+
+
+</script>
+</html>

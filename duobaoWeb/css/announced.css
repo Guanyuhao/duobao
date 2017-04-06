@@ -1,12 +1,12 @@
 .mui-table-view li{
 	position: relative;
-	border-bottom: 0.01rem solid #F3F3F3;
+	border-bottom: 0.03rem solid #F3F3F3;
 	background: #f9f9f9;
 }
 /*即将揭晓*/
 .mui-table-view li .bgimg{
-	width: .5rem;
-	height: .4rem;
+	width: 1.56rem;
+	height: 1.25rem;
 	position: absolute;
 	background: url(../image/jijiangjiexiao.png) no-repeat;
 	background-size: cover;
@@ -14,18 +14,18 @@
 
 .mui-table-view .mui-media-object{
 	width: 35%;
-	height: 1rem;
+	height: 3.125rem;
 	max-width: none;
-	margin-left: 0.05rem;
-	margin-top: 0.1rem;
+	margin-left: 0.15rem;
+	margin-top: 0.3125rem;
 }
 .mui-table-view .mui-media-object.mui-pull-left {
 	margin-right: 0;
 }
 .mui-media-body p{
-	line-height: .14rem;
-	margin: 0.1rem;
-	font-size: 0.12rem;
+	line-height: .4375rem;
+	margin: 0.3125rem;
+	font-size: 0.41rem;
 }
 .mui-media-body p:nth-child(1){
 	color: #000;

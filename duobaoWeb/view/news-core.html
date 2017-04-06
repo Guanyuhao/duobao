@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>消息中心</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
@@ -11,26 +27,26 @@
 				background: #f7f7f7;
 			}
 			#newsList li{
-				padding-right: .1rem;
+				padding-right: .3125rem;
 				background: #fff;
-				margin-bottom:.1rem ;
+				margin-bottom:.3125rem ;
 				border: none;
 			}
 			#newsList .mui-table-view-cell:after {
 				height: 0;
 			}
 			#newsList .mui-media-body{
-				font-size: .14rem;
+				font-size: .4375rem;
 				position: relative;
 				
 			}
 			#newsList .mui-media-body span{
-				font-size: .12rem;
+				font-size: .375rem;
 				color: #C0C0C0;
 				float: right;
 			}
 			#newsList .mui-media-body>p{
-				font-size: .12rem;
+				font-size: .375rem;
 			}
 		</style>
 	</head>
@@ -205,17 +221,17 @@ function pronewDom(arr){
 	var newsList = document.querySelector('#newsList');
 	
 	if( arr.length == 0){
-		if(!newsList.innerText){
+		if(!newsList.innerHTML){
 			
-			newsList.innerHTML =`<div id="kong" style="position: relative;min-height: 5.6rem;">
-			    		<img src="../image/ic_emptypage_redpackets.png" style="width: 1.5rem;height: 1.5rem; position: absolute; left: 50%;margin-left: -.75rem; top: 15%;"/>
-			    		<P style="position:absolute;left:33%;top:40%">没有您的消息哦</P>		
+			newsList.innerHTML =`<div id="kong" style="position: relative;min-height: 18rem;">
+			    		<img src="../image/ic_emptypage_redpackets.png" style="width: 4.6875rem;height: 4.6875rem; position: absolute; left: 50%;margin-left: -2.34375rem; top: 15%;"/>
+			    		<P style="position:absolute;left:35%;top:40%">没有您的消息哦</P>		
 			    	</div>`
 			
 		}
 		return false;
 	}
-	if( mui('#kong') ){
+	if( mui('#kong')[0] ){
 		newsList.innerHTML = '';
 	}
 	var Fragment = document.createDocumentFragment();

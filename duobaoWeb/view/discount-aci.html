@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-    	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="utf-8">
+		<meta name="referrer" content="never">
+		<!--忽略电话号码和email识别-->
+		<meta name="format-detection" content="telephone=no"/>
+		<meta name="format-detection" content="email=no"/>
+		<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+		<meta name="apple-mobile-web-app-capable" content="yes"/>
+		<!--隐藏ios上的浏览器地址栏-->
+		<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+		<!-- UC默认竖屏 ，UC强制全屏 -->
+		<meta name="full-screen" content="yes">
+		<meta name="browsermode" content="application">
+		<!-- QQ强制竖屏 QQ强制全屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<meta name="x5-fullscreen" content="true">
+		<meta name="x5-page-mode" content="app">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+		<script src="../js/fiexible.js" type="text/javascript" charset="utf-8"></script>
 		<title>优惠活动</title>
    		<link href="../css/mui.min.css" rel="stylesheet"/>
 		<link rel="stylesheet" type="text/css" href="../css/com.css"/>
@@ -14,10 +30,10 @@
 			}
 			.dis-aci-list{
 				width: 40%;
-				height: 2rem;
+				height: 6.25rem;
 				box-sizing: border-box;
 				margin: 5%;
-				border: .01rem solid #fff;
+				border: 1px solid #fff;
 				float: left;
 			}
 			.dis-aci-list>.top-img{
@@ -30,56 +46,59 @@
 				margin: 5%;
 			}
 			.dis-aci-list>.center{
-				padding: .05rem .05rem;
+				padding: .15625rem .15625rem;
 				height: 30%;
 			}
 			.dis-aci-list>.center>p{
-				font-size: .1rem;
+				font-size: .3125rem;
 				margin: 0;
 				padding: 0;
-				line-height: .16rem;
+				line-height: .5rem;
 			}
 			.dis-aci-list>.center>p:first-child{
-				font-size: .12rem;
+				white-space: nowrap;
+			    text-overflow: ellipsis;
+			    overflow: hidden;
+				font-size: .375rem;
 				color: #000;
 			}
 			.dis-aci-list>.center>p:nth-child(3){
 				width: 100%;
-				height: .04rem;
+				height: .125rem;
 				background: #fff;
-				border-radius: .04rem;
-				margin: 0.02rem 0;
+				border-radius: .125rem;
+				margin: 0.0625rem 0;
 				position: relative;
 			}
 			.dis-aci-list>.center>p:nth-child(3)>span{
 				position: absolute;
 				background: red;
-				border-radius: .04rem;
+				border-radius: .125rem;
 				height: 100%;
 			}
 			.dis-aci-list>.bottom{
-				border-top:.01rem solid #fff ;
-				padding-left: .05rem;
+				border-top:1px solid #fff ;
+				
 				height: 15%;
 			}
 			.dis-aci-list>.bottom>span{
-				font-size: .1rem;
+				font-size: .3125rem;
 				color: #fff;
-				line-height: .32rem;
+				line-height: 1rem;
 			}
 			.dis-aci-list>.bottom>span>i{
 				color: red;
 				font-style: normal;
 			}
 			.dis-aci-list>.bottom>button{
-				font-size: .1rem;
+				font-size: .3125rem;
 				padding: 0;
-				width: .5rem;
-				height: .28rem;
+				width: 1.5625rem;
+				height: .875rem;
 				float: right;
 			}
-			
 		</style>
+		
 	</head>
 	<body>
 		
@@ -154,7 +173,19 @@ mui.init({
       contentnomore:'没有更多数据了',//可选，请求完毕若没有更多数据时显示的提醒内容；
       callback :function up(){
       	discountpage++;
-      	
+      	getdiscountacidata({
+      		page:discountpage,
+			callback:function(res){
+				
+				var Obj = JSON.parse(res);
+				
+				var arr = Obj.data;
+				if(arr.length==0){
+					return false;
+				}
+				prodiscountaciDom(arr)
+			}
+		})
       	 this.endPullupToRefresh(false);
       } //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
     }
@@ -165,7 +196,7 @@ mui.init({
 			callback:function(res){
 				var Obj = JSON.parse(res);
 				var arr = Obj.data;
-				console.log(arr)
+				//console.log(arr)
 				prodiscountaciDom(arr)
 			}
 		})
@@ -229,16 +260,39 @@ mui('.people').on('tap','button',function(){
 mui('#nowpay')[0].addEventListener('tap',function(){
 	
 	if(goodsSaleId){
+	
 		var num = mui('.mui-numbox-input')[0].value;
-		detailnowbuy({
+		
+		discountnowbuy({
 			num:num,
 			goodsSaleId:goodsSaleId,
 			callback:function(res){
-				var Obj = JSON.parse(res).buyData;
-				var str = JSON.stringify(Obj);
-				console.log(str)
-				localStorage.account = str;
-				document.location.href = 'settle-account.html';		
+				//code 处理	
+				var ObjCode = JSON.parse(res);
+				if(ObjCode.code == 777){
+					mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+					 	if(e.index == 0){
+							mui.openWindow({
+								url: '../login.html'							
+							})
+					 	}
+					 },'div');
+					
+				}else if(ObjCode.code == 0){
+					
+					var Obj = JSON.parse(res).buyData;
+					
+					var str = JSON.stringify(Obj);
+					
+					console.log(str)
+					
+					localStorage.account = str;
+					document.location.href = 'settle-account.html';	
+				}else if(ObjCode == 1){
+					mui.toast('购买失败',{ duration:1000, type:'div' }) 
+				}
+				
+					
 			}
 		})
 	}
@@ -267,15 +321,16 @@ mui('#nowpay')[0].addEventListener('tap',function(){
 			})
 		}
 		
-		function detailnowbuy(opt){
+		function discountnowbuy(opt){
 			//注意详情页面不许穿 但是其他页面的goodsSaleId需要获取
-			var detailConitemId = localStorage.itemId;
+			//var detailConitemId = localStorage.itemId;
+			
 			if(localStorage.user){
 				var User = JSON.parse(localStorage.user);
 				var UserInfo = User.userInfo;
 				var config = {
 					num:1,
-					goodsSaleId:localStorage.itemId,
+					goodsSaleId:'',
 					userId:UserInfo.userId,
 					token:UserInfo.caibaoToken,
 					callback:function(res){

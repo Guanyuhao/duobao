@@ -1,18 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-</head>
+	<meta charset="utf-8">
+	<meta name="referrer" content="never">
+	<!--忽略电话号码和email识别-->
+	<meta name="format-detection" content="telephone=no"/>
+	<meta name="format-detection" content="email=no"/>
+	<!--当网站添加到主屏幕快速启动方式，将网站添加到主屏幕快速启动方式-->
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<!--隐藏ios上的浏览器地址栏-->
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<!-- UC默认竖屏 ，UC强制全屏 -->
+	<meta name="full-screen" content="yes">
+	<meta name="browsermode" content="application">
+	<!-- QQ强制竖屏 QQ强制全屏 -->
+	<meta name="x5-orientation" content="portrait">
+	<meta name="x5-fullscreen" content="true">
+	<meta name="x5-page-mode" content="app">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+    <script src="js/fiexible.js" type="text/javascript" charset="utf-8"></script>
     <link href="css/mui.min.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/com.css"/>
 	<link rel="stylesheet" type="text/css" href="css/detail.css"/>
+</head>
+    
 <body>
 	<header class="mui-bar mui-bar-nav">
 	    <span class="mui-icon mui-icon-left-nav mui-pull-left"></span>    
 	    <h1 class="mui-title">详情</h1>
 	    <span class="mui-icon icon-car"></span>
-	    <a href="#menu" id="openPopover" class="mui-pull-right dian">●●●</a>
+	    <a href="#menu" id="openPopover" class="mui-pull-right dian mui-icon mui-icon-more"></a>
 	</header>
 	<footer class="detail">
 		<nav class="mui-bar mui-bar-tab">
@@ -21,12 +38,12 @@
 				<button class="mui-btn" id="NowBuy">立即购买</button>	
 			</div>
 			<div class="now-go clearfloat hide" style="position: relative;">
-				<div class="left mui-pull-left" style="font-size: .14rem;">
+				<div class="left mui-pull-left" style="font-size: .4375rem;">
 					<p>新的一起正在火热进行...</p>
 					<span>夺宝有风险，参与需谨慎</span>
 				</div>
-				<div class="right"  style="width: 25%;height: 100%; position: absolute; right: -.1rem; font-size: .14rem; text-align: center;">
-					<span class="mui-btn-danger" style="line-height: .51rem; display: block;" id="NowGo">立即前往</span>
+				<div class="right"  style="width: 25%;height: 100%; position: absolute; right: -.3125rem; font-size: .4375rem; text-align: center;">
+					<span class="mui-btn-danger" style="line-height: 1.5rem; display: block;" id="NowGo">立即前往</span>
 				</div>
 			</div>
 		</nav>
@@ -72,7 +89,7 @@
 	       	
 	        <!--数据列表-->
 	        
-	        <ul class="mui-table-view mui-table-view-chevron" id="BuyList" style="margin-bottom: .6rem">
+	        <ul class="mui-table-view mui-table-view-chevron" id="BuyList" style="margin-bottom: 1.875rem">
 	        
 	        </ul>
 	        <!--滑块-->
@@ -85,7 +102,7 @@
 	    </div>  
 	</div>
 <!--右侧弹框-->	
-<div id="menu" class="mui-popover" style="width: 1rem;">
+<div id="menu" class="mui-popover" style="width: 3.125rem;">
   <ul class="mui-table-view">
   	 <li class="mui-table-view-cell"><a href="javascript:if(localStorage.getItem('user')){document.location='view/news-core.html'}else{ mui.confirm('您好，请你先登录',' ',['确认','取消'],function(e){if(e.index == 0){mui.openWindow({url: 'login.html',id:'login.html'})}},'div');}">消息中心</a></li>
     <li class="mui-table-view-cell"><a href="javascript:document.location='index.html';">返回首页</a></li>
@@ -166,9 +183,10 @@
 	})
 	
 	mui('header').on('tap','.mui-icon-left-nav',function(){
-		mui.openWindow({
-			url:'index.html'
-		})
+//		mui.openWindow({
+//			url:'index.html'
+//		})
+		window.history.back()
 	})
 	
 	
@@ -202,7 +220,7 @@ function plusReady(){
 			goodsSaleId:detailCon.itemId,
 			callback:function(res){
 				//成功 返回 result 1
-				console.log(res)
+				//console.log(res)
 				var Obj = JSON.parse(res);
 				if(Obj.result){
 					 mui.toast('已经添加到您的清单',{ duration:1000, type:'div' }) 
@@ -241,13 +259,13 @@ if(window.plus){
 function brower(){
 var addbill = document.querySelector('#addbill')
 var detailConitemId = localStorage.itemId;
-console.log(detailConitemId)
+//console.log(detailConitemId)
 	addbill.addEventListener('tap',function(){
 		addcar({
 			goodsSaleId:detailConitemId,
 			callback:function(res){
 				//成功 返回 result 1
-				console.log(res)
+				//console.log(res)
 				var Obj = JSON.parse(res);
 				if(Obj.result){
 					 mui.toast('已经添加到您的清单',{ duration:1000, type:'div' }) 
@@ -330,11 +348,22 @@ mui('#nowpay')[0].addEventListener('tap',function(){
 	detailnowbuy({
 		num:num,
 		callback:function(res){
-			var Obj = JSON.parse(res).buyData;
-			var str = JSON.stringify(Obj);
-			console.log(str)
-			localStorage.account = str;
-			document.location.href = 'view/settle-account.html';		
+			var Obj = JSON.parse(res);
+			if(Obj.code == 777){
+				mui.confirm('你在其他地方登录了',' ',['确认','取消'],function(e){
+				 	if(e.index == 0){
+						mui.openWindow({
+							url: 'login.html',
+							id:'login.html'								
+						})
+				 	}
+				},'div');
+			}else if( Obj.code == 0){
+				var Objs = JSON.parse(res).buyData;
+				var str = JSON.stringify(Objs);
+				localStorage.account = str;
+				document.location.href = 'view/settle-account.html';
+			}			
 		}
 	})
 })
@@ -433,6 +462,16 @@ function detailnowbuy(opt){
 				config.callback(res)
 			}
 		})
+	}else{
+		mui.confirm('您好，请你先登录',' ',['确认','取消'],function(e){
+		 	//console.log(e.index)
+		 	if(e.index == 0){
+					mui.openWindow({
+						url: 'login.html',
+						id:'login.html'
+					})
+		 	}
+		 },'div');
 	}
 }
 
@@ -572,7 +611,7 @@ function detailnowbuy(opt){
 		var Obj = JSON.parse(res);
 		//console.log(Obj)
 		var itemStatus = Obj.itemStatus;
-		console.log('itemStatus:'+itemStatus)
+		//console.log('itemStatus:'+itemStatus)
 		var DetaTitle = document.querySelector('.detail-title');
 		var Obutton = document.createElement('button');
 		if(itemStatus == 1){
@@ -585,7 +624,7 @@ function detailnowbuy(opt){
 			footershow(itemStatus)
 			//获奖者
 		}else if( itemStatus == 3){
-			console.log(3)
+			
 			Obutton.innerText = '倒计时';
 			Obutton.className = 'mui-btn btn-ed';
 			footershow(itemStatus)
@@ -639,7 +678,7 @@ function detailnowbuy(opt){
 		//计时器结束更新 获奖者 detail-win
 		var Obj = JSON.parse(res);
 		var itemStatus = Obj.itemStatus;
-		console.log(Obj)
+		//console.log(Obj)
 		
 		if(itemStatus != 3){
 			return false;
@@ -650,15 +689,15 @@ function detailnowbuy(opt){
 		odiv2.className = 'btn-warp'
 		var showSaleTime = Obj['goodsSale']['showSaleTime'];
 		
-		console.log('showSaleTime:'+showSaleTime)
+		//console.log('showSaleTime:'+showSaleTime)
 		var times = '00';
 		if( showSaleTime >9 ){
 			times = showSaleTime;
 		}else{
 			times = '0'+showSaleTime;
 		}
-		odiv2.innerHTML = `揭晓倒计时：<button class='mui-btn mui-btn-danger' style="margin-left:.1rem;">00</button>
-		<button class='mui-btn mui-btn-danger' style="margin-right:.05rem;">00</button>`
+		odiv2.innerHTML = `揭晓倒计时：<button class='mui-btn mui-btn-danger' style="margin-left:.3125rem;">00</button>
+		<button class='mui-btn mui-btn-danger' style="margin-right:.15625rem;">00</button>`
 		var dom = document.createElement('button');
 		dom.className = 'mui-btn mui-btn-danger';
 		dom.innerText = times;
@@ -799,27 +838,27 @@ function downsetinterval(showSaleTime,dom,Obj){
 //	}
 //})
 
-//分页事件
-function pagingEvent(goodsSaleId){
-	
-	var Paging = document.querySelector('#paging')
-	Paging.addEventListener('change',function(){
-		
-		var val = document.querySelector('#paging input').value;
-		var sky = document.querySelector('#BuyList');
-		getBuyListData({
-			goodsSaleId:goodsSaleId,
-			page:val,
-			callback:function(res){
-				buyList(res)
-				if(!sky.innerHTML){
-					sky.innerHTML ='<li style="font-size: .14rem; color: #C0C0C0;">没有更多记录了</li>';
-				}
-			}
-		})	
-		mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
-	})
-}
+// 按钮 分页事件
+//function pagingEvent(goodsSaleId){
+//	
+//	var Paging = document.querySelector('#paging')
+//	Paging.addEventListener('change',function(){
+//		
+//		var val = document.querySelector('#paging input').value;
+//		var sky = document.querySelector('#BuyList');
+//		getBuyListData({
+//			goodsSaleId:goodsSaleId,
+//			page:val,
+//			callback:function(res){
+//				buyList(res)
+//				if(!sky.innerHTML){
+//					sky.innerHTML ='<li style="font-size: .14rem; color: #C0C0C0;">没有更多记录了</li>';
+//				}
+//			}
+//		})	
+//		mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);//100毫秒滚动到顶
+//	})
+//}
 
 
 
